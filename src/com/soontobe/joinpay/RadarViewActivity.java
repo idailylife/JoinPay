@@ -140,7 +140,6 @@ public class RadarViewActivity extends FragmentActivity
 		mBigBubble.setTouchable(true);
 		mBigBubble.setBackgroundDrawable(new BitmapDrawable()); //Outside disimss-able
 		
-		
 		ArrayList<Float> dataList = new ArrayList<Float>();
 		dataList.add(1.05f);
 		dataList.add(2.55f);

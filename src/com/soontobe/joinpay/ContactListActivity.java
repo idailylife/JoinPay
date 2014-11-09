@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2012 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.soontobe.joinpay;
 
 import java.util.ArrayList;
@@ -49,22 +34,20 @@ public class ContactListActivity extends ListActivity {
 	// Search EditText
 	private EditText inputSearch;
 
-
-	// ArrayList for Listview
-	ArrayList<HashMap<String, String>> productList;
-
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.choose_from_contact_list);
-
+		setContactListView();
+		setInputSearch();
+	}
+	
+	private void setContactListView() {
 		int layoutType = android.R.layout.simple_list_item_multiple_choice;
-		final ListView lv = getListView();
+		lv = getListView();
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 		adapter = new ArrayAdapter<String>(this, layoutType, Constants.NameList);
-
 		setListAdapter(adapter);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -77,28 +60,20 @@ public class ContactListActivity extends ListActivity {
 				}
 			}
 		});
-
+	}
+	
+	private void setInputSearch() {
 		inputSearch = (EditText) findViewById(R.id.contact_search_input);
 		inputSearch.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
 				// When user changed the Text
-
-				for (int i = 0;i < adapter.getCount();i++) {
-					Log.d("adpater state before", adapter.getItem(i));
-					if (nameSelected.contains(adapter.getItem(i))) {
-						lv.setItemChecked(i, true);
-					} else {
-						lv.setItemChecked(i, false);
-					}
-				}    
 				adapter.getFilter().filter(cs, new FilterListener() {
 					@Override
 					public void onFilterComplete(int count) {
 						// TODO Auto-generated method stub
 						for (int i = 0;i < adapter.getCount();i++) {
-							Log.d("adpater state after", adapter.getItem(i));
 							if (nameSelected.contains(adapter.getItem(i))) {
 								lv.setItemChecked(i, true);
 							} else {
@@ -107,15 +82,6 @@ public class ContactListActivity extends ListActivity {
 						}    
 					}
 				});
-				
-				findViewById(R.id.contact_search_input_clear_button).setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						EditText contactSearchBox = (EditText) findViewById(R.id.contact_search_input);
-						contactSearchBox.setText("");
-					}
-				});;
 			}
 
 			@Override
@@ -130,10 +96,15 @@ public class ContactListActivity extends ListActivity {
 
 			}
 		});
-	}
 
-	public void BackFromContactToMain(View v) {
-		finish();
+		findViewById(R.id.button_clear_contact_search_input).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				EditText contactSearchBox = (EditText) findViewById(R.id.contact_search_input);
+				contactSearchBox.setText("");
+			}
+		});
 	}
 
 	public void AddContactAndBackToMain(View v) {

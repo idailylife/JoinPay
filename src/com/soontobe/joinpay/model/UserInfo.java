@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * User information model for exchanging between RadarView and BigBubble
- * @author ²©Î°
+ * @author ï¿½ï¿½Î°
  *
  */
 public class UserInfo {
