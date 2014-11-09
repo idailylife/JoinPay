@@ -1,17 +1,24 @@
 package com.soontobe.joinpay.fragment;
 
+import java.util.ArrayList;
+
+import com.soontobe.joinpay.ContactListActivity;
 import com.soontobe.joinpay.R;
 import com.soontobe.joinpay.R.layout;
+import com.soontobe.joinpay.widget.BigBubblePopupWindow;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Intent;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
+import android.content.Context;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
@@ -35,6 +42,7 @@ public class SendFragment extends Fragment
 	private String mParam2;
 
 	private OnFragmentInteractionListener mListener;
+	private static final int contactListRequestCode = 1;
 
 	/**
 	 * Use this factory method to create a new instance of this fragment using
@@ -131,5 +139,7 @@ public class SendFragment extends Fragment
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 
 }

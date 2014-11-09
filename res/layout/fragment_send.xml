@@ -5,10 +5,44 @@
     tools:context="com.soontobe.joinpay.fragment.SendFragment" >
 
     <!-- TODO: Update blank fragment layout -->
+    <!-- Using FrameLayout to implement customized positions of buttons/drawables... -->
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="SEND" />
+	
+    <!-- Test button to call the big bubble. -->
+    <Button
+        android:id="@+id/button_call_bigbubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="debugCallBigBubble"
+        android:text="CALL_BIG_BUBBLE" />
+    
+    <!-- Contact List button has been moved here -->
+    <Button
+        android:id="@+id/contact_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="contactButtonOnClick"
+        android:layout_marginTop="50dp"
+        android:text="Contact List" />
+    
+    <!-- Layout for the elements in the bottom, e.g. ($) input-->
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        >
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BLABLABLA\nI`m in the bottom!"
+            />
+    </LinearLayout>
 
 </FrameLayout>
