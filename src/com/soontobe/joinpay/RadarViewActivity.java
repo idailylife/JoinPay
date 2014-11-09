@@ -58,9 +58,10 @@ public class RadarViewActivity extends FragmentActivity
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
 		setupTabs();
 		mTabHost.setOnTabChangedListener(this);
+		
 		mCurrentTab = 0;
 		mTabHost.setCurrentTab(mCurrentTab);
-		getFragmentManager().beginTransaction().replace(R.id.tab_send, new SendFragment())
+		getFragmentManager().beginTransaction().replace(R.id.tab_send, mSendFragment)
 							.commit();
 	}
 	

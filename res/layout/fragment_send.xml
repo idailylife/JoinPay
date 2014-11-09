@@ -7,42 +7,83 @@
     <!-- TODO: Update blank fragment layout -->
     <!-- Using FrameLayout to implement customized positions of buttons/drawables... -->
 
-    <TextView
+    <RelativeLayout
+        android:focusableInTouchMode="true" 
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="SEND" />
+        android:layout_height="match_parent" >
 	
-    <!-- Test button to call the big bubble. -->
-    <Button
-        android:id="@+id/button_call_bigbubble"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="debugCallBigBubble"
-        android:text="CALL_BIG_BUBBLE" />
+    	<!-- Test button to call the big bubble. -->
+    	<!-- End of test button -->
     
-    <!-- Contact List button has been moved here -->
-    <Button
-        android:id="@+id/contact_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="contactButtonOnClick"
-        android:layout_marginTop="50dp"
-        android:text="Contact List" />
-    
-    <!-- Layout for the elements in the bottom, e.g. ($) input-->
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        >
-        
-        <TextView 
+
+        <Button
+            android:id="@+id/contact_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BLABLABLA\nI`m in the bottom!"
-            />
-    </LinearLayout>
+            android:onClick="contactButtonOnClick"
+            android:text="Contact List"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:id="@+id/radar_view_bottom_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true" >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:hint="Total" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/send_request_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next" />
+        </LinearLayout>
+        
+        <RelativeLayout
+            android:id="@+id/group_note_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/radar_view_bottom_bar" >
+
+            <Button
+                android:id="@+id/group_note_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/group_note"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/group_note_icon"
+                
+                android:hint="What&apos;s it for" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/button_call_bigbubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/contact_button"
+            android:layout_centerHorizontal="true"
+            android:onClick="debugCallBigBubble"
+            android:text="CALL_BIG_BUBBLE" />
+
+    </RelativeLayout>
 
 </FrameLayout>
