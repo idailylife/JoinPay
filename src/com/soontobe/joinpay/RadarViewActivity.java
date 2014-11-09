@@ -4,8 +4,8 @@ package com.soontobe.joinpay;
 import com.soontobe.joinpay.fragment.RequestFragment;
 import com.soontobe.joinpay.fragment.SendFragment;
 
-
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 public class RadarViewActivity extends FragmentActivity 
@@ -30,6 +31,7 @@ public class RadarViewActivity extends FragmentActivity
 	private static final String TAG_REQUEST = "tab_request";
 	private static final String TAG_HISTORY = "tab_history";
 	
+	private static final int contactListRequestCode = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,10 @@ public class RadarViewActivity extends FragmentActivity
 							.commit();
 	}
 	
-	
+    public void contactButtonOnClick(View v) {
+		//		Log.d("contactButtonOnClick", "clicked");
+		startActivityForResult(new Intent(this, ContactListActivity.class), contactListRequestCode);
+	}
 
 	private void setupTabs() {
 		// Setup tabs
@@ -91,13 +96,17 @@ public class RadarViewActivity extends FragmentActivity
 		}
 	}
 
-
-
 	@Override
 	public void onFragmentInteraction(Uri uri) {
 		Log.d(TAG, uri.toString());		
 	}
-	
 
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == contactListRequestCode) { 
+			if (resultCode == RESULT_OK) {
+				Toast.makeText(this,data.getData().toString(), Toast.LENGTH_SHORT).show();
+			} 
+		}
+	}
 
 }

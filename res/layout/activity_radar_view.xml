@@ -6,82 +6,81 @@
     tools:context="com.soontobe.joinpay.RadarViewActivity" >
 
     <!-- Two Buttons -->
-    <RelativeLayout 
+
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button 
+        android:orientation="horizontal" >
+
+        <Button
             android:id="@+id/btn_radar_view_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BACK"
-            android:layout_marginLeft="@dimen/radarview_btn_margin"
             android:layout_alignParentLeft="true"
-            />
-        <Button 
+            android:layout_marginLeft="@dimen/radarview_btn_margin"
+            android:text="BACK" />
+
+        <Button
             android:id="@+id/btn_radar_view_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CLOSE"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/radarview_btn_margin"
-            />
+            android:text="CLOSE" />
     </RelativeLayout>
-    
-    <TabHost 
+
+    <TabHost
         android:id="@android:id/tabhost"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
+        android:layout_height="fill_parent" >
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            
-        	>
-        	
+            android:orientation="vertical" >
+
             <!-- Tab Label -->
-            <TabWidget 
+
+            <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                
-                />
-			
+                android:layout_height="wrap_content" />
+
             <!-- Tab Conetne -->
-            <FrameLayout 
+
+            <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                >
-                
+                android:layout_height="fill_parent" >
+
                 <!-- Layout for fragments -->
-                <FrameLayout 
+
+                <FrameLayout
                     android:id="@+id/tab_send"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    >
+                    android:layout_height="fill_parent" >
+                    
+                    <Button
+                        android:id="@+id/contact_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="contactButtonOnClick"
+                        android:text="Contact List" />
                 </FrameLayout>
-                
-                <FrameLayout 
+
+                <FrameLayout
                     android:id="@+id/tab_request"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    >
+                    android:layout_height="fill_parent" >
                 </FrameLayout>
-                
-                <FrameLayout 
+
+                <FrameLayout
                     android:id="@+id/tab_history"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    >
+                    android:layout_height="fill_parent" >
                 </FrameLayout>
-                
             </FrameLayout>
-            	
         </LinearLayout>
-        
     </TabHost>
 
 </LinearLayout>
