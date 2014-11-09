@@ -6,9 +6,68 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/tab_send"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="SEND" />
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/contact_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="contactButtonOnClick"
+            android:text="Contact List"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:id="@+id/radar_view_bottom_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true" >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:hint="Total" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/send_request_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next" />
+        </LinearLayout>
+        
+        <RelativeLayout
+            android:id="@+id/group_note_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/radar_view_bottom_bar" >
+
+            <Button
+                android:id="@+id/group_note_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/group_note"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/group_note_icon"
+                android:hint="What&apos;s it for" />
+        </RelativeLayout>
+    </RelativeLayout>
 
 </FrameLayout>

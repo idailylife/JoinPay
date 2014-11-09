@@ -44,13 +44,14 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" />
 
             <!-- Tab Conetne -->
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent" >
 
                 <!-- Layout for fragments -->
@@ -59,13 +60,6 @@
                     android:id="@+id/tab_send"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent" >
-                    
-                    <Button
-                        android:id="@+id/contact_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="contactButtonOnClick"
-                        android:text="Contact List" />
                 </FrameLayout>
 
                 <FrameLayout
