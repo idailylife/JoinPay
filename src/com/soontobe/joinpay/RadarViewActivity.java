@@ -3,15 +3,8 @@ package com.soontobe.joinpay;
 
 import java.util.ArrayList;
 
-import com.soontobe.joinpay.fragment.RequestFragment;
-import com.soontobe.joinpay.fragment.SendFragment;
-import com.soontobe.joinpay.model.UserInfo;
-import com.soontobe.joinpay.widget.BigBubblePopupWindow;
-
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,12 +15,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.PopupWindow.OnDismissListener;
-import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
+import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TabHost.TabSpec;
+
+import com.soontobe.joinpay.fragment.RequestFragment;
+import com.soontobe.joinpay.fragment.SendFragment;
+import com.soontobe.joinpay.model.UserInfo;
+import com.soontobe.joinpay.widget.BigBubblePopupWindow;
+
+/* TODO: 
+ * 		1. Numeric Keyboard should contain arithmetic operations
+ */
 
 public class RadarViewActivity extends FragmentActivity 
 			implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
@@ -51,7 +54,6 @@ public class RadarViewActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  //No Title Bar
 		setContentView(R.layout.activity_radar_view);
-		
 		mSendFragment = new SendFragment();
 		mRequestFragment = new RequestFragment();
 		
@@ -170,6 +172,19 @@ public class RadarViewActivity extends FragmentActivity
 			Log.d("OnBigBubbleDismissListener", userInfo.toString());
 		}
 		
+	}
+	
+	public void sendProceedToConfirm(View v) {
+		startActivity(new Intent(this, SendConfirmActivity.class));
+	}
+	
+	public void setSendTotalLock(View v) {
+		Button b = (Button) v;
+		if (b.getText().equals("U")) {
+			b.setText("L");
+		} else {
+			b.setText("U");
+		}
 	}
 
 }

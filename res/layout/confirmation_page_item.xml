@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="0" >
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/activity_confirm"
+            android:padding="3dp"
+            android:text="Activity message"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/amount_confirm"
+            android:padding="3dp"
+            android:text="Amount"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/personal_note_confirm"
+            android:layout_span="1"
+            android:gravity="left"
+            android:padding="3dp"
+            android:text="Country"
+            android:textSize="20dp" />
+    </TableRow>
+
+</TableLayout>

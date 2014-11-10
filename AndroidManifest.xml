@@ -25,11 +25,18 @@
         <activity
             android:name=".RadarViewActivity"
             android:label="@string/title_activity_radar_view" 
+            android:windowSoftInputMode="adjustResize"
             >
         </activity>
         <activity
             android:name=".ContactListActivity"
-            android:label="@string/title_contact_list_activity" 
+            android:label="@string/title_contact_list" 
+            android:windowSoftInputMode="adjustPan"
+            >
+        </activity>
+        <activity
+            android:name=".SendConfirmActivity"
+            android:label="@string/title_send_confirm" 
             android:windowSoftInputMode="adjustPan"
             >
         </activity>

@@ -32,19 +32,15 @@
             android:layout_alignParentBottom="true" >
 
             <Button
+                android:id="@+id/send_total_lock"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="wrap_content"
+                android:onClick="setSendTotalLock"
+                android:text="U" />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="$"
-                />
-            
             <EditText
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -55,11 +51,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1" />
+            
             <Button
                 android:id="@+id/send_request_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next" />
+                android:text="Next"
+                android:onClick="sendProceedToConfirm" />
         </LinearLayout>
         
         <RelativeLayout

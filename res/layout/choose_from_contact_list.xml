@@ -55,7 +55,7 @@ limitations under the License.
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/button"
+        android:id="@+id/contact_list_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
@@ -65,7 +65,7 @@ limitations under the License.
 
 
         <Button
-            android:id="@+id/add_button"
+            android:id="@+id/contact_list_add_button"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -81,7 +81,7 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="6dp"
-        android:layout_above="@id/button"
+        android:layout_above="@id/contact_list_button"
         android:layout_below="@id/contact_search"  >
     </ListView>
 

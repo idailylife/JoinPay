@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.soontobe.joinpay.ContactListActivity;
 import com.soontobe.joinpay.R;
 import com.soontobe.joinpay.R.layout;
+import com.soontobe.joinpay.Utility;
 import com.soontobe.joinpay.widget.BigBubblePopupWindow;
 
 import android.app.Activity;
@@ -14,9 +15,14 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.content.Context;
 
@@ -81,7 +87,9 @@ public class SendFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_send, container, false);
+		View view = inflater.inflate(R.layout.fragment_send, container, false);
+		Utility.setupKeyboardAutoHidden(view, getActivity());
+		return view;
 	}
 
 	// TODO: Rename method, update argument and hook method into UI event
@@ -101,6 +109,7 @@ public class SendFragment extends Fragment
 					+ " must implement OnFragmentInteractionListener");
 		}
 	}
+	
 
 	@Override
 	public void onDetach() {
@@ -139,7 +148,4 @@ public class SendFragment extends Fragment
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
-
 }
