@@ -14,7 +14,21 @@ public class UserInfo {
 	private String personalNote;
 	private float amountOfMoney;
 	private float changedMoney;	//Amount of money changed when editing TextEdit
+	private boolean isContact;
+	private boolean isLocked;
 	
+	public UserInfo() {
+		isContact = false;
+	}
+	
+	public boolean isContact() {
+		return isContact;
+	}
+
+	public void setContactState(boolean isContact) {
+		this.isContact = isContact;
+	}
+
 	public float getChangedMoney() {
 		return changedMoney;
 	}
@@ -23,7 +37,7 @@ public class UserInfo {
 		this.changedMoney = changedMoney;
 	}
 
-	private boolean isLocked;
+	
 	
 	public String getPublicNote() {
 		return publicNote;
@@ -49,9 +63,7 @@ public class UserInfo {
 		this.isLocked = isLocked;
 	}
 
-	public UserInfo() {
-		
-	}
+
 	
 	
 	public int getUserId() {
