@@ -2,8 +2,9 @@ package com.soontobe.joinpay.widget;
 
 import com.soontobe.joinpay.R;
 import com.soontobe.joinpay.model.UserInfo;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +31,8 @@ public class RadarUserView extends FrameLayout {
 	private boolean mIsContact;
 	
 	private ImageView mYellowCircle;
-	private ImageView mGreenCircle[]; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
-	private Button	mSideButtons[]; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
+	private ImageView mGreenCircle[] = {null, null, null, null}; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
+	private Button	mSideButtons[] = {null, null, null, null}; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
 	private Button mCenterButton;
 	private TextView mNameText;
 	private TextView mMoneyText;
@@ -59,16 +60,53 @@ public class RadarUserView extends FrameLayout {
 			OnCenterButtonClickedListener centerBtnClickedListener) {
 		this.centerBtnClickedListener = centerBtnClickedListener;
 	}
+	
 
-	public RadarUserView(Context context, UserInfo userInfo) {
+	public RadarUserView(Context context) {
 		super(context);
-		LayoutInflater.from(context).inflate(R.layout.adjust_panel, this);
-		init();
 		
-		switchExpandPanel(false);
+		LayoutInflater.from(context).inflate(R.layout.adjust_panel, this);
 		mIsPanelExpanded = false;
 		mIsUserSelected = false;
-		
+		init();
+		switchExpandPanel(false);
+	}
+	
+	@SuppressLint("NewApi")
+	public RadarUserView(Context context, AttributeSet attrs, int defStyleAttr,
+			int defStyleRes) {
+		super(context, attrs, defStyleAttr, defStyleRes);
+		LayoutInflater.from(context).inflate(R.layout.adjust_panel, this);
+		mIsPanelExpanded = false;
+		mIsUserSelected = false;
+		init();
+		switchExpandPanel(false);
+	}
+
+	public RadarUserView(Context context, AttributeSet attrs, int defStyleAttr) {
+		super(context, attrs, defStyleAttr);
+		LayoutInflater.from(context).inflate(R.layout.adjust_panel, this);
+		mIsPanelExpanded = false;
+		mIsUserSelected = false;
+		init();
+		switchExpandPanel(false);
+	}
+
+	public RadarUserView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		LayoutInflater.from(context).inflate(R.layout.adjust_panel, this);
+		mIsPanelExpanded = false;
+		mIsUserSelected = false;
+		init();
+		switchExpandPanel(false);
+	}
+
+	/**
+	 * Must be called after construction method
+	 * to update user info.
+	 * @param userInfo
+	 */
+	public void setUserInfo(UserInfo userInfo){
 		if(null != userInfo){
 			setUserName(userInfo.getUserName());
 			setMoneyAmount(userInfo.getAmountOfMoney());
@@ -80,7 +118,7 @@ public class RadarUserView extends FrameLayout {
 			
 			if(userInfo.isLocked()){
 				changeLockState(true);
-				mIsMoneyLocked = true;
+				//mIsMoneyLocked = true;
 			} else {
 				mIsMoneyLocked = false;
 			}
@@ -99,15 +137,36 @@ public class RadarUserView extends FrameLayout {
 		mSideButtons[0].setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				changeLockState(!mIsMoneyLocked);
 				Log.d("AdjPanel", "MoneyLockState=" + !mIsMoneyLocked);
-				mIsMoneyLocked = !mIsMoneyLocked;
-				//Invoke further listener!
-				lockBtnClickedListener.OnClick(v, mIsMoneyLocked);
+				changeLockState(!mIsMoneyLocked);
+				//mIsMoneyLocked = !mIsMoneyLocked;
+				//TODO: Invoke further listener!
+				if(lockBtnClickedListener != null)
+					lockBtnClickedListener.OnClick(v, mIsMoneyLocked);
 			}
 		});
+		
 		mSideButtons[1] = (Button)findViewById(R.id.button_adjpanel_left);
+		mSideButtons[1].setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(editBtnClickedListener != null){
+					editBtnClickedListener.OnClick(v);
+				}
+			}
+		});
+		
 		mSideButtons[2] = (Button)findViewById(R.id.button_adjpanel_bottom);
+		mSideButtons[2].setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(addBtnClickedListener != null){
+					addBtnClickedListener.OnClick(v);
+				}
+			}
+		});
+		
 		mSideButtons[3] = (Button)findViewById(R.id.button_adjpanel_right);
 		mSideButtons[3].setOnClickListener(new OnClickListener() {
 			

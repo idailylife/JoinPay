@@ -1,39 +1,68 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fcfcfc"
-    tools:context="com.soontobe.joinpay.fragment.SendFragment" >
+    tools:context="com.soontobe.joinpay.fragment.SendFragment" > -->
 
     <!-- TODO: Update blank fragment layout -->
     <!-- Using FrameLayout to implement customized positions of buttons/drawables... -->
 
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusableInTouchMode="true" >
+        android:background="#fcfcfc"
+        android:orientation="vertical"
+        android:focusableInTouchMode="true" 
+        tools:context="com.soontobe.joinpay.fragment.SendFragment"
+        >
+		
+        
+        <!-- User circles in this frame(or somewhat)layout -->
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" 
+            android:layout_above="@+id/radar_view_bottom_bar"
+            android:background="#ccffff"
+            >
 
-        <ImageView
-            android:id="@+id/radar_view_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/group_note_bar"
-            android:layout_alignParentTop="true" 
-            android:src="@drawable/radar_bg"/>
+            <Button
+            	android:id="@+id/contact_button"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:onClick="contactButtonOnClick"
+            	android:text="Contact List" />
+        
+        	<!-- Test button to call the big bubble. -->
+        	<Button
+            	android:id="@+id/button_call_bigbubble"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:onClick="debugCallBigBubble"
+            	android:text="CALL_BIG_BUBBLE" 
+            	android:layout_marginTop="50dp"
+            	/>
+        
+        	<!-- Under construction -->
+        	<!-- Remove when ready, may be dynamically called in java code. -->
+        	<com.soontobe.joinpay.widget.RadarUserView
+            	android:id="@+id/user_view_test"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_marginTop="100dp"
+            	>
+        	</com.soontobe.joinpay.widget.RadarUserView>
+        </FrameLayout>
 
-        <Button
-            android:id="@+id/contact_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:onClick="contactButtonOnClick"
-            android:text="Contact List" />
-
+        
+		<!-- Bottom Bar -->
         <RelativeLayout
             android:id="@+id/radar_view_bottom_bar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/group_note_bar"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="10dp" >
@@ -101,12 +130,14 @@
                 android:onClick="sendProceedToConfirm"
                 android:text="Next" />
         </RelativeLayout>
-
+	
+        <!-- Group note bar -->
         <RelativeLayout
             android:id="@+id/group_note_bar"
             android:layout_width="fill_parent"
+            android:layout_gravity="bottom"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/radar_view_bottom_bar"
+            android:layout_alignParentBottom="true"
             android:paddingBottom="3dp"
             android:paddingLeft="15dp"
             android:paddingRight="10dp" >
@@ -137,17 +168,6 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <!-- Test button to call the big bubble. -->
-
-        <Button
-            android:id="@+id/button_call_bigbubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/contact_button"
-            android:layout_centerHorizontal="true"
-            android:onClick="debugCallBigBubble"
-            android:text="CALL_BIG_BUBBLE" />
-        <!-- End of test button -->
     </RelativeLayout>
 
-</FrameLayout>
+<!-- </FrameLayout> -->

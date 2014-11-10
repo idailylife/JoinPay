@@ -91,23 +91,32 @@ implements LoaderCallbacks<Void>{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-
-		setEventListeners();
-		Button sendMoneyNextButton = (Button) getActivity().findViewById(R.id.send_money_next);
-		OnTouchListener buttonOnTouchListener = new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				Button btn = (Button) v;
-				// TODO Auto-generated method stub
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					btn.setBackgroundResource(R.drawable.button_active);
-				} else if (event.getAction() == MotionEvent.ACTION_UP) {
-					btn.setBackgroundResource(R.drawable.button_normal);
-				}
-				return false;
-			}
-		};
-		sendMoneyNextButton.setOnTouchListener(buttonOnTouchListener);
+		
+		/**
+		 * NOTE.........
+		 * 
+		 * The code below was temporarily commented in case of weird crash.
+		 */
+//		setEventListeners();
+//		Button sendMoneyNextButton = (Button) getActivity().findViewById(R.id.send_money_next);
+//		
+//		
+//		OnTouchListener buttonOnTouchListener = new OnTouchListener() {
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				Button btn = (Button) v;
+//				// TODO Auto-generated method stub
+//				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//					//CAUSE OF　CRASH。 Temporarily removed.
+//					//btn.setBackgroundResource(R.drawable.button_active);
+//				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+//					//CAUSE OF　CRASH。 Temporarily removed.
+//					//btn.setBackgroundResource(R.drawable.button_normal);
+//				}
+//				return false;
+//			}
+//		};
+//		sendMoneyNextButton.setOnTouchListener(buttonOnTouchListener);
 		
 	}
 	
