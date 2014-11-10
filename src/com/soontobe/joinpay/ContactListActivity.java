@@ -8,6 +8,7 @@ import java.util.Set;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,6 +44,54 @@ public class ContactListActivity extends ListActivity {
 		setContentView(R.layout.choose_from_contact_list);
 		setContactListView();
 		setInputSearch();
+		setEventListeners();
+	}
+	
+	private void setEventListeners() {
+		Button contactListAddButton = (Button) findViewById(R.id.contact_list_add_button);
+		contactListAddButton.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Button btn = (Button) v;
+				// TODO Auto-generated method stub
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					btn.setBackgroundResource(R.drawable.button_active);
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					btn.setBackgroundResource(R.drawable.button_normal);
+				}
+				return false;
+			}
+		});
+
+		EditText contactSearchInput = (EditText) findViewById(R.id.contact_search_input);
+		contactSearchInput.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				Button clearButton = (Button) findViewById(R.id.button_clear_contact_search_input);
+				// TODO Auto-generated method stub
+				if (count == 0) {
+					clearButton.setVisibility(View.INVISIBLE);
+				} else {
+					clearButton.setVisibility(View.VISIBLE);
+					
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 	}
 	
 	private void setContactListView() {
