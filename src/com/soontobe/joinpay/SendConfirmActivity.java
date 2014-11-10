@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -70,18 +71,16 @@ public class SendConfirmActivity extends ListActivity {
 				{"Kate", "20", ""},
 				{"Jason", "25", ""},
 				{"Melissa", "20", ""},
-				{"Kate", "20", ""},
-				{"Jason", "25", ""},
-				{"Melissa", "20", ""},
-				{"Kate", "20", ""},
-				{"Jason", "25", ""},
-				{"Melissa", "20", ""},
 				{"Itziar", "15", ""}
 		};
 		paymentInfo = tmp;
 	}
 	
 	public void backToSendInfo(View v) {
+		finish();
+	}
+	
+	public void proceedToConfirmSend(View v) {
 		finish();
 	}
 }

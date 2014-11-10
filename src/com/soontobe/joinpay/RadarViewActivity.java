@@ -2,20 +2,27 @@ package com.soontobe.joinpay;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
@@ -33,21 +40,23 @@ import com.soontobe.joinpay.widget.BigBubblePopupWindow;
  */
 
 public class RadarViewActivity extends FragmentActivity 
-			implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
-			, RequestFragment.OnFragmentInteractionListener{
-	
+implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
+, RequestFragment.OnFragmentInteractionListener, OnTouchListener{
+
 	private TabHost mTabHost;
 	private int mCurrentTab;
 	private SendFragment mSendFragment;
 	private RequestFragment mRequestFragment;
 	private BigBubblePopupWindow mBigBubble;
-	
+
 	private static final String TAG = "RadarViewActivity";
 	private static final String TAG_SEND = "tab_send";
 	private static final String TAG_REQUEST = "tab_request";
 	private static final String TAG_HISTORY = "tab_history";
-	
+
 	private static final int contactListRequestCode = 1;
+
+	Map<String, Boolean> lockInfo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +65,34 @@ public class RadarViewActivity extends FragmentActivity
 		setContentView(R.layout.activity_radar_view);
 		mSendFragment = new SendFragment();
 		mRequestFragment = new RequestFragment();
-		
+
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
 		setupTabs();
 		mTabHost.setOnTabChangedListener(this);
-		
+
 		mCurrentTab = 0;
 		mTabHost.setCurrentTab(mCurrentTab);
 		getFragmentManager().beginTransaction().replace(R.id.tab_send, mSendFragment)
-							.commit();
+		.commit();
+
+		lockInfo = new HashMap<String, Boolean>();
+		lockInfo.put("total", false);
+		setEvents();
+
 	}
-	
-    public void contactButtonOnClick(View v) {
+
+	@Override
+	public View onCreateView(String name, Context context, AttributeSet attrs) {
+		// TODO Auto-generated method stub
+		return super.onCreateView(name, context, attrs);
+	}
+
+	private void setEvents() {
+		ImageView iv = (ImageView) findViewById(R.id.btn_radar_view_back);
+		iv.setOnTouchListener(this);
+	}
+
+	public void contactButtonOnClick(View v) {
 		//		Log.d("contactButtonOnClick", "clicked");
 		startActivityForResult(new Intent(this, ContactListActivity.class), contactListRequestCode);
 	}
@@ -79,7 +104,7 @@ public class RadarViewActivity extends FragmentActivity
 		mTabHost.addTab(newTab(TAG_REQUEST, R.string.tab_request, R.id.tab_request));
 		mTabHost.addTab(newTab(TAG_HISTORY, R.string.tab_history, R.id.tab_history));
 	}
-	
+
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
 		Log.d(TAG, "buildTab(): tag=" + tag);
 
@@ -101,37 +126,38 @@ public class RadarViewActivity extends FragmentActivity
 		if(TAG_SEND.equals(tabId)){
 			mCurrentTab = 0;
 			fm.beginTransaction().replace(R.id.tab_send, mSendFragment)
-								.commit();
-			
+			.commit();
+
 		} else if (TAG_REQUEST.equals(tabId)){
 			mCurrentTab = 1;
 			fm.beginTransaction().replace(R.id.tab_request, mRequestFragment)
-						.commit();
+			.commit();
 		} else if (TAG_HISTORY.equals(tabId)){
 			mCurrentTab = 2;
-			
+
 		} else {
 			Log.w("RadarViewActivity_onTabChanged", "Cannot find tab id=" + tabId);
 		}
+
 	}
 
 	@Override
 	public void onFragmentInteraction(Uri uri) {
 		Log.d(TAG, uri.toString());		
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == contactListRequestCode) { 
 			if (resultCode == RESULT_OK) {
 				Toast.makeText(this,data.getData().toString(), Toast.LENGTH_SHORT).show();
-				
+
 				//TODO: Inform mSendFragment of mRequestFragment that we have new contact selected
 				// switch case.: mCurrentTab
 			} 
 		}
 	}
-	
+
 	/**
 	 * onClick function for the debug button `CALL_BIG_BUBBLE`
 	 * @param view
@@ -141,28 +167,28 @@ public class RadarViewActivity extends FragmentActivity
 		mBigBubble = new BigBubblePopupWindow(popupView, null);
 		mBigBubble.setTouchable(true);
 		mBigBubble.setBackgroundDrawable(new BitmapDrawable()); //Outside disimss-able
-		
+
 		ArrayList<Float> dataList = new ArrayList<Float>();
 		dataList.add(1.05f);
 		dataList.add(2.55f);
-		
+
 		mBigBubble.setDonutChartData(dataList);
-		
+
 		//Make up some user info...
 		UserInfo userInfo = new UserInfo();
 		userInfo.setLocked(true);
 		userInfo.setUserName("Test User Name");
 		userInfo.setAmountOfMoney(52.06f);
 		userInfo.setPublicNote("Helloween party");
-		
+
 		mBigBubble.setUserInfo(userInfo);
 		mBigBubble.showUserInfo();
 		mBigBubble.setOnDismissListener(new OnBigBubbleDismissListener());
-		
+
 		mBigBubble.showAtLocation(findViewById(R.id.btn_radar_view_back), Gravity.CENTER_VERTICAL, 0, 50);
 	}
-	
-	
+
+
 	private class OnBigBubbleDismissListener implements OnDismissListener {
 
 		@Override
@@ -171,20 +197,42 @@ public class RadarViewActivity extends FragmentActivity
 			//TODO: 
 			Log.d("OnBigBubbleDismissListener", userInfo.toString());
 		}
-		
+
 	}
-	
+
 	public void sendProceedToConfirm(View v) {
 		startActivity(new Intent(this, SendConfirmActivity.class));
 	}
-	
+
 	public void setSendTotalLock(View v) {
-		Button b = (Button) v;
-		if (b.getText().equals("U")) {
-			b.setText("L");
+		ImageView iv = (ImageView) v;
+		if (lockInfo.get("total")) {
+			iv.setImageResource(R.drawable.unlocked_darkgreen);
+			lockInfo.put("total", false);
+			// TODO
 		} else {
-			b.setText("U");
+			iv.setImageResource(R.drawable.locked_darkgreen);
+			lockInfo.put("total", true);
 		}
 	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		// TODO Auto-generated method stub
+
+		Log.d("ActionType", event.toString());
+		if (v instanceof ImageButton) {
+			ImageView iv = (ImageView) v;
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				iv.setImageResource(R.drawable.arrow_active);
+			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				iv.setImageResource(R.drawable.arrow_normal);
+			}
+			iv.requestLayout();
+			// also let the framework process the event
+		}
+		return false;
+	}
+
 
 }

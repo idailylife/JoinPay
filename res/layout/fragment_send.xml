@@ -9,82 +9,105 @@
     <!-- Using FrameLayout to implement customized positions of buttons/drawables... -->
 
     <RelativeLayout
-        android:focusableInTouchMode="true" 
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-	
-    	<!-- Test button to call the big bubble. -->
-    	<!-- End of test button -->
-    
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true" >
+
+        
 
         <Button
             android:id="@+id/contact_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:onClick="contactButtonOnClick"
-            android:text="Contact List"
-            android:layout_centerHorizontal="true" />
+            android:text="Contact List" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/radar_view_bottom_bar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true" >
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal" >
 
-            <Button
+            <ImageView
                 android:id="@+id/send_total_lock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:onClick="setSendTotalLock"
-                android:text="U" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:src="@drawable/unlocked_darkgreen" />
+
+            <ImageView
+                android:id="@+id/dollar_sign"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toRightOf="@id/send_total_lock"
+                android:layout_centerVertical="true"
+                android:src="@drawable/dollar_white" />
 
             <EditText
-                android:layout_width="80dp"
+                android:id="@+id/edit_text_total_amount"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:hint="Total" 
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/dollar_sign"
+                android:hint="Total"
+                android:gravity="center"
                 android:inputType="numberDecimal" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/send_pane_single_person_icon"
+                android:layout_centerVertical="true"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_toRightOf="@+id/edit_text_total_amount"
+                android:src="@drawable/person_white" />
 
             <TextView
+                android:id="@+id/send_num_of_people"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/send_pane_single_person_icon"
+                android:layout_centerVertical="true"
+                android:textSize="20dp"
                 android:text="1" />
-            
+
             <Button
                 android:id="@+id/send_request_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next"
-                android:onClick="sendProceedToConfirm" />
-        </LinearLayout>
-        
+                android:onClick="sendProceedToConfirm"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="Next" />
+        </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/group_note_bar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/radar_view_bottom_bar" >
 
-            <Button
-                android:id="@+id/group_note_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/icon_group_note"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/group_white" />
 
             <EditText
                 android:id="@+id/group_note"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/group_note_icon"
-                
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/icon_group_note"
                 android:hint="What&apos;s it for" />
         </RelativeLayout>
-
+		
+        <!-- Test button to call the big bubble. -->
+        
         <Button
             android:id="@+id/button_call_bigbubble"
             android:layout_width="wrap_content"
@@ -93,7 +116,7 @@
             android:layout_centerHorizontal="true"
             android:onClick="debugCallBigBubble"
             android:text="CALL_BIG_BUBBLE" />
-
+        <!-- End of test button -->
     </RelativeLayout>
 
 </FrameLayout>
