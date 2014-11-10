@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow.OnDismissListener;
@@ -41,7 +42,7 @@ import com.soontobe.joinpay.widget.BigBubblePopupWindow;
 
 public class RadarViewActivity extends FragmentActivity 
 implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
-, RequestFragment.OnFragmentInteractionListener, OnTouchListener{
+, RequestFragment.OnFragmentInteractionListener {
 
 	private TabHost mTabHost;
 	private int mCurrentTab;
@@ -77,7 +78,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 
 		lockInfo = new HashMap<String, Boolean>();
 		lockInfo.put("total", false);
-		setEvents();
+		setEventListeners();
 
 	}
 
@@ -87,9 +88,36 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		return super.onCreateView(name, context, attrs);
 	}
 
-	private void setEvents() {
-		ImageView iv = (ImageView) findViewById(R.id.btn_radar_view_back);
-		iv.setOnTouchListener(this);
+	private void setEventListeners() {
+		Button btn = (Button) findViewById(R.id.btn_radar_view_back);
+		btn.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Button btn = (Button) v;
+				// TODO Auto-generated method stub
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					btn.setBackgroundResource(R.drawable.arrow_active);
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					btn.setBackgroundResource(R.drawable.arrow_normal);
+				}
+				return false;
+			}
+		});
+
+		btn = (Button) findViewById(R.id.btn_radar_view_cross);
+		btn.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Button btn = (Button) v;
+				// TODO Auto-generated method stub
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					btn.setBackgroundResource(R.drawable.cross_active);
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					btn.setBackgroundResource(R.drawable.cross_normal);
+				}
+				return false;
+			}
+		});
 	}
 
 	public void contactButtonOnClick(View v) {
@@ -214,24 +242,6 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 			iv.setImageResource(R.drawable.locked_darkgreen);
 			lockInfo.put("total", true);
 		}
-	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		// TODO Auto-generated method stub
-
-		Log.d("ActionType", event.toString());
-		if (v instanceof ImageButton) {
-			ImageView iv = (ImageView) v;
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-				iv.setImageResource(R.drawable.arrow_active);
-			} else if (event.getAction() == MotionEvent.ACTION_UP) {
-				iv.setImageResource(R.drawable.arrow_normal);
-			}
-			iv.requestLayout();
-			// also let the framework process the event
-		}
-		return false;
 	}
 
 

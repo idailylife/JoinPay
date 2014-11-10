@@ -7,14 +7,15 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.soontobe.joinpay.R;
 import com.soontobe.joinpay.Utility;
@@ -82,7 +83,7 @@ implements LoaderCallbacks<Void>{
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_send, container, false);
 		Utility.setupKeyboardAutoHidden(view, getActivity());
-		
+
 		return view;
 	}
 
@@ -90,8 +91,30 @@ implements LoaderCallbacks<Void>{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+
+		setEventListeners();
+		Button sendMoneyNextButton = (Button) getActivity().findViewById(R.id.send_money_next);
+		OnTouchListener buttonOnTouchListener = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Button btn = (Button) v;
+				// TODO Auto-generated method stub
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					btn.setBackgroundResource(R.drawable.button_active);
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					btn.setBackgroundResource(R.drawable.button_normal);
+				}
+				return false;
+			}
+		};
+		sendMoneyNextButton.setOnTouchListener(buttonOnTouchListener);
+		
 	}
 	
+	private void setEventListeners() {
+		
+	}
+
 	// TODO: Rename method, update argument and hook method into UI event
 	public void onButtonPressed(Uri uri) {
 		if (mListener != null) {
