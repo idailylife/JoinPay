@@ -109,20 +109,6 @@ implements LoaderCallbacks<Void>{
 		};
 		sendMoneyNextButton.setOnTouchListener(buttonOnTouchListener);
 		
-		
-		
-		
-//		EditText groupNote = (EditText) getActivity().findViewById(R.id.group_note);
-//		groupNote.setOnFocusChangeListener(new OnFocusChangeListener() {          
-//		    public void onFocusChange(View v, boolean hasFocus) {
-//	        	EditText groupNote = (EditText) v;
-//		        if(hasFocus) {
-//		        	groupNote.setGravity(Gravity.NO_GRAVITY);
-//		        } else {
-//		        	groupNote.setGravity(Gravity.CENTER);
-//		        }
-//		    }
-//		});
 	}
 	
 	private void setEventListeners() {

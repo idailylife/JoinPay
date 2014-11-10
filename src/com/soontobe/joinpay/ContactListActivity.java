@@ -74,7 +74,6 @@ public class ContactListActivity extends ListActivity {
 					clearButton.setVisibility(View.INVISIBLE);
 				} else {
 					clearButton.setVisibility(View.VISIBLE);
-					
 				}
 			}
 			

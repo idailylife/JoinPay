@@ -13,7 +13,13 @@
         android:layout_height="match_parent"
         android:focusableInTouchMode="true" >
 
-        
+        <ImageView
+            android:id="@+id/radar_view_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/group_note_bar"
+            android:layout_alignParentTop="true" 
+            android:src="@drawable/radar_bg"/>
 
         <Button
             android:id="@+id/contact_button"
@@ -125,13 +131,14 @@
                     android:layout_height="fill_parent"
                     android:layout_centerVertical="true"
                     android:background="#ffffff"
+                    android:hint="What&apos;s it for"
                     android:paddingLeft="8dp"
-                    android:hint="What&apos;s it for" />
+                    android:singleLine="true" />
             </RelativeLayout>
         </RelativeLayout>
-		
+
         <!-- Test button to call the big bubble. -->
-        
+
         <Button
             android:id="@+id/button_call_bigbubble"
             android:layout_width="wrap_content"
