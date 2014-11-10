@@ -50,7 +50,7 @@
                 android:layout_height="16dp"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/ic_launcher"
+                android:src="@drawable/group_darkgrey"
                 />
             
             <TextView 
@@ -74,8 +74,8 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginLeft="2dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/ic_launcher"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/person_darkgrey"
                 />
             
             <TextView 
@@ -107,9 +107,9 @@
             >
             <Button
                 android:id="@+id/button_lock_inbubble"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:text="L" 
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/unlocked_darkgreen2"
                 android:textSize="10dp"
                 />
             <TextView 

@@ -40,7 +40,6 @@ public class BigBubblePopupWindow extends PopupWindow {
 		this.mUserInfo = mUserInfo;
 	}
 
-	private ArrayAdapter<String> mArrayAdapter;
 	
 	private PieGraph mPieGraph;
 	private Button mLockButton;
@@ -98,7 +97,8 @@ public class BigBubblePopupWindow extends PopupWindow {
 		mTextView.setText(userInfo.getUserName());
 		mEditText.setText(String.valueOf(userInfo.getAmountOfMoney()));
 		if(userInfo.isLocked()){
-			mLockButton.setText("U");
+			//mLockButton.setText("U");
+			mLockButton.setBackgroundResource(R.drawable.locked_darkgreen);
 		}
 		if(null != userInfo.getPublicNote()){
 			//TODO: Insert items into ListView
@@ -152,10 +152,12 @@ public class BigBubblePopupWindow extends PopupWindow {
 			if (mUserInfo.isLocked()){
 				//Unlock
 				mUserInfo.setLocked(false);
-				mLockButton.setText("L");
+				mLockButton.setBackgroundResource(R.drawable.unlocked_darkgreen2);
+				//mLockButton.setText("L");
 			} else {
 				mUserInfo.setLocked(true);
-				mLockButton.setText("U");
+				//mLockButton.setText("U");
+				mLockButton.setBackgroundResource(R.drawable.locked_darkgreen);
 			}
 		}
 		

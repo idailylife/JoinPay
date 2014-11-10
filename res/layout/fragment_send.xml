@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#555555"
+    android:background="#fcfcfc"
     tools:context="com.soontobe.joinpay.fragment.SendFragment" >
 
     <!-- TODO: Update blank fragment layout -->
@@ -13,8 +13,7 @@
         android:layout_height="match_parent"
         android:focusableInTouchMode="true" >
 
-        <!-- Test button to call the big bubble. -->
-        <!-- End of test button -->
+        
 
         <Button
             android:id="@+id/contact_button"
@@ -130,7 +129,9 @@
                     android:hint="What&apos;s it for" />
             </RelativeLayout>
         </RelativeLayout>
-
+		
+        <!-- Test button to call the big bubble. -->
+        
         <Button
             android:id="@+id/button_call_bigbubble"
             android:layout_width="wrap_content"
@@ -139,6 +140,7 @@
             android:layout_centerHorizontal="true"
             android:onClick="debugCallBigBubble"
             android:text="CALL_BIG_BUBBLE" />
+        <!-- End of test button -->
     </RelativeLayout>
 
 </FrameLayout>
