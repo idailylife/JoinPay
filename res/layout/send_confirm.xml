@@ -2,6 +2,11 @@
     android:id="@+id/send_confirm_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="10dp"
+    android:background="#888888"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -14,27 +19,31 @@
             android:id="@+id/title_send_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
             android:text="Send"
             android:textSize="24dp" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/send_edit_pencil"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+        android:layout_centerVertical="true"
             android:layout_alignBottom="@+id/title_send_confirm"
             android:layout_toRightOf="@id/title_send_confirm"
+            android:background="@drawable/pencil_white"
             android:onClick="backToSendInfo" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/send_confirm_button"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
         android:onClick="proceedToConfirmSend"
-        android:text="Send" />
+        android:background="@drawable/button_normal"
+        android:text="Send"
+        android:gravity="center" />
 
     <ListView
         android:id="@android:id/list"

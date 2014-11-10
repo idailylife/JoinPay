@@ -8,8 +8,11 @@ import java.util.Map;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -32,8 +35,45 @@ public class SendConfirmActivity extends ListActivity {
 		setContentView(R.layout.send_confirm);
 		setConstant();
 		setListView();
+		setEventListeners();
 	}
 	
+    private void setEventListeners() {
+		Button sendConfirmButton = (Button) findViewById(R.id.send_confirm_button);
+		OnTouchListener buttonOnTouchListener = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Button btn = (Button) v;
+				// TODO Auto-generated method stub
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					btn.setBackgroundResource(R.drawable.button_active);
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					btn.setBackgroundResource(R.drawable.button_normal);
+				}
+				return false;
+			}
+		};
+		sendConfirmButton.setOnTouchListener(buttonOnTouchListener);
+
+		Button sendEditPencil = (Button) findViewById(R.id.send_edit_pencil);
+		buttonOnTouchListener = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Button btn = (Button) v;
+				// TODO Auto-generated method stub
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					btn.setBackgroundResource(R.drawable.pencil_grey);
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					btn.setBackgroundResource(R.drawable.pencil_white);
+				}
+				return false;
+			}
+		};
+		sendEditPencil.setOnTouchListener(buttonOnTouchListener);
+		
+	}
+	
+    
 	private void setListView() {
 		
 		ListView list = getListView();
