@@ -11,5 +11,6 @@
     <string name="tab_send">Send</string>
     <string name="tab_request">Request</string>
     <string name="tab_history">History</string>
+    <string name="service_name">MsgRtrService</string>
 
 </resources>

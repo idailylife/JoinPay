@@ -40,6 +40,10 @@
             android:windowSoftInputMode="adjustPan"
             >
         </activity>
+        <service android:name="MessageRetrievalService"
+            android:label="@string/service_name"            
+            >
+        </service>
     </application>
 
 </manifest>

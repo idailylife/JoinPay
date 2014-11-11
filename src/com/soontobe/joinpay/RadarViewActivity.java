@@ -215,6 +215,11 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 
 		mBigBubble.showAtLocation(findViewById(R.id.btn_radar_view_back), Gravity.CENTER_VERTICAL, 0, 50);
 	}
+	
+	
+	public void showBigBubble(UserInfo userInfo){
+		
+	}
 
 
 	private class OnBigBubbleDismissListener implements OnDismissListener {
@@ -222,7 +227,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		@Override
 		public void onDismiss() {
 			UserInfo userInfo = mBigBubble.getUserInfo();
-			//TODO: 
+			//TODO: Refresh UI.
 			Log.d("OnBigBubbleDismissListener", userInfo.toString());
 		}
 

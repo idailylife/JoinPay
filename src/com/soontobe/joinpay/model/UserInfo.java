@@ -19,6 +19,7 @@ public class UserInfo {
 	
 	public UserInfo() {
 		isContact = false;
+		amountOfMoney = Float.NaN;
 	}
 	
 	public boolean isContact() {

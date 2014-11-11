@@ -178,6 +178,7 @@ public class BigBubblePopupWindow extends PopupWindow {
 		}
 	}
 	
+	
 	private class PersonalNoteChangeListener implements View.OnFocusChangeListener{
 
 		@Override

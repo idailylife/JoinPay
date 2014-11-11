@@ -40,4 +40,10 @@ public class MainActivity extends Activity {
     	Log.d("button", "click");
     	startActivity(new Intent(this, RadarViewActivity.class));
     }
+    
+    public void onStartServiceClick(View v){
+    	Log.d("Service", "start?");
+    	Intent i = new Intent(getBaseContext(), MessageRetrievalService.class);
+    	getBaseContext().startService(i);
+    }
 }

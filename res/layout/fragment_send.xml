@@ -22,40 +22,82 @@
         
         <!-- User circles in this frame(or somewhat)layout -->
         <FrameLayout
+            android:id="@+id/layout_send_frag_bubbles"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" 
-            android:layout_above="@+id/radar_view_bottom_bar"
-            android:background="#ccffff"
+            android:layout_above="@+id/group_note_bar"
+            android:background="@drawable/radar_bg"
             >
 
-            <Button
+            <ImageButton
             	android:id="@+id/contact_button"
-            	android:layout_width="wrap_content"
-            	android:layout_height="wrap_content"
+            	android:layout_width="62dp"
+            	android:layout_height="62dp"
+            	android:layout_gravity="center|top"
+            	android:layout_marginTop="30dp"
             	android:onClick="contactButtonOnClick"
-            	android:text="Contact List" />
-        
-        	<!-- Test button to call the big bubble. -->
-        	<Button
-            	android:id="@+id/button_call_bigbubble"
-            	android:layout_width="wrap_content"
-            	android:layout_height="wrap_content"
-            	android:onClick="debugCallBigBubble"
-            	android:text="CALL_BIG_BUBBLE" 
-            	android:layout_marginTop="50dp"
+            	android:src="@drawable/add_white"
+            	android:scaleType="fitCenter"
+            	android:padding="15dp"
+            	android:textColor="#fcfcfc"
+            	android:textSize="36dp"
+            	android:background="@drawable/shape_circle_gray"
+            	android:gravity="center"
             	/>
         
-        	<!-- Under construction -->
-        	<!-- Remove when ready, may be dynamically called in java code. -->
-        	<com.soontobe.joinpay.widget.RadarUserView
-            	android:id="@+id/user_view_test"
-            	android:layout_width="wrap_content"
-            	android:layout_height="wrap_content"
-            	android:layout_marginTop="100dp"
-            	>
-        	</com.soontobe.joinpay.widget.RadarUserView>
+            <com.soontobe.joinpay.widget.RadarUserView 
+                android:id="@+id/user_bubble_myself"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="5dp"
+                >
+            </com.soontobe.joinpay.widget.RadarUserView>
+            
+            
+
+        	
         </FrameLayout>
 
+        <!-- Group note bar -->
+        <RelativeLayout
+            android:id="@+id/group_note_bar"
+            android:background="#e3e3e2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/radar_view_bottom_bar"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="10dp" >
+
+            <ImageView
+                android:id="@+id/icon_group_note"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/group_white" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="26dp"
+                android:layout_toRightOf="@id/icon_group_note"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <EditText
+                    android:id="@+id/group_note"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_centerVertical="true"
+                    android:background="#ffffff"
+                    android:hint="What&apos;s it for"
+                    android:paddingLeft="8dp"
+                    android:textSize="16dp"
+                    android:singleLine="true" />
+            </RelativeLayout>
+        </RelativeLayout>
+        
         
 		<!-- Bottom Bar -->
         <RelativeLayout
@@ -65,7 +107,9 @@
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
-            android:paddingRight="10dp" >
+            android:paddingRight="10dp" 
+            android:background="#5bc48c"
+            >
 
             <ImageView
                 android:id="@+id/send_total_lock"
@@ -131,41 +175,7 @@
                 android:text="Next" />
         </RelativeLayout>
 	
-        <!-- Group note bar -->
-        <RelativeLayout
-            android:id="@+id/group_note_bar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/radar_view_bottom_bar"
-            android:paddingBottom="3dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="10dp" >
-
-            <ImageView
-                android:id="@+id/icon_group_note"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/group_white" />
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="30dp"
-                android:layout_toRightOf="@id/icon_group_note"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" >
-
-                <EditText
-                    android:id="@+id/group_note"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_centerVertical="true"
-                    android:background="#ffffff"
-                    android:hint="What&apos;s it for"
-                    android:paddingLeft="8dp"
-                    android:singleLine="true" />
-            </RelativeLayout>
-        </RelativeLayout>
+        
 
     </RelativeLayout>
 

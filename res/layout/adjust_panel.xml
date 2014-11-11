@@ -13,75 +13,83 @@
         android:src="@drawable/shape_small_circle" />
 	
     <!-- Top button -->
-    <ImageView 
+    <!-- <ImageView 
         android:id="@+id/imgview_adjpanel_top"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginLeft="45.6dp"
         android:src="@drawable/shape_small_button_circle"        
-        />
-    <Button 
+        /> -->
+    <ImageButton 
         android:id="@+id/button_adjpanel_top"
-        android:layout_width="19.2dp"
-        android:layout_height="19.2dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="2.4dp"
-        android:background="@drawable/unlocked_white"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="45.6dp"
+        android:src="@drawable/unlocked_white"
+        android:scaleType="fitCenter"
+        android:padding="3dp"
+        android:background="@drawable/shape_small_button_circle"
         />
     
     <!-- Left button -->
-    <ImageView 
+    <!--  <ImageView 
         android:id="@+id/imgview_adjpanel_left"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="45.6dp"
         android:background="@drawable/shape_small_button_circle"
-        />
-    <Button 
+        />-->
+    <ImageButton 
         android:id="@+id/button_adjpanel_left"
-        android:layout_width="19.2dp"
-        android:layout_height="19.2dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginLeft="2.4dp"
-        android:background="@drawable/pencil_white"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="45.6dp"
+        android:src="@drawable/pencil_white"
+        android:scaleType="fitCenter"
+        android:padding="3dp"
+        android:background="@drawable/shape_small_button_circle"
         />
     
     <!-- Bottom button -->
-    <ImageView 
+    <!--<ImageView 
         android:id="@+id/imgview_adjpanel_bottom"
         android:layout_gravity="bottom"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginLeft="45.6dp"
         android:src="@drawable/shape_small_button_circle"
-        />
-    <Button 
+        />-->
+    <ImageButton 
         android:id="@+id/button_adjpanel_bottom"
-        android:layout_width="19.2dp"
-        android:layout_height="19.2dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginBottom="2.4dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="45.6dp"
         android:layout_gravity="bottom"
-        android:background="@drawable/add_person_white"
+        android:src="@drawable/add_person_white"
+        android:scaleType="fitCenter"
+        android:padding="3dp"
+        android:background="@drawable/shape_small_button_circle"
         />
     
     <!-- Right button -->
-    <ImageView 
+    <!--  <ImageView 
         android:id="@+id/imgview_adjpanel_right"
         android:layout_gravity="right"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="45.6dp"
         android:background="@drawable/shape_small_button_circle"
-        />
-    <Button 
+        />-->
+    <ImageButton 
         android:id="@+id/button_adjpanel_right"
         android:layout_gravity="right"
-        android:layout_width="19.2dp"
-        android:layout_height="19.2dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginRight="2.4dp"
-        android:background="@drawable/cross_white"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="45.6dp"
+        android:background="@drawable/shape_small_button_circle"
+        android:src="@drawable/cross_white"
+        android:scaleType="fitCenter"
+        android:padding="3dp"
         />
     
     <!-- Center border and big button -->
@@ -98,7 +106,7 @@
         android:focusable="false"
         android:layout_width="60dp"
         android:layout_height="16dp"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:text="NAME"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
@@ -108,8 +116,8 @@
         android:id="@+id/textview_adjpanel_money"
         android:focusable="false"
         android:layout_width="60dp"
-        android:layout_height="16dp"
-        android:textSize="13sp"
+        android:layout_height="17dp"
+        android:textSize="15sp"
         android:text="$24.2"
         android:layout_gravity="center"
         android:layout_marginTop="9dp"
