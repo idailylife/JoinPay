@@ -17,8 +17,8 @@ import android.widget.TextView;
  * Customized widget in radar view
  * contains 1 center button and 4 side buttons.
  * 
- * CAUTION: This widget has the size 96dp*96dp whether the side buttons show or not.
- * The center part of this widget have the size 80dp*80dp.
+ * CAUTION: This widget has the size 108dp*108dp whether the side buttons show or not.
+ * The center part of this widget have the size 96dp*96dp.
  * @author ²©Î°
  *
  */
