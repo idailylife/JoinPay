@@ -1,28 +1,24 @@
 package com.soontobe.joinpay;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Filter.FilterListener;
 import android.widget.ListView;
 
@@ -46,6 +42,22 @@ public class ContactListActivity extends ListActivity {
 		setInputSearch();
 		setEventListeners();
 	}
+	
+//	@Override  
+//    public void onAttachedToWindow() {  
+//        super.onAttachedToWindow();  
+//  
+//        if (getResources().getBoolean(R.bool.is_tablet) && mOpenAsSmallWindow) {  
+//            final View view = getWindow().getDecorView();  
+//            final WindowManager.LayoutParams lp = (WindowManager.LayoutParams) view.getLayoutParams();  
+//  
+//            lp.gravity = Gravity.CENTER;  
+//  
+//            lp.width = mActivityWindowWidth;  
+//            lp.height = mActivityWindowHeight;  
+//            getWindowManager().updateViewLayout(view, lp);  
+//        }  
+//    }  
 	
 	private void setEventListeners() {
 		Button contactListAddButton = (Button) findViewById(R.id.contact_list_add_button);

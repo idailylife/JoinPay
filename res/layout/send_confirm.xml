@@ -50,7 +50,9 @@
             android:background="#ffffff"
             android:orientation="vertical"
             android:paddingBottom="10dp"
-            android:paddingTop="10dp" >
+            android:paddingTop="10dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp" >
         </ListView>
     </LinearLayout>
 
