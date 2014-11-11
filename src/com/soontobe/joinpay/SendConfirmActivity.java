@@ -1,12 +1,9 @@
 package com.soontobe.joinpay;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.LinkedList;
 
 import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,13 +11,12 @@ import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 public class SendConfirmActivity extends ListActivity {
 
 
     // for testing only
-    private String[][] paymentInfo;
+    private ArrayList<String[]> paymentInfo;
     
     private ArrayAdapter<String> adapter;
     private ListView lv;
@@ -77,43 +73,49 @@ public class SendConfirmActivity extends ListActivity {
 	private void setListView() {
 		
 		ListView list = getListView();
-        List<Map<String, String>> values = new ArrayList<Map<String, String>>();
-        Map<String, String> map = null;
-        for (int i = 0;i< paymentInfo.length;i++) {
-        	if (i == 0) continue;
-            map = new HashMap<String,String>();
-            map.put(ACTIVITY_MSG_ID, paymentInfo[i][0]);
-            map.put(AMOUNT_ID, paymentInfo[i][1]);
-            map.put(PERSONAL_NOTE_ID, paymentInfo[i][2]);
-            values.add(map);
-        }
-        String[] from = new String[]{ACTIVITY_MSG_ID, AMOUNT_ID, PERSONAL_NOTE_ID};
-        
-        int[] to = new int[]{R.id.activity_confirm, R.id.amount_confirm, R.id.personal_note_confirm};
-        //Initiliazing Adapter
-        SimpleAdapter adapter = new SimpleAdapter(SendConfirmActivity.this,
-                values,								//values to be displayed
-                R.layout.confirmation_page_item,	//list item layout id
-                from,								//Keys for input values
-                to									//keys for output items
-                );
-        //setting Adapter to ListView
-//		list.setClickable(false);		//	not working
-
-        list.setAdapter(adapter);
+//        List<Map<String, String>> values = new ArrayList<Map<String, String>>();
+//        Map<String, String> map = null;
+//        for (int i = 0;i< paymentInfo.length;i++) {
+//        	if (i == 0) continue;
+//            map = new HashMap<String,String>();
+//            map.put(ACTIVITY_MSG_ID, paymentInfo[i][0]);
+//            map.put(AMOUNT_ID, paymentInfo[i][1]);
+//            map.put(PERSONAL_NOTE_ID, paymentInfo[i][2]);
+//            values.add(map);
+//        }
+//        String[] from = new String[]{ACTIVITY_MSG_ID, AMOUNT_ID, PERSONAL_NOTE_ID};
+//        
+//        int[] to = new int[]{R.id.activity_confirm, R.id.amount_confirm, R.id.personal_note_confirm};
+//        //Initiliazing Adapter
+//        SimpleAdapter adapter = new SimpleAdapter(SendConfirmActivity.this,
+//                values,								//values to be displayed
+//                R.layout.confirm_page_item_with_personal_note,	//list item layout id
+//                from,								//Keys for input values
+//                to									//keys for output items
+//                );
+//        //setting Adapter to ListView
+////		list.setClickable(false);		//	not working
+//
+//        list.setAdapter(adapter);
+		
+		ConfirmPageArrayAdapter adapter = new ConfirmPageArrayAdapter(this, paymentInfo);
+		list.setAdapter(adapter);
 	}
 	
 	private void setConstant() {
-		String[][] tmp = {
-				{"5", "130", "Helloween Party"}, 	//	total # of payers, total amount, group note
-				{"Patrick", "30", "Pay one extra beer"},   //	name, amount, personal note
-				{"Benny", "20", ""},
-				{"Kate", "20", ""},
-				{"Jason", "25", ""},
-				{"Melissa", "20", ""},
-				{"Itziar", "15", ""}
-		};
-		paymentInfo = tmp;
+		String[][] tmp = 
+			{
+				{"normal", "", "Luna", "Itziar", "$ 20"},
+				{"normal", "Pay one extra beer", "Patrick", "Itziar", "$ 30"},   //	name, amount, personal note
+				{"normal", "", "asd", "Itziar", "$ 20"},
+				{"normal", "", "Itziar", "Itziar", "$ 20"},
+				{"group_note", "This is a group note"},
+				{"summary", "2014-11-14", "5", "$ 130"}
+			};
+		paymentInfo = new ArrayList<String[]>();
+		for (int i = 0;i < tmp.length;i++) {
+			paymentInfo.add(tmp[i]);
+		}
 	}
 	
 	public void backToSendInfo(View v) {

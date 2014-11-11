@@ -62,7 +62,7 @@
             android:id="@+id/radar_view_bottom_bar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/group_note_bar"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="10dp" >
@@ -135,9 +135,8 @@
         <RelativeLayout
             android:id="@+id/group_note_bar"
             android:layout_width="fill_parent"
-            android:layout_gravity="bottom"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/radar_view_bottom_bar"
             android:paddingBottom="3dp"
             android:paddingLeft="15dp"
             android:paddingRight="10dp" >
