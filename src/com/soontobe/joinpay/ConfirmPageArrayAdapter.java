@@ -59,7 +59,8 @@ public class ConfirmPageArrayAdapter extends ArrayAdapter<String[]> {
 			amountView.setText(values.get(position)[4]);
 			if (values.get(position)[2].equals(values.get(position)[3])) {
 				payerView.setText("You paid");
-				payerView.setTextColor(Color.rgb(0xcc, 0xcc, 0xcc));
+				payerView.setTextColor(Color.rgb(0xb3, 0xb3, 0xb3));
+				amountView.setTextColor(Color.rgb(0xb3, 0xb3, 0xb3));
 				LinearLayout item = (LinearLayout) rowView.findViewById(R.id.activity_confirm_pay_item_layout);
 				item.removeView(item.findViewById(R.id.activity_confirm_pay_text));
 				item.removeView(payeeView);

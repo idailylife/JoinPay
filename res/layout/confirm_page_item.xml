@@ -46,10 +46,11 @@
     </TableRow>
 
     <TableRow android:id="@+id/confirm_personal_note_row_elm" >
-
         <TextView
             android:id="@+id/confirm_personal_note_normal"
-            android:gravity="left" />
+            android:gravity="left" 
+            android:textColor="#b3b3b3"
+            android:text="This is a personal note" />
     </TableRow>
 
 </TableLayout>
