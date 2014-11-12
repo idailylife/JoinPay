@@ -66,6 +66,7 @@ implements LoaderCallbacks<Void>{
 	
 	private UserInfo myUserInfo;
 	private ArrayList<UserInfo> mUserInfoList;	//User info list except for myself
+	private float mOldMoneyAmount;
 	
 
 	public static SendFragment newInstance(String param1, String param2) {
@@ -129,7 +130,7 @@ implements LoaderCallbacks<Void>{
 		mSelfBubble.setEditBtnClickedListener(new OnEditButtonClickedListener() {
 			@Override
 			public void OnClick(View v) {
-				// TODO Auto-generated method stub
+				
 				showBigBubble(myUserInfo);
 			}
 		});
@@ -280,13 +281,15 @@ implements LoaderCallbacks<Void>{
 		dataList.add(2.55f);
 
 		mBigBubble.setDonutChartData(dataList);
-
 		mBigBubble.setUserInfo(userInfo);
 		mBigBubble.showUserInfo();
 		mBigBubble.setOnDismissListener(new OnBigBubbleDismissListener());
-
+		
+		mOldMoneyAmount = userInfo.getAmountOfMoney();
+		
 		mBigBubble.showAtLocation(getActivity().findViewById(R.id.btn_radar_view_back), Gravity.CENTER|Gravity.TOP, 0, 200);
 	}
+	
 	
 	private class OnBigBubbleDismissListener implements OnDismissListener {
 
@@ -297,20 +300,46 @@ implements LoaderCallbacks<Void>{
 			int index = findUserIndexById(uid);
 			if(index == -1){
 				//TODO: Refresh UI.
+//				float oldAmount = myUserInfo.getAmountOfMoney();
 				myUserInfo = userInfo;
 				mSelfBubble.setUserInfo(myUserInfo);
+				applyFurtherMoneyChange(index, mOldMoneyAmount, myUserInfo.getAmountOfMoney());
 			} else if(index == -2) {
 				Log.w("OnBigBubbleDismissListener", "Could not find user id=" + userInfo.getUserId());
 			} else {
 				//TODO: Refresh UI.
+//				float oldAmount = mUserInfoList.get(index).getAmountOfMoney();
 				mUserInfoList.set(index, userInfo);
 				mUserBubbles.get(index).setUserInfo(userInfo);
+				applyFurtherMoneyChange(index, mOldMoneyAmount, mUserInfoList.get(index).getAmountOfMoney());
 			}
 			
 			Log.d("OnBigBubbleDismissListener", userInfo.toString());
+			
+		}
+
+		private void applyFurtherMoneyChange(int indexOfUser, float oldAmount,
+				float currentAmount) {
+			if(!getTotalLockState()){
+				//Total amount is not locked
+				float moneyChanged = currentAmount - oldAmount;
+				float oldTotalAmount = 0;
+				try{
+					oldTotalAmount = Float.valueOf(mTotalAmount.getEditableText().toString());
+				} catch(NumberFormatException e){
+					;
+				}
+				float newAmount = oldTotalAmount + moneyChanged;
+				mTotalAmount.setText(String.valueOf(newAmount));
+			} else {
+				
+			}
+			
 		}
 
 	}
+	
+	
 	
 	/**
 	 * 
@@ -353,7 +382,8 @@ implements LoaderCallbacks<Void>{
 		
 		@Override
 		public void OnClick(View v) {
-			showBigBubble(mUserInfoList.get(indexOfBubble));			
+			showBigBubble(mUserInfoList.get(indexOfBubble));
+			
 		}
 		
 	}
