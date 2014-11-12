@@ -48,6 +48,9 @@ public class RadarUserView extends FrameLayout {
 	OnEditButtonClickedListener editBtnClickedListener = null;
 	OnAddContactClickedListener addBtnClickedListener = null;
 	OnCenterButtonClickedListener centerBtnClickedListener = null;
+	OnDeselectButtonClickedListener deselectBtnClickedListener = null;
+	
+	
 	public void setLockBtnClickedListener(
 			OnLockButtonClickedListener lockBtnClickedListener) {
 		this.lockBtnClickedListener = lockBtnClickedListener;
@@ -68,6 +71,10 @@ public class RadarUserView extends FrameLayout {
 		this.centerBtnClickedListener = centerBtnClickedListener;
 	}
 	
+	public void setDeselectBtnClickedListener(
+			OnDeselectButtonClickedListener deselectBtnClickedListener) {
+		this.deselectBtnClickedListener = deselectBtnClickedListener;
+	}
 
 	public RadarUserView(Context context) {
 		super(context);
@@ -116,8 +123,7 @@ public class RadarUserView extends FrameLayout {
 	public void setUserInfo(UserInfo userInfo){
 		if(null != userInfo){
 			setUserName(userInfo.getUserName());
-			if(userInfo.getAmountOfMoney() == Float.NaN)
-				setMoneyAmount(userInfo.getAmountOfMoney());
+			setMoneyAmount(userInfo.getAmountOfMoney());
 			
 			mIsContact = userInfo.isContact();
 			if(userInfo.isContact()){
@@ -135,20 +141,14 @@ public class RadarUserView extends FrameLayout {
 
 	private void init() {
 		mYellowCircle = (ImageView)findViewById(R.id.imgview_adjpanel_yellow);
-		
-//		mGreenCircle[0] = (ImageView)findViewById(R.id.imgview_adjpanel_top);
-//		mGreenCircle[1] = (ImageView)findViewById(R.id.imgview_adjpanel_left);
-//		mGreenCircle[2] = (ImageView)findViewById(R.id.imgview_adjpanel_bottom);
-//		mGreenCircle[3] = (ImageView)findViewById(R.id.imgview_adjpanel_right);
-		
+
 		mSideButtons[0] = (ImageButton)findViewById(R.id.button_adjpanel_top);
 		mSideButtons[0].setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Log.d("AdjPanel", "MoneyLockState=" + !mIsMoneyLocked);
 				changeLockState(!mIsMoneyLocked);
-				//mIsMoneyLocked = !mIsMoneyLocked;
-				//TODO: Invoke further listener!
+
 				if(lockBtnClickedListener != null)
 					lockBtnClickedListener.OnClick(v, mIsMoneyLocked);
 			}
@@ -183,6 +183,9 @@ public class RadarUserView extends FrameLayout {
 				//Deselect and close expand panel
 				setSelectState(false);
 				switchExpandPanel(false);
+				if(null != deselectBtnClickedListener){
+					deselectBtnClickedListener.OnClick(v);
+				}
 			}
 		});
 		
@@ -201,11 +204,11 @@ public class RadarUserView extends FrameLayout {
 	/**
 	 * Set amount of money
 	 * 
-	 * @param amountOfMoney If this value is Float.NaN, the amount of money will be hided.
+	 * @param amountOfMoney If this value is 0.0f, the amount of money will be hided.
 	 */
 	
 	public void setMoneyAmount(float amountOfMoney) {
-		if(Float.isNaN(amountOfMoney)){
+		if(Float.valueOf(amountOfMoney).equals(0.0f)){
 			//Hide money amount and reset view
 			mMoneyText.setVisibility(View.GONE);
 			mNameText.setTextSize(22.0f);	//enlarge text
@@ -333,6 +336,10 @@ public class RadarUserView extends FrameLayout {
 	}
 	
 	public interface OnCenterButtonClickedListener {
+		public void OnClick(View v, boolean isSelected);
+	}
+	
+	public interface OnDeselectButtonClickedListener {
 		public void OnClick(View v);
 	}
 	
@@ -355,7 +362,9 @@ public class RadarUserView extends FrameLayout {
 			} else {
 				switchExpandPanel(false);
 			}
+			if(centerBtnClickedListener != null){
+				centerBtnClickedListener.OnClick(v, mIsUserSelected);
+			}
 		}
-		
 	}
 }

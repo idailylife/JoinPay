@@ -3,6 +3,8 @@ package com.soontobe.joinpay.fragment;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.security.auth.Destroyable;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.PopupWindow.OnDismissListener;
 
 import com.soontobe.joinpay.PositionHandler;
@@ -27,6 +30,8 @@ import com.soontobe.joinpay.Utility;
 import com.soontobe.joinpay.model.UserInfo;
 import com.soontobe.joinpay.widget.BigBubblePopupWindow;
 import com.soontobe.joinpay.widget.RadarUserView;
+import com.soontobe.joinpay.widget.RadarUserView.OnCenterButtonClickedListener;
+import com.soontobe.joinpay.widget.RadarUserView.OnDeselectButtonClickedListener;
 import com.soontobe.joinpay.widget.RadarUserView.OnEditButtonClickedListener;
 import com.soontobe.joinpay.widget.RadarUserView.OnLockButtonClickedListener;
 
@@ -53,11 +58,10 @@ implements LoaderCallbacks<Void>{
 	private RadarUserView mSelfBubble;
 	private View mCurrentView;
 	private BigBubblePopupWindow mBigBubble;
-	
+	private TextView mSelectCountText;	//Number of selected user
 	private UserInfo myUserInfo;
 	private ArrayList<UserInfo> mUserInfoList;	//User info list except me myself
 	
-	private PositionHandler mPositionHandler;	
 
 	public static SendFragment newInstance(String param1, String param2) {
 		SendFragment fragment = new SendFragment();
@@ -91,6 +95,7 @@ implements LoaderCallbacks<Void>{
 		mBubbleFrameLayout = (FrameLayout)mCurrentView.findViewById(R.id.layout_send_frag_bubbles);
 		mBubbleFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new MyOnGlobalLayoutChgListener());
 		mSelfBubble = (RadarUserView)mCurrentView.findViewById(R.id.user_bubble_myself);
+		mSelectCountText = (TextView)mCurrentView.findViewById(R.id.send_num_of_people);
 		
 		myUserInfo = new UserInfo();
 		myUserInfo.setUserId(new Random().nextInt());
@@ -98,19 +103,31 @@ implements LoaderCallbacks<Void>{
 		myUserInfo.setContactState(true);
 		mSelfBubble.setUserInfo(myUserInfo);
 		mSelfBubble.setEditBtnClickedListener(new OnEditButtonClickedListener() {
-			
 			@Override
 			public void OnClick(View v) {
 				// TODO Auto-generated method stub
 				showBigBubble(myUserInfo);
 			}
 		});
-//		myUserInfo.setAmountOfMoney(50.6f);
-//		mSelfBubble.setUserInfo(myUserInfo);
+		mSelfBubble.setCenterBtnClickedListener(new OnCenterButtonClickedListener() {	
+			@Override
+			public void OnClick(View v, boolean isSelected) {
+				myUserInfo.setSelecetd(isSelected);
+				updateSelectedUserNumber();
+			}
+		});
+		mSelfBubble.setDeselectBtnClickedListener(new OnDeselectButtonClickedListener() {
+			@Override
+			public void OnClick(View v) {
+				myUserInfo.setSelecetd(false);
+				updateSelectedUserNumber();
+			}
+		});
+		
 		//TODO: Randomly generated small bubbles~ 
 		mUserInfoList = new ArrayList<UserInfo>();
 		mUserBubbles = new ArrayList<RadarUserView>();
-		mPositionHandler = new PositionHandler();
+		//mPositionHandler = new PositionHandler();
 		
 		
 		return mCurrentView;
@@ -144,7 +161,6 @@ implements LoaderCallbacks<Void>{
 			mUserBubbles.add(ruv);
 			mBubbleFrameLayout.addView(mUserBubbles.get(i), params);
 			
-			//TODO:Set onClick listener
 			UserInfo info = new UserInfo();
 			info.setUserName("Ano" + i);
 			info.setUserId(random.nextInt());
@@ -152,6 +168,8 @@ implements LoaderCallbacks<Void>{
 			mUserBubbles.get(i).setUserInfo(info);
 			mUserBubbles.get(i).setEditBtnClickedListener(new EditButtonOnClickListener(i));
 			mUserBubbles.get(i).setLockBtnClickedListener(new LockButtonOnClickListener(i));
+			mUserBubbles.get(i).setCenterBtnClickedListener(new SelectUserOnClickListener(i));
+			mUserBubbles.get(i).setDeselectBtnClickedListener(new DeselectUserOnClickListener(i));
 		}
 	}
 
@@ -321,10 +339,67 @@ implements LoaderCallbacks<Void>{
 		
 		@Override
 		public void OnClick(View v, boolean isLocked) {
-			// TODO Auto-generated method stub
 			mUserInfoList.get(indexOfBubble).setLocked(isLocked);
 			Log.d(getTag(), "User" + indexOfBubble + " lock state = " + isLocked);
 		}
 		
+	}
+	
+	private class SelectUserOnClickListener implements OnCenterButtonClickedListener{
+		int indexOfBubble;
+		
+		public SelectUserOnClickListener(int index) {
+			indexOfBubble = index;
+		}
+		
+		@Override
+		public void OnClick(View v, boolean isSelected) {
+			mUserInfoList.get(indexOfBubble).setSelecetd(isSelected);
+			Log.d(getTag(), "User" + indexOfBubble + " select state = " + isSelected);
+			updateSelectedUserNumber();
+		}
+	}
+	
+	private class DeselectUserOnClickListener implements OnDeselectButtonClickedListener{
+		int indexOfBubble;
+		public DeselectUserOnClickListener(int index) {
+			indexOfBubble = index;
+		}
+		
+		@Override
+		public void OnClick(View v) {
+			mUserInfoList.get(indexOfBubble).setSelecetd(false);
+			Log.d(getTag(), "User" + indexOfBubble + " deselected");
+			updateSelectedUserNumber();
+		}
+		
+	}
+	
+	/**
+	 * Get selected user index
+	 * @return Index array. The index of myself = -1;
+	 */
+	public ArrayList<Integer> getSelectedUserIndex() {
+		//TODO:
+		ArrayList<Integer> retList = new ArrayList<Integer>();
+		if(myUserInfo.isSelecetd()){
+			retList.add(-1);
+		}
+		
+		int userSize = mUserInfoList.size();
+		for (int i=0; i<userSize; i++){
+			if(mUserInfoList.get(i).isSelecetd())
+				retList.add(i);
+		}
+		return retList;
+	}
+
+	public int getSelectedUserSize(){
+		return getSelectedUserIndex().size();
+	}
+	
+	public void updateSelectedUserNumber() {
+		int selectedUserNum = getSelectedUserSize();
+		mSelectCountText.setText(String.valueOf(selectedUserNum));
 	}
 }

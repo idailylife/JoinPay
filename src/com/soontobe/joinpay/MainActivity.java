@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
     public void onButtonClick(View view){
     	Log.d("button", "click");
     	startActivity(new Intent(this, RadarViewActivity.class));
+    	finish(); //Close current activity
     }
     
     public void onStartServiceClick(View v){

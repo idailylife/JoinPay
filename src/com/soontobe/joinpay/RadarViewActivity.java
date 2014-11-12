@@ -17,6 +17,7 @@ import android.text.TextUtils.StringSplitter;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,7 +55,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	private SendFragment mSendFragment;
 	private RequestFragment mRequestFragment;
 	private HistoryFragment mHistoryFragment;
-	private BigBubblePopupWindow mBigBubble;
+
 	
 	public static final String JUMP_KEY = "_jump";
 	private static final String TAG = "RadarViewActivity";
@@ -101,7 +102,6 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		lockInfo = new HashMap<String, Boolean>();
 		lockInfo.put("total", false);
 		setEventListeners();
-		
 		
 	}
 
@@ -244,52 +244,49 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		startActivityForResult(new Intent(this, ContactListActivity.class), contactListRequestCode);
 	}
 
-	/**
-	 * onClick function for the debug button `CALL_BIG_BUBBLE`
-	 * @param view
-	 */
-	public void debugCallBigBubble(View view){
-		View popupView = getLayoutInflater().inflate(R.layout.big_bubble, null);
-		mBigBubble = new BigBubblePopupWindow(popupView, null);
-		mBigBubble.setTouchable(true);
-		mBigBubble.setBackgroundDrawable(new BitmapDrawable()); //Outside disimss-able
-
-		ArrayList<Float> dataList = new ArrayList<Float>();
-		dataList.add(1.05f);
-		dataList.add(2.55f);
-
-		mBigBubble.setDonutChartData(dataList);
-
-		//Make up some user info...
-		UserInfo userInfo = new UserInfo();
-		userInfo.setLocked(true);
-		userInfo.setUserName("Test User Name");
-		userInfo.setAmountOfMoney(52.06f);
-		userInfo.setPublicNote("Helloween party");
-
-		mBigBubble.setUserInfo(userInfo);
-		mBigBubble.showUserInfo();
-		mBigBubble.setOnDismissListener(new OnBigBubbleDismissListener());
-
-		mBigBubble.showAtLocation(findViewById(R.id.btn_radar_view_back), Gravity.CENTER_VERTICAL, 0, 50);
-	}
-
-
-	public void showBigBubble(UserInfo userInfo){
-
-	}
-
-
-	private class OnBigBubbleDismissListener implements OnDismissListener {
-
-		@Override
-		public void onDismiss() {
-			UserInfo userInfo = mBigBubble.getUserInfo();
-			//TODO: Refresh UI.
-			Log.d("OnBigBubbleDismissListener", userInfo.toString());
-		}
-
-	}
+//	/**
+//	 * onClick function for the debug button `CALL_BIG_BUBBLE`
+//	 * @param view
+//	 */
+//	public void debugCallBigBubble(View view){
+//		View popupView = getLayoutInflater().inflate(R.layout.big_bubble, null);
+//		mBigBubble = new BigBubblePopupWindow(popupView, null);
+//		mBigBubble.setTouchable(true);
+//		mBigBubble.setBackgroundDrawable(new BitmapDrawable()); //Outside disimss-able
+//
+//		ArrayList<Float> dataList = new ArrayList<Float>();
+//		dataList.add(1.05f);
+//		dataList.add(2.55f);
+//
+//		mBigBubble.setDonutChartData(dataList);
+//
+//		//Make up some user info...
+//		UserInfo userInfo = new UserInfo();
+//		userInfo.setLocked(true);
+//		userInfo.setUserName("Test User Name");
+//		userInfo.setAmountOfMoney(52.06f);
+//		userInfo.setPublicNote("Helloween party");
+//
+//		mBigBubble.setUserInfo(userInfo);
+//		mBigBubble.showUserInfo();
+//		mBigBubble.setOnDismissListener(new OnBigBubbleDismissListener());
+//
+//		mBigBubble.showAtLocation(findViewById(R.id.btn_radar_view_back), Gravity.CENTER_VERTICAL, 0, 50);
+//	}
+//
+//
+//
+//
+//	private class OnBigBubbleDismissListener implements OnDismissListener {
+//
+//		@Override
+//		public void onDismiss() {
+//			UserInfo userInfo = mBigBubble.getUserInfo();
+//			//TODO: Refresh UI.
+//			Log.d("OnBigBubbleDismissListener", userInfo.toString());
+//		}
+//
+//	}
 
 	public void setSendTotalLock(View v) {
 		ImageView iv = (ImageView) v;
@@ -302,4 +299,23 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 			lockInfo.put("total", true);
 		}
 	}
+	
+	public void onClickBackButton(View v){
+		Intent i = new Intent(this, MainActivity.class);
+		startActivity(i);
+		finish();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK){
+			onClickBackButton(getCurrentFocus());
+			return true;
+		}
+		
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	
+	
 }

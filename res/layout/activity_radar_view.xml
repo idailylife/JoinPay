@@ -20,7 +20,9 @@
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/radarview_btn_margin"
-            android:background="@drawable/arrow_normal" />
+            android:background="@drawable/arrow_normal" 
+            android:onClick="onClickBackButton"
+            />
 
         <Button
             android:id="@+id/btn_radar_view_cross"

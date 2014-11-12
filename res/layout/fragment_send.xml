@@ -159,7 +159,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/send_pane_single_person_icon"
-                    android:text="1"
+                    android:text="0"
                     android:textColor="#FFFFFF"
                     android:textSize="20dp" />
             </RelativeLayout>
