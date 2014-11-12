@@ -55,7 +55,8 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	private RequestFragment mRequestFragment;
 	private HistoryFragment mHistoryFragment;
 	private BigBubblePopupWindow mBigBubble;
-
+	
+	public static final String JUMP_KEY = "_jump";
 	private static final String TAG = "RadarViewActivity";
 	private static final String TAG_SEND = "tab_send";
 	private static final String TAG_REQUEST = "tab_request";
@@ -63,7 +64,9 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 
 	private static final int contactListRequestCode = 1;
 	private static final int proceedToConfirmRequestCode = 2;
-
+	public static final int historyRequestCode = 3;
+	private static final int sendTab = 0;
+	private static final int receiveTab = 1;
 	private static final int historyTab = 2;
 
     private ArrayList<String[]> paymentInfo;
@@ -82,8 +85,15 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
 		setupTabs();
 		mTabHost.setOnTabChangedListener(this);
-
-		mCurrentTab = 0;
+		
+		//Receive jump command
+		Intent intent = getIntent();
+		int jump_target = intent.getIntExtra(JUMP_KEY, 0);
+		mCurrentTab = sendTab;
+		if(jump_target == historyRequestCode){
+			mCurrentTab = historyTab;
+		}
+		
 		mTabHost.setCurrentTab(mCurrentTab);
 		getFragmentManager().beginTransaction().replace(R.id.tab_send, mSendFragment)
 		.commit();
@@ -91,7 +101,8 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		lockInfo = new HashMap<String, Boolean>();
 		lockInfo.put("total", false);
 		setEventListeners();
-
+		
+		
 	}
 
 	@Override

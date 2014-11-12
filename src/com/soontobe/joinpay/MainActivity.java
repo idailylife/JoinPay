@@ -10,11 +10,14 @@ import android.view.View;
 
 
 public class MainActivity extends Activity {
+	private boolean mIsServiceStarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        mIsServiceStarted = false;
     }
 
     @Override
@@ -42,8 +45,17 @@ public class MainActivity extends Activity {
     }
     
     public void onStartServiceClick(View v){
-    	Log.d("Service", "start?");
-    	Intent i = new Intent(getBaseContext(), MessageRetrievalService.class);
-    	getBaseContext().startService(i);
+    	
+    	Intent i = new Intent(getBaseContext(), MessageRetrievalService.class);;
+    	if(!mIsServiceStarted){
+        	startService(i);
+        	Log.d("Service", "started");
+        	mIsServiceStarted = true;
+    	} else {
+    		stopService(i);
+    		Log.d("Service", "stopped");
+    		mIsServiceStarted = false;
+    	}
+    	
     }
 }

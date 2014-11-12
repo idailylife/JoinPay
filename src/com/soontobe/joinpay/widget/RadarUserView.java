@@ -116,7 +116,8 @@ public class RadarUserView extends FrameLayout {
 	public void setUserInfo(UserInfo userInfo){
 		if(null != userInfo){
 			setUserName(userInfo.getUserName());
-			setMoneyAmount(userInfo.getAmountOfMoney());
+			if(userInfo.getAmountOfMoney() == Float.NaN)
+				setMoneyAmount(userInfo.getAmountOfMoney());
 			
 			mIsContact = userInfo.isContact();
 			if(userInfo.isContact()){
@@ -207,10 +208,10 @@ public class RadarUserView extends FrameLayout {
 		if(Float.isNaN(amountOfMoney)){
 			//Hide money amount and reset view
 			mMoneyText.setVisibility(View.GONE);
-			mNameText.setTextSize(16.0f);	//enlarge text
+			mNameText.setTextSize(22.0f);	//enlarge text
 			
 			FrameLayout.LayoutParams params = new LayoutParams(mNameText.getLayoutParams());
-			params.height = params.height + 5;
+			params.height = params.height + 20;
 			params.gravity = Gravity.CENTER;
 			params.setMargins(0, 0, 0, 0);
 			mNameText.setLayoutParams(params);
@@ -218,7 +219,7 @@ public class RadarUserView extends FrameLayout {
 			mMoneyText.setText(String.valueOf(amountOfMoney));
 			//Restore default layout with mondy amount
 			mMoneyText.setVisibility(View.VISIBLE);
-			mNameText.setTextSize(12.0f);
+			mNameText.setTextSize(14.0f);
 			mNameText.setLayoutParams(nameTextParams);
 		}	
 	}

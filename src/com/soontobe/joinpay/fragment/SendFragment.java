@@ -79,6 +79,14 @@ implements LoaderCallbacks<Void>{
 //			mParam2 = getArguments().getString(ARG_PARAM2);
 //		}
 	}
+	
+	
+
+	@Override
+	public void onStop() {
+		//TODO: Save current status
+		super.onStop();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -149,6 +157,7 @@ implements LoaderCallbacks<Void>{
 			info.setUserId(random.nextInt());
 			mUserInfoList.add(info);
 			mUserBubbles.get(i).setUserInfo(info);
+			mUserBubbles.get(i).setEditBtnClickedListener(new EditButtonOnClickListener(i));
 		}
 	}
 
@@ -156,37 +165,8 @@ implements LoaderCallbacks<Void>{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		/**
-		 * NOTE.........
-		 * 
-		 * The code below was temporarily commented in case of weird crash.
-		 */
-//		setEventListeners();
-//		Button sendMoneyNextButton = (Button) getActivity().findViewById(R.id.send_money_next);
-//		
-//		
-//		OnTouchListener buttonOnTouchListener = new OnTouchListener() {
-//			@Override
-//			public boolean onTouch(View v, MotionEvent event) {
-//				Button btn = (Button) v;
-//				// TODO Auto-generated method stub
-//				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//					//CAUSE OF　CRASH。 Temporarily removed.
-//					//btn.setBackgroundResource(R.drawable.button_active);
-//				} else if (event.getAction() == MotionEvent.ACTION_UP) {
-//					//CAUSE OF　CRASH。 Temporarily removed.
-//					//btn.setBackgroundResource(R.drawable.button_normal);
-//				}
-//				return false;
-//			}
-//		};
-//		sendMoneyNextButton.setOnTouchListener(buttonOnTouchListener);
-		//generateBubbles(2);
 	}
-	
-	private void setEventListeners() {
-		
-	}
+
 
 	// TODO: Rename method, update argument and hook method into UI event
 	public void onButtonPressed(Uri uri) {
@@ -320,6 +300,20 @@ implements LoaderCallbacks<Void>{
 				mBubbleFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 			else
 				mBubbleFrameLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+		}
+		
+	}
+	
+	private class EditButtonOnClickListener implements OnEditButtonClickedListener{
+		int indexOfBubble;
+		
+		public EditButtonOnClickListener(int index){
+			indexOfBubble = index;
+		}
+		
+		@Override
+		public void OnClick(View v) {
+			showBigBubble(mUserInfoList.get(indexOfBubble));			
 		}
 		
 	}
