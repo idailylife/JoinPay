@@ -72,7 +72,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 
     private ArrayList<String[]> paymentInfo;
 
-	Map<String, Boolean> lockInfo;
+	public Map<String, Boolean> lockInfo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -289,14 +289,17 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 //	}
 
 	public void setSendTotalLock(View v) {
+		//TODO:Move to SendFragment
 		ImageView iv = (ImageView) v;
 		if (lockInfo.get("total")) {
 			iv.setImageResource(R.drawable.unlocked_darkgreen);
 			lockInfo.put("total", false);
+			findViewById(R.id.edit_text_total_amount).setEnabled(true);
 			// TODO
 		} else {
 			iv.setImageResource(R.drawable.locked_darkgreen);
 			lockInfo.put("total", true);
+			findViewById(R.id.edit_text_total_amount).setEnabled(false);
 		}
 	}
 	

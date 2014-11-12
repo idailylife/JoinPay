@@ -3,8 +3,6 @@ package com.soontobe.joinpay.fragment;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.security.auth.Destroyable;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
@@ -18,14 +16,18 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.PopupWindow.OnDismissListener;
 
 import com.soontobe.joinpay.PositionHandler;
 import com.soontobe.joinpay.R;
+import com.soontobe.joinpay.RadarViewActivity;
 import com.soontobe.joinpay.Utility;
 import com.soontobe.joinpay.model.UserInfo;
 import com.soontobe.joinpay.widget.BigBubblePopupWindow;
@@ -59,8 +61,11 @@ implements LoaderCallbacks<Void>{
 	private View mCurrentView;
 	private BigBubblePopupWindow mBigBubble;
 	private TextView mSelectCountText;	//Number of selected user
+	private EditText mTotalAmount;
+	private EditText mGroupNote;
+	
 	private UserInfo myUserInfo;
-	private ArrayList<UserInfo> mUserInfoList;	//User info list except me myself
+	private ArrayList<UserInfo> mUserInfoList;	//User info list except for myself
 	
 
 	public static SendFragment newInstance(String param1, String param2) {
@@ -94,8 +99,27 @@ implements LoaderCallbacks<Void>{
 		
 		mBubbleFrameLayout = (FrameLayout)mCurrentView.findViewById(R.id.layout_send_frag_bubbles);
 		mBubbleFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new MyOnGlobalLayoutChgListener());
+		mBubbleFrameLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//TODO:Un-expand small bubbles
+				mSelfBubble.switchExpandPanel(false);
+				for(RadarUserView ruv: mUserBubbles){
+					ruv.switchExpandPanel(false);
+				}
+					
+				//Catch the focus (from TotalAmout EditText)
+				mBubbleFrameLayout.requestFocus();
+			}
+		});
+		
 		mSelfBubble = (RadarUserView)mCurrentView.findViewById(R.id.user_bubble_myself);
 		mSelectCountText = (TextView)mCurrentView.findViewById(R.id.send_num_of_people);
+		mTotalAmount = (EditText)mCurrentView.findViewById(R.id.edit_text_total_amount);
+		mGroupNote = (EditText)mCurrentView.findViewById(R.id.group_note);
+		
+
 		
 		myUserInfo = new UserInfo();
 		myUserInfo.setUserId(new Random().nextInt());
@@ -129,6 +153,10 @@ implements LoaderCallbacks<Void>{
 		mUserBubbles = new ArrayList<RadarUserView>();
 		//mPositionHandler = new PositionHandler();
 		
+		
+		mTotalAmount.setOnFocusChangeListener(new OnTotalMoneyFocusChangeListener());
+		
+		mGroupNote.setOnFocusChangeListener(new OnGroupNoteFocusChangeListener());
 		
 		return mCurrentView;
 	}
@@ -375,6 +403,58 @@ implements LoaderCallbacks<Void>{
 		
 	}
 	
+	private class OnTotalMoneyFocusChangeListener implements OnFocusChangeListener{
+		private float oldAmount;
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			if(hasFocus){
+				oldAmount = 0.0f;
+				try{
+					oldAmount = Float.valueOf(((EditText)v).getEditableText().toString());
+				} catch (NumberFormatException e){
+					oldAmount = 0.0f;
+				}
+				Log.d("TotalMoneyAmount", "" + oldAmount);
+				return;
+			}
+			float currentAmount = Float.valueOf(((EditText)v).getEditableText().toString());
+			ArrayList<Integer> targetUserIndex = getUnlockedSelectedUserIndex();
+			int size = targetUserIndex.size();
+			float splitAmount = (currentAmount - oldAmount) / (float)size;
+			for(Integer index: targetUserIndex){
+				if(index == -1){
+					float oldUserAmount = myUserInfo.getAmountOfMoney();
+					myUserInfo.setAmountOfMoney(oldUserAmount + splitAmount);
+					mSelfBubble.setUserInfo(myUserInfo);
+				} else {
+					float oldUserAmount = mUserInfoList.get(index).getAmountOfMoney();
+					mUserInfoList.get(index).setAmountOfMoney(oldUserAmount + splitAmount);
+					mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
+				}
+			}
+			
+			oldAmount = currentAmount;
+		}
+	}
+	
+	private class OnGroupNoteFocusChangeListener implements OnFocusChangeListener{
+
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			if(hasFocus)
+				return;
+			String groupNote = mGroupNote.getEditableText().toString();
+			myUserInfo.setPersonalNote(groupNote);
+			mSelfBubble.setUserInfo(myUserInfo);
+			for(int i=0; i<mUserInfoList.size(); i++){
+				mUserInfoList.get(i).setPublicNote(groupNote);
+				mUserBubbles.get(i).setUserInfo(mUserInfoList.get(i));
+			}
+			
+		}
+		
+	}
+	
 	/**
 	 * Get selected user index
 	 * @return Index array. The index of myself = -1;
@@ -401,5 +481,35 @@ implements LoaderCallbacks<Void>{
 	public void updateSelectedUserNumber() {
 		int selectedUserNum = getSelectedUserSize();
 		mSelectCountText.setText(String.valueOf(selectedUserNum));
+		if(selectedUserNum > 0){
+			mTotalAmount.setEnabled(true);
+		} else {
+			mTotalAmount.setEnabled(false);
+		}
 	}
+	
+	public boolean getTotalLockState() {
+		RadarViewActivity activity = (RadarViewActivity)getActivity();
+		Boolean b =  activity.lockInfo.get("total");
+		return b;
+	}
+	
+	/**
+	 * Get unlocked && selected user index
+	 * @return	Index array. The index of myself = -1;
+	 */
+	public ArrayList<Integer> getUnlockedSelectedUserIndex(){
+		ArrayList<Integer> retList = new ArrayList<Integer>();
+		if(myUserInfo.isSelecetd() && !myUserInfo.isLocked()){
+			retList.add(-1);
+		}
+		int userSize = mUserInfoList.size();
+		for (int i=0; i<userSize; i++){
+			if(mUserInfoList.get(i).isSelecetd()
+					&& !mUserInfoList.get(i).isLocked())
+				retList.add(i);
+		}
+		return retList;
+	}
+	
 }

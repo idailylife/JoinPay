@@ -256,7 +256,7 @@ public class RadarUserView extends FrameLayout {
 	 * Switch the visibility of 4 side buttons
 	 * @param b
 	 */
-	private void switchExpandPanel(boolean visible) {
+	public void switchExpandPanel(boolean visible) {
 		if(!visible){
 			mYellowCircle.setVisibility(View.INVISIBLE);
 			for (int i=0; i<mSideButtons.length; i++){

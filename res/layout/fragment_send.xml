@@ -27,6 +27,7 @@
             android:layout_height="fill_parent" 
             android:layout_above="@+id/group_note_bar"
             android:background="@drawable/radar_bg"
+            android:focusableInTouchMode="true"
             >
 
             <ImageButton
@@ -137,6 +138,7 @@
                 android:background="#ffffff"
                 android:gravity="center"
                 android:hint="Total"
+                android:enabled="false"
                 android:inputType="numberDecimal" />
 
             <RelativeLayout
