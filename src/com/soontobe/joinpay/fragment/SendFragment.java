@@ -163,11 +163,24 @@ implements LoaderCallbacks<Void>{
 	}
 	
 	/**
+	 * Add a contact to view
+	 * @param contactName
+	 */
+	public void addContactToView(String contactName){
+		generateBubbles(1);
+		int index = mUserInfoList.size() -1;
+		mUserInfoList.get(index).setContactState(true);
+		mUserInfoList.get(index).setUserName(contactName);
+		mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
+	}
+	
+	/**
 	 * Generate user bubbles.
 	 * @param qty Amount of users to be generated.
 	 */
 	public void generateBubbles(int qty){
-		if(qty > PositionHandler.MAX_USER_SUPPORTED){
+		int posOffset = mUserInfoList.size();
+		if(qty + posOffset > PositionHandler.MAX_USER_SUPPORTED){
 			Log.e("SendFragment::generateBubbles", "Maximum user quantity exceed!");
 			return;
 		}
@@ -177,7 +190,8 @@ implements LoaderCallbacks<Void>{
 		int widgetWidth = mSelfBubble.getWidth();
 		Random random = new Random();
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(mSelfBubble.getLayoutParams());
-		for (int i=0; i<qty; i++){
+		for (int i=posOffset; i<qty+posOffset; i++){
+			
 			float pos[] = {PositionHandler.RAND_BUBBLE_CENTER_POS_X[i],
 					PositionHandler.RAND_BUBBLE_CENTER_POS_Y[i]			};
 			pos[0] = pos[0] * frameWidth - widgetWidth/2;
@@ -381,8 +395,8 @@ implements LoaderCallbacks<Void>{
 		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 		@Override
 		public void onGlobalLayout() {
-			// TODO Auto-generated method stub
-			generateBubbles(5);
+			
+			generateBubbles(2);
 			
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
 				mBubbleFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
