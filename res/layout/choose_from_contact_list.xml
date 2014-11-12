@@ -6,8 +6,8 @@
     android:background="#c2d42d"
     android:orientation="vertical"
     android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
     android:paddingTop="10dp" >
 
     <TextView
@@ -42,7 +42,7 @@
             android:layout_height="20dp"
             android:layout_gravity="center_vertical|left"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/search_darkgreen" />
+            android:src="@drawable/search_green" />
 
         <Button
             android:id="@+id/button_clear_contact_search_input"

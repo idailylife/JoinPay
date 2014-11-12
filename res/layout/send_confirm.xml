@@ -30,7 +30,7 @@
 
             <Button
                 android:id="@+id/send_edit_pencil"
-                android:layout_width="30dp"
+                android:layout_width="22dp"
                 android:layout_height="30dp"
                 android:layout_alignBottom="@+id/title_send_confirm"
                 android:layout_centerVertical="true"

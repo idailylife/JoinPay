@@ -1,10 +1,13 @@
 package com.soontobe.joinpay;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
+import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -17,6 +20,7 @@ public class SendConfirmActivity extends ListActivity {
 
     // for testing only
     private ArrayList<String[]> paymentInfo;
+    private String[][] paymentInfoArray;
     
     private ArrayAdapter<String> adapter;
     private ListView lv;
@@ -98,14 +102,14 @@ public class SendConfirmActivity extends ListActivity {
 //
 //        list.setAdapter(adapter);
 		
-		ConfirmPageArrayAdapter adapter = new ConfirmPageArrayAdapter(this, paymentInfo);
+		PaymentSummaryAdapter adapter = new PaymentSummaryAdapter(this, paymentInfo, false);
 		list.setAdapter(adapter);
 	}
 	
 	private void setConstant() {
 		String[][] tmp = 
 			{
-				{"normal", "", "Luna", "Itziar", "$ 20"},
+				{"normal", "", "Luna", "Itziar", "$ 500"},
 				{"normal", "Pay one extra beer", "Patrick", "Itziar", "$ 30"},   //	name, amount, personal note
 				{"normal", "", "asd", "Itziar", "$ 20"},
 				{"normal", "", "Itziar", "Itziar", "$ 20"},
@@ -116,6 +120,7 @@ public class SendConfirmActivity extends ListActivity {
 		for (int i = 0;i < tmp.length;i++) {
 			paymentInfo.add(tmp[i]);
 		}
+		paymentInfoArray = tmp;
 	}
 	
 	public void backToSendInfo(View v) {
@@ -123,6 +128,17 @@ public class SendConfirmActivity extends ListActivity {
 	}
 	
 	public void proceedToConfirmSend(View v) {
+		String retData = "";
+		for (int i = 0;i < paymentInfoArray.length;i++) {
+			if (i != 0) retData += "|";
+			for (int j = 0;j < paymentInfoArray[i].length;j++) {
+				if (j != 0) retData += ",";
+				retData += paymentInfoArray[i][j];
+			}
+		}
+		Intent data = new Intent();
+		data.setData(Uri.parse(retData));
+		setResult(RESULT_OK, data);
 		finish();
 	}
 }

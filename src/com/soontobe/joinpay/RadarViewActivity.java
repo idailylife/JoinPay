@@ -8,10 +8,12 @@ import java.util.Map;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils.StringSplitter;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,15 +24,18 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.soontobe.joinpay.fragment.HistoryFragment;
 import com.soontobe.joinpay.fragment.RequestFragment;
 import com.soontobe.joinpay.fragment.SendFragment;
 import com.soontobe.joinpay.model.UserInfo;
@@ -42,12 +47,13 @@ import com.soontobe.joinpay.widget.BigBubblePopupWindow;
 
 public class RadarViewActivity extends FragmentActivity 
 implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
-, RequestFragment.OnFragmentInteractionListener {
+, RequestFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener {
 
 	private TabHost mTabHost;
 	private int mCurrentTab;
 	private SendFragment mSendFragment;
 	private RequestFragment mRequestFragment;
+	private HistoryFragment mHistoryFragment;
 	private BigBubblePopupWindow mBigBubble;
 
 	private static final String TAG = "RadarViewActivity";
@@ -56,6 +62,11 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	private static final String TAG_HISTORY = "tab_history";
 
 	private static final int contactListRequestCode = 1;
+	private static final int proceedToConfirmRequestCode = 2;
+
+	private static final int historyTab = 2;
+
+    private ArrayList<String[]> paymentInfo;
 
 	Map<String, Boolean> lockInfo;
 
@@ -66,6 +77,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		setContentView(R.layout.activity_radar_view);
 		mSendFragment = new SendFragment();
 		mRequestFragment = new RequestFragment();
+		mHistoryFragment = new HistoryFragment();
 
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
 		setupTabs();
@@ -120,11 +132,6 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		});
 	}
 
-	public void contactButtonOnClick(View v) {
-		//		Log.d("contactButtonOnClick", "clicked");
-		startActivityForResult(new Intent(this, ContactListActivity.class), contactListRequestCode);
-	}
-
 	private void setupTabs() {
 		// Setup tabs
 		mTabHost.setup();
@@ -149,7 +156,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 
 	@Override
 	public void onTabChanged(String tabId) {
-		Log.d(TAG, "onTabChanged(): tabId=" + tabId);
+		//		Log.d(TAG, "onTabChanged(): tabId=" + tabId);
 		FragmentManager fm = getFragmentManager();
 		if(TAG_SEND.equals(tabId)){
 			mCurrentTab = 0;
@@ -162,9 +169,19 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 			.commit();
 		} else if (TAG_HISTORY.equals(tabId)){
 			mCurrentTab = 2;
+			fm.beginTransaction().replace(R.id.tab_history, mHistoryFragment)
+			.commit();
 
 		} else {
 			Log.w("RadarViewActivity_onTabChanged", "Cannot find tab id=" + tabId);
+		}
+
+		// change history tab color. Should be refactored later.
+		if (tabId.equals("tab_history")) {
+			mTabHost.getTabWidget().getChildAt(mTabHost.getCurrentTab()).setBackgroundColor(Color.rgb(0xc2, 0xd4, 0x2d));
+		} else {
+			TabWidget tabWidget = mTabHost.getTabWidget();
+			tabWidget.getChildAt(2).setBackgroundColor(Color.rgb(0xe6, 0xe6, 0xe6));
 		}
 
 	}
@@ -183,7 +200,37 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 				//TODO: Inform mSendFragment of mRequestFragment that we have new contact selected
 				// switch case.: mCurrentTab
 			} 
+		} else if (requestCode == proceedToConfirmRequestCode) {
+			if (resultCode == RESULT_OK) {
+				paymentInfo = new ArrayList<String []>();
+				String dataString = data.getData().toString();
+//				Log.d("SendConfirm", dataString);
+				String[] paymentStrings = dataString.split("\\|");
+				for (int i = 0;i < paymentStrings.length;i++) {
+//					Log.d("SendConfirm", dataString);
+//					Log.d("SendConfirm", paymentStrings[i] + "------");
+					String[] items = paymentStrings[i].split(",");
+					paymentInfo.add(items);
+					for (int j = 0;j < items.length;j++) {
+
+//						Log.d("SendConfirm", items[j] + "-");
+					}
+				}
+				mHistoryFragment.setNewRecordNotification(paymentInfo);
+				mTabHost.setCurrentTab(historyTab);
+			} 
 		}
+	}
+	
+	
+
+	public void sendProceedToConfirm(View v) {
+		startActivityForResult(new Intent(this, SendConfirmActivity.class), proceedToConfirmRequestCode);
+	}
+
+	public void contactButtonOnClick(View v) {
+		//		Log.d("contactButtonOnClick", "clicked");
+		startActivityForResult(new Intent(this, ContactListActivity.class), contactListRequestCode);
 	}
 
 	/**
@@ -215,10 +262,10 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 
 		mBigBubble.showAtLocation(findViewById(R.id.btn_radar_view_back), Gravity.CENTER_VERTICAL, 0, 50);
 	}
-	
-	
+
+
 	public void showBigBubble(UserInfo userInfo){
-		
+
 	}
 
 
@@ -233,10 +280,6 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 
 	}
 
-	public void sendProceedToConfirm(View v) {
-		startActivity(new Intent(this, SendConfirmActivity.class));
-	}
-
 	public void setSendTotalLock(View v) {
 		ImageView iv = (ImageView) v;
 		if (lockInfo.get("total")) {
@@ -248,6 +291,4 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 			lockInfo.put("total", true);
 		}
 	}
-
-
 }

@@ -15,8 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-public class ConfirmPageArrayAdapter extends ArrayAdapter<String[]> {
+public class PaymentSummaryAdapter extends ArrayAdapter<String[]> {
 	private final Context context;
+
+	private boolean isHistory;
 
 	/*
 	 * [][0]: type
@@ -36,10 +38,14 @@ public class ConfirmPageArrayAdapter extends ArrayAdapter<String[]> {
 	 */
 	private final ArrayList<String[]> values;
 
-	public ConfirmPageArrayAdapter(Context context, List<String[]> values) {
+	/*
+	 * isHistory: true if this list view is shown in History, false if in transaction confirmation view
+	 */
+	public PaymentSummaryAdapter(Context context, List<String[]> values, boolean isHistory) {
 		super(context, R.layout.confirm_page_item, values);		//	dummy?
 		this.context = context;
 		this.values = (ArrayList<String[]>) values;
+		this.isHistory = isHistory;
 	}
 
 	@Override
@@ -57,6 +63,10 @@ public class ConfirmPageArrayAdapter extends ArrayAdapter<String[]> {
 			payerView.setText(values.get(position)[2]);
 			payeeView.setText(values.get(position)[3]);
 			amountView.setText(values.get(position)[4]);
+
+
+			TableLayout tr = (TableLayout) rowView;
+			// Initiator pays himself/herself
 			if (values.get(position)[2].equals(values.get(position)[3])) {
 				payerView.setText("You paid");
 				payerView.setTextColor(Color.rgb(0xb3, 0xb3, 0xb3));
@@ -65,12 +75,21 @@ public class ConfirmPageArrayAdapter extends ArrayAdapter<String[]> {
 				item.removeView(item.findViewById(R.id.activity_confirm_pay_text));
 				item.removeView(payeeView);
 				item.requestLayout();
+				
+				if (values.get(position)[1].length() == 0) {	//	without personal note
+					tr.removeView(tr.findViewById(R.id.confirm_item_second_row));
+				}
+				
+			} else if (isHistory) {
+				// Show "Pending" by default.
+				TextView tv = (TextView) tr.findViewById(R.id.payment_status);
+				tv.setText("Pending");
+			} else if (values.get(position)[1].length() == 0) {	//	without personal note
+				tr.removeView(tr.findViewById(R.id.confirm_item_second_row));
 			}
-			if (values.get(position)[1].length() == 0) {	//	without personal note
-				TableLayout tr = (TableLayout) rowView;
-				tr.removeView(tr.findViewById(R.id.confirm_personal_note_row_elm));
-				tr.requestLayout();
-			}
+
+			tr.requestLayout();
+
 		} else if (values.get(position)[0].equals("summary")) {
 			rowView = inflater.inflate(R.layout.confirm_page_total, parent, false);
 			TextView dateView = (TextView) rowView.findViewById(R.id.activity_confirm_date);
