@@ -16,11 +16,21 @@ public class UserInfo {
 	private float changedMoney;	//Amount of money changed when editing TextEdit
 	private boolean isContact;
 	private boolean isLocked;
+	private boolean isSelecetd;
 	
 	public UserInfo() {
 		isContact = false;
-		amountOfMoney = Float.NaN;
+		amountOfMoney = 0.0f;
 	}
+	
+	public boolean isSelecetd() {
+		return isSelecetd;
+	}
+
+	public void setSelecetd(boolean isSelecetd) {
+		this.isSelecetd = isSelecetd;
+	}
+
 	
 	public boolean isContact() {
 		return isContact;

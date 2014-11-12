@@ -48,6 +48,9 @@ public class RadarUserView extends FrameLayout {
 	OnEditButtonClickedListener editBtnClickedListener = null;
 	OnAddContactClickedListener addBtnClickedListener = null;
 	OnCenterButtonClickedListener centerBtnClickedListener = null;
+	OnDeselectButtonClickedListener deselectBtnClickedListener = null;
+	
+	
 	public void setLockBtnClickedListener(
 			OnLockButtonClickedListener lockBtnClickedListener) {
 		this.lockBtnClickedListener = lockBtnClickedListener;
@@ -68,6 +71,10 @@ public class RadarUserView extends FrameLayout {
 		this.centerBtnClickedListener = centerBtnClickedListener;
 	}
 	
+	public void setDeselectBtnClickedListener(
+			OnDeselectButtonClickedListener deselectBtnClickedListener) {
+		this.deselectBtnClickedListener = deselectBtnClickedListener;
+	}
 
 	public RadarUserView(Context context) {
 		super(context);
@@ -134,20 +141,14 @@ public class RadarUserView extends FrameLayout {
 
 	private void init() {
 		mYellowCircle = (ImageView)findViewById(R.id.imgview_adjpanel_yellow);
-		
-//		mGreenCircle[0] = (ImageView)findViewById(R.id.imgview_adjpanel_top);
-//		mGreenCircle[1] = (ImageView)findViewById(R.id.imgview_adjpanel_left);
-//		mGreenCircle[2] = (ImageView)findViewById(R.id.imgview_adjpanel_bottom);
-//		mGreenCircle[3] = (ImageView)findViewById(R.id.imgview_adjpanel_right);
-		
+
 		mSideButtons[0] = (ImageButton)findViewById(R.id.button_adjpanel_top);
 		mSideButtons[0].setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Log.d("AdjPanel", "MoneyLockState=" + !mIsMoneyLocked);
 				changeLockState(!mIsMoneyLocked);
-				//mIsMoneyLocked = !mIsMoneyLocked;
-				//TODO: Invoke further listener!
+
 				if(lockBtnClickedListener != null)
 					lockBtnClickedListener.OnClick(v, mIsMoneyLocked);
 			}
@@ -182,6 +183,9 @@ public class RadarUserView extends FrameLayout {
 				//Deselect and close expand panel
 				setSelectState(false);
 				switchExpandPanel(false);
+				if(null != deselectBtnClickedListener){
+					deselectBtnClickedListener.OnClick(v);
+				}
 			}
 		});
 		
@@ -200,25 +204,25 @@ public class RadarUserView extends FrameLayout {
 	/**
 	 * Set amount of money
 	 * 
-	 * @param amountOfMoney If this value is Float.NaN, the amount of money will be hided.
+	 * @param amountOfMoney If this value is 0.0f, the amount of money will be hided.
 	 */
 	
 	public void setMoneyAmount(float amountOfMoney) {
-		if(Float.isNaN(amountOfMoney)){
+		if(Float.valueOf(amountOfMoney).equals(0.0f)){
 			//Hide money amount and reset view
 			mMoneyText.setVisibility(View.GONE);
-			mNameText.setTextSize(16.0f);	//enlarge text
+			mNameText.setTextSize(22.0f);	//enlarge text
 			
 			FrameLayout.LayoutParams params = new LayoutParams(mNameText.getLayoutParams());
-			params.height = params.height + 5;
+			params.height = params.height + 20;
 			params.gravity = Gravity.CENTER;
 			params.setMargins(0, 0, 0, 0);
 			mNameText.setLayoutParams(params);
 		} else {
-			mMoneyText.setText(String.valueOf(amountOfMoney));
+			mMoneyText.setText(String.format("%.1f", amountOfMoney + 0.05f));
 			//Restore default layout with mondy amount
 			mMoneyText.setVisibility(View.VISIBLE);
-			mNameText.setTextSize(12.0f);
+			mNameText.setTextSize(14.0f);
 			mNameText.setLayoutParams(nameTextParams);
 		}	
 	}
@@ -252,7 +256,7 @@ public class RadarUserView extends FrameLayout {
 	 * Switch the visibility of 4 side buttons
 	 * @param b
 	 */
-	private void switchExpandPanel(boolean visible) {
+	public void switchExpandPanel(boolean visible) {
 		if(!visible){
 			mYellowCircle.setVisibility(View.INVISIBLE);
 			for (int i=0; i<mSideButtons.length; i++){
@@ -332,6 +336,10 @@ public class RadarUserView extends FrameLayout {
 	}
 	
 	public interface OnCenterButtonClickedListener {
+		public void OnClick(View v, boolean isSelected);
+	}
+	
+	public interface OnDeselectButtonClickedListener {
 		public void OnClick(View v);
 	}
 	
@@ -354,7 +362,9 @@ public class RadarUserView extends FrameLayout {
 			} else {
 				switchExpandPanel(false);
 			}
+			if(centerBtnClickedListener != null){
+				centerBtnClickedListener.OnClick(v, mIsUserSelected);
+			}
 		}
-		
 	}
 }

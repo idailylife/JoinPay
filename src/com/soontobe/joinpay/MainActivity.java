@@ -31,6 +31,7 @@ import android.view.View;
 
 
 public class MainActivity extends Activity {
+	private boolean mIsServiceStarted;
 
 	public String urlPrefix = "http://www.posttestserver.com/data/2014/11/12/lirong/";
 	
@@ -38,6 +39,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        mIsServiceStarted = false;
 		new Thread() {
 			@Override
 			public void run() {
@@ -194,33 +196,43 @@ public class MainActivity extends Activity {
 		return sb.toString();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	public void onButtonClick(View view){
-		Log.d("button", "click");
-		startActivity(new Intent(this, RadarViewActivity.class));
-	}
-
-	public void onStartServiceClick(View v){
-		Log.d("Service", "start?");
-		Intent i = new Intent(getBaseContext(), MessageRetrievalService.class);
-		getBaseContext().startService(i);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    public void onButtonClick(View view){
+    	Log.d("button", "click");
+    	startActivity(new Intent(this, RadarViewActivity.class));
+    	finish(); //Close current activity
+    }
+    
+    public void onStartServiceClick(View v){
+    	
+    	Intent i = new Intent(getBaseContext(), MessageRetrievalService.class);;
+    	if(!mIsServiceStarted){
+        	startService(i);
+        	Log.d("Service", "started");
+        	mIsServiceStarted = true;
+    	} else {
+    		stopService(i);
+    		Log.d("Service", "stopped");
+    		mIsServiceStarted = false;
+    	}
+    	
+    }
 }
