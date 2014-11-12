@@ -65,6 +65,7 @@ public class MessageRetrievalService extends Service {
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		mWorkThred.stopMe();
 		Log.d(TAG, "onDestroy() executed"); 
 	}
 
@@ -79,12 +80,27 @@ public class MessageRetrievalService extends Service {
 	
 	
 	private class PendingWorkThread extends Thread {
+		private boolean shouldStop;
+		public void stopMe(){
+			shouldStop = true;
+		}
+		
+		
+		
+		public PendingWorkThread() {
+			super();
+			shouldStop = false;
+		}
+
+
 
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			try {
 				for(int i=0; i<10; i++){
+					if(shouldStop)
+						return;
 					Thread.sleep(3000);
 					showNotification(getTestNotiObj());
 				}

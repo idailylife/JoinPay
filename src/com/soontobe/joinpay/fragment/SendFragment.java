@@ -28,6 +28,7 @@ import com.soontobe.joinpay.model.UserInfo;
 import com.soontobe.joinpay.widget.BigBubblePopupWindow;
 import com.soontobe.joinpay.widget.RadarUserView;
 import com.soontobe.joinpay.widget.RadarUserView.OnEditButtonClickedListener;
+import com.soontobe.joinpay.widget.RadarUserView.OnLockButtonClickedListener;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
@@ -60,10 +61,6 @@ implements LoaderCallbacks<Void>{
 
 	public static SendFragment newInstance(String param1, String param2) {
 		SendFragment fragment = new SendFragment();
-//		Bundle args = new Bundle();
-//		args.putString(ARG_PARAM1, param1);
-//		args.putString(ARG_PARAM2, param2);
-//		fragment.setArguments(args);
 		return fragment;
 	}
 
@@ -74,10 +71,6 @@ implements LoaderCallbacks<Void>{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		if (getArguments() != null) {
-//			mParam1 = getArguments().getString(ARG_PARAM1);
-//			mParam2 = getArguments().getString(ARG_PARAM2);
-//		}
 	}
 	
 	
@@ -114,7 +107,7 @@ implements LoaderCallbacks<Void>{
 		});
 //		myUserInfo.setAmountOfMoney(50.6f);
 //		mSelfBubble.setUserInfo(myUserInfo);
-		//TODO: Random generated small bubbles~ 
+		//TODO: Randomly generated small bubbles~ 
 		mUserInfoList = new ArrayList<UserInfo>();
 		mUserBubbles = new ArrayList<RadarUserView>();
 		mPositionHandler = new PositionHandler();
@@ -158,6 +151,7 @@ implements LoaderCallbacks<Void>{
 			mUserInfoList.add(info);
 			mUserBubbles.get(i).setUserInfo(info);
 			mUserBubbles.get(i).setEditBtnClickedListener(new EditButtonOnClickListener(i));
+			mUserBubbles.get(i).setLockBtnClickedListener(new LockButtonOnClickListener(i));
 		}
 	}
 
@@ -314,6 +308,22 @@ implements LoaderCallbacks<Void>{
 		@Override
 		public void OnClick(View v) {
 			showBigBubble(mUserInfoList.get(indexOfBubble));			
+		}
+		
+	}
+	
+	private class LockButtonOnClickListener implements OnLockButtonClickedListener{
+		int indexOfBubble;
+		
+		public LockButtonOnClickListener(int index) {
+			indexOfBubble = index;
+		}
+		
+		@Override
+		public void OnClick(View v, boolean isLocked) {
+			// TODO Auto-generated method stub
+			mUserInfoList.get(indexOfBubble).setLocked(isLocked);
+			Log.d(getTag(), "User" + indexOfBubble + " lock state = " + isLocked);
 		}
 		
 	}
