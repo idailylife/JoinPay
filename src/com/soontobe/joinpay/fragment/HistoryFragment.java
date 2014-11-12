@@ -13,10 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.soontobe.joinpay.PaymentSummaryAdapter;
 import com.soontobe.joinpay.R;
@@ -27,12 +26,14 @@ implements LoaderCallbacks<Void> {
 
 	private OnFragmentInteractionListener mListener;
 	private View mCurrentView;
-	private ArrayList<String[]> paymentInfo;
+	private ArrayList<ArrayList<String[]>> paymentInfoList;
 	private boolean newRecordAvailable;
+	private ArrayList<String[]> newPaymentInfo;
 
 	public HistoryFragment() {
 		// Required empty public constructor
 		newRecordAvailable = false;
+		paymentInfoList = new ArrayList<ArrayList<String[]>>();
 	}
 
 	@Override
@@ -52,28 +53,22 @@ implements LoaderCallbacks<Void> {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-
-		if (newRecordAvailable) {
-			addNewRecordToHistory();
-			newRecordAvailable = false;
-		}
 		
-		Log.d("onActivityCreated", "" + (paymentInfo == null));
-
-	}
-	
-	private void addNewRecordToHistory() {
-		Log.d("addNewRecordToHistory", "addNewRecordToHistory");
 		LinearLayout historyItems = (LinearLayout) getActivity().findViewById(R.id.history_view_pane_items);
 		int margin = 15;
-		ListView lv = new ListView(getActivity());
-		PaymentSummaryAdapter adapter = new PaymentSummaryAdapter(getActivity(), paymentInfo, true);
-		lv.setAdapter(adapter);
-		lv.setBackgroundColor(Color.rgb(0xff, 0xff, 0xff));
-		historyItems.addView(lv, 0);
-		Utility.setListViewHeightBasedOnChildren(lv);
-		LinearLayout.MarginLayoutParams mlp = (LinearLayout.MarginLayoutParams) lv.getLayoutParams();
-		mlp.setMargins(0, margin, 0, margin);
+		ListView lv;
+		LinearLayout.MarginLayoutParams mlp;
+		for (int i = 0;i < paymentInfoList.size();i++) {
+			lv = new ListView(getActivity());
+			PaymentSummaryAdapter adapter = new PaymentSummaryAdapter(getActivity(), paymentInfoList.get(i), true);
+			lv.setAdapter(adapter);
+			lv.setBackgroundColor(Color.rgb(0xff, 0xff, 0xff));
+			historyItems.addView(lv, 0);
+			Utility.setListViewHeightBasedOnChildren(lv);
+			mlp = (LinearLayout.MarginLayoutParams) lv.getLayoutParams();
+			mlp.setMargins(0, margin, 0, margin);
+		}
+		
 	}
 
 	@Override
@@ -126,10 +121,7 @@ implements LoaderCallbacks<Void> {
 
 	}
 
-	public void setNewRecordNotification(ArrayList<String []> paymentInfo) {
-		this.paymentInfo = paymentInfo;
-		if (this.paymentInfo != null) {
-			this.newRecordAvailable = true;
-		}
+	public void setNewRecordNotification(ArrayList<String []> newPaymentInfo) {
+		paymentInfoList.add(newPaymentInfo);
 	}
 }

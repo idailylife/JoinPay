@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.util.EncodingUtils;
+
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow.OnDismissListener;
@@ -91,7 +94,6 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		lockInfo = new HashMap<String, Boolean>();
 		lockInfo.put("total", false);
 		setEventListeners();
-
 	}
 
 	@Override
@@ -141,7 +143,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	}
 
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
-		Log.d(TAG, "buildTab(): tag=" + tag);
+//		Log.d(TAG, "buildTab(): tag=" + tag);
 
 		View indicator = LayoutInflater.from(this).inflate(
 				R.layout.tab,
@@ -221,8 +223,6 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 			} 
 		}
 	}
-	
-	
 
 	public void sendProceedToConfirm(View v) {
 		startActivityForResult(new Intent(this, SendConfirmActivity.class), proceedToConfirmRequestCode);
