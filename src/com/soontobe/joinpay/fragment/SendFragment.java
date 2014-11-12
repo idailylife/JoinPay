@@ -332,7 +332,26 @@ implements LoaderCallbacks<Void>{
 				float newAmount = oldTotalAmount + moneyChanged;
 				mTotalAmount.setText(String.valueOf(newAmount));
 			} else {
-				
+				//Total amount is locked, split the balance to (unlocked && selected) users
+				float moneyChanged = currentAmount - oldAmount;
+				ArrayList<Integer> unlockedSelectedUserIndexList = 
+						getUnlockedSelectedUserIndex();
+				int size = unlockedSelectedUserIndexList.size() - 1; //except me
+				float moneyToSplit = moneyChanged / (float)size;
+				for(int index: unlockedSelectedUserIndexList){
+					if(indexOfUser == index)
+						continue;
+					if(-1 == index){
+						float old = myUserInfo.getAmountOfMoney();
+						myUserInfo.setAmountOfMoney(old - moneyToSplit);
+						mSelfBubble.setUserInfo(myUserInfo);
+						continue;
+					}
+					
+					float old = mUserInfoList.get(index).getAmountOfMoney();
+					mUserInfoList.get(index).setAmountOfMoney(old - moneyToSplit);
+					mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
+				}
 			}
 			
 		}
@@ -363,7 +382,7 @@ implements LoaderCallbacks<Void>{
 		@Override
 		public void onGlobalLayout() {
 			// TODO Auto-generated method stub
-			generateBubbles(3);
+			generateBubbles(5);
 			
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
 				mBubbleFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -511,7 +530,7 @@ implements LoaderCallbacks<Void>{
 	public void updateSelectedUserNumber() {
 		int selectedUserNum = getSelectedUserSize();
 		mSelectCountText.setText(String.valueOf(selectedUserNum));
-		if(selectedUserNum > 0){
+		if(selectedUserNum > 0 && !getTotalLockState()){
 			mTotalAmount.setEnabled(true);
 		} else {
 			mTotalAmount.setEnabled(false);

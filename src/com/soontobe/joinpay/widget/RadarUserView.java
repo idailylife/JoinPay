@@ -219,7 +219,7 @@ public class RadarUserView extends FrameLayout {
 			params.setMargins(0, 0, 0, 0);
 			mNameText.setLayoutParams(params);
 		} else {
-			mMoneyText.setText(String.valueOf(amountOfMoney));
+			mMoneyText.setText(String.format("%.1f", amountOfMoney + 0.05f));
 			//Restore default layout with mondy amount
 			mMoneyText.setVisibility(View.VISIBLE);
 			mNameText.setTextSize(14.0f);
