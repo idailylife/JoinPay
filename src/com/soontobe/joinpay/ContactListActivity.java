@@ -172,6 +172,8 @@ public class ContactListActivity extends ListActivity {
 
 	public void AddContactAndBackToMain(View v) {
 		Intent data = new Intent();
+		String strArray[] = nameSelected.toArray(new String[nameSelected.size()]);
+		data.putExtra("name", strArray);
 		data.setData(Uri.parse(nameSelected.toString()));
 		setResult(RESULT_OK, data);
 		finish();

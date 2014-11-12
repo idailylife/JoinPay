@@ -208,8 +208,22 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == contactListRequestCode) { 
 			if (resultCode == RESULT_OK) {
-				Toast.makeText(this,data.getData().toString(), Toast.LENGTH_SHORT).show();
-
+				Toast.makeText(this, data.getData().toString(), Toast.LENGTH_SHORT).show();
+				switch(mCurrentTab){
+				case 0:
+					//Send
+					String nameArray[] = data.getStringArrayExtra("name");
+					for(String name: nameArray){
+						mSendFragment.addContactToView(name);
+					}
+					//mSendFragment.addContactToView(data.getDataString());
+					break;
+				case 1:
+					//Request
+					break;
+				default:
+					break;
+				}
 				//TODO: Inform mSendFragment of mRequestFragment that we have new contact selected
 				// switch case.: mCurrentTab
 			} 

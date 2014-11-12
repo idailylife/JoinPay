@@ -95,7 +95,7 @@ public class BigBubblePopupWindow extends PopupWindow {
 		}
 		UserInfo userInfo = mUserInfo;
 		mTextView.setText(userInfo.getUserName());
-		mEditText.setText(String.format("%.1f", userInfo.getAmountOfMoney() + 0.05f));
+		mEditText.setText(String.format("%.1f", userInfo.getAmountOfMoney()));
 		if(userInfo.isLocked()){
 			//mLockButton.setText("U");
 			mLockButton.setBackgroundResource(R.drawable.locked_darkgreen);

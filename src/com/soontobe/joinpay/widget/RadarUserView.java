@@ -40,6 +40,7 @@ public class RadarUserView extends FrameLayout {
 	private ImageButton	mSideButtons[] = {null, null, null, null}; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
 	private Button mCenterButton;
 	private TextView mNameText;
+	private TextView mDollarText;
 	private TextView mMoneyText;
 	
 	private ViewGroup.LayoutParams nameTextParams;
@@ -195,6 +196,7 @@ public class RadarUserView extends FrameLayout {
 		mNameText = (TextView)findViewById(R.id.textview_adjpanel_name);
 		nameTextParams = mNameText.getLayoutParams();
 		mMoneyText = (TextView)findViewById(R.id.textview_adjpanel_money);
+		mDollarText = (TextView)findViewById(R.id.textview_adjpanel_dollar);
 	}
 
 	private void setUserName(String userName) {
@@ -208,20 +210,23 @@ public class RadarUserView extends FrameLayout {
 	 */
 	
 	public void setMoneyAmount(float amountOfMoney) {
-		if(Float.valueOf(amountOfMoney).equals(0.0f)){
+		if(amountOfMoney < 0.01f){
 			//Hide money amount and reset view
 			mMoneyText.setVisibility(View.GONE);
-			mNameText.setTextSize(22.0f);	//enlarge text
+			mDollarText.setVisibility(View.GONE);
+			mNameText.setTextSize(20.0f);	//enlarge text
 			
 			FrameLayout.LayoutParams params = new LayoutParams(mNameText.getLayoutParams());
-			params.height = params.height + 20;
+			//params.height = params.height + 20;
+			params.height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 			params.gravity = Gravity.CENTER;
 			params.setMargins(0, 0, 0, 0);
 			mNameText.setLayoutParams(params);
 		} else {
-			mMoneyText.setText(String.format("%.1f", amountOfMoney + 0.05f));
+			mMoneyText.setText(String.format("%.1f", amountOfMoney));
 			//Restore default layout with mondy amount
 			mMoneyText.setVisibility(View.VISIBLE);
+			mDollarText.setVisibility(View.VISIBLE);
 			mNameText.setTextSize(14.0f);
 			mNameText.setLayoutParams(nameTextParams);
 		}	
@@ -237,10 +242,12 @@ public class RadarUserView extends FrameLayout {
 			mCenterButton.setBackgroundResource(CENTER_BUTTON_BKG_ID[1]);
 			mNameText.setTextColor(Color.parseColor("#FFFFFF"));
 			mMoneyText.setTextColor(Color.parseColor("#FFFFFF"));
+			mDollarText.setTextColor(Color.parseColor("#FFFFFF"));
 		} else {
 			mCenterButton.setBackgroundResource(CENTER_BUTTON_BKG_ID[0]);
 			mNameText.setTextColor(Color.parseColor("#000000"));
-			mMoneyText.setTextColor(Color.parseColor("#000000"));
+			mMoneyText.setTextColor(Color.parseColor("#5bc48c"));
+			mDollarText.setTextColor(Color.parseColor("#5bc48c"));
 		}
 	}
 
