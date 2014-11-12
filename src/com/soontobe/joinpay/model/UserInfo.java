@@ -21,6 +21,9 @@ public class UserInfo {
 	public UserInfo() {
 		isContact = false;
 		amountOfMoney = 0.0f;
+		userName = "";
+		publicNote = "";
+		personalNote = "";
 	}
 	
 	public boolean isSelecetd() {

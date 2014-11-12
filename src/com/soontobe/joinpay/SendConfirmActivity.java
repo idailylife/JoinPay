@@ -33,7 +33,14 @@ public class SendConfirmActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.send_confirm);
-		setConstant();
+		//setConstant();
+		Bundle bundle = getIntent().getExtras();
+		paymentInfo = (ArrayList<String[]>) bundle.get("paymentInfo");
+		for (String[] x : paymentInfo) {
+			for (int i = 0;i < x.length;i++) {
+				Log.d("get bundle", x[i]);
+			}
+		}
 		setListView();
 		setEventListeners();
 	}
@@ -106,6 +113,7 @@ public class SendConfirmActivity extends ListActivity {
 		list.setAdapter(adapter);
 	}
 	
+	
 	private void setConstant() {
 		String[][] tmp = 
 			{
@@ -129,11 +137,11 @@ public class SendConfirmActivity extends ListActivity {
 	
 	public void proceedToConfirmSend(View v) {
 		String retData = "";
-		for (int i = 0;i < paymentInfoArray.length;i++) {
+		for (int i = 0;i < paymentInfo.size();i++) {
 			if (i != 0) retData += "|";
-			for (int j = 0;j < paymentInfoArray[i].length;j++) {
+			for (int j = 0;j < paymentInfo.get(i).length;j++) {
 				if (j != 0) retData += ",";
-				retData += paymentInfoArray[i][j];
+				retData += paymentInfo.get(i)[j];
 			}
 		}
 		Intent data = new Intent();

@@ -236,7 +236,12 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	}
 
 	public void sendProceedToConfirm(View v) {
-		startActivityForResult(new Intent(this, SendConfirmActivity.class), proceedToConfirmRequestCode);
+		Intent i = new Intent(this, SendConfirmActivity.class);
+		ArrayList<String[]> paymentInfo = mSendFragment.getPaymentInfo();
+		Bundle extras = new Bundle();
+		extras.putSerializable("paymentInfo", paymentInfo);
+		i.putExtras(extras);
+		startActivityForResult(i, proceedToConfirmRequestCode);
 	}
 
 	public void contactButtonOnClick(View v) {

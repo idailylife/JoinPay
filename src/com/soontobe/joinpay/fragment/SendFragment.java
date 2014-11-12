@@ -1,6 +1,9 @@
 package com.soontobe.joinpay.fragment;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 import android.annotation.TargetApi;
@@ -12,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,8 +26,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.PopupWindow.OnDismissListener;
+import android.widget.TextView;
 
 import com.soontobe.joinpay.PositionHandler;
 import com.soontobe.joinpay.R;
@@ -54,7 +58,7 @@ implements LoaderCallbacks<Void>{
 
 	private OnFragmentInteractionListener mListener;
 	private static final int contactListRequestCode = 1;
-	
+
 	private FrameLayout mBubbleFrameLayout;
 	private ArrayList<RadarUserView> mUserBubbles;
 	private RadarUserView mSelfBubble;
@@ -63,11 +67,11 @@ implements LoaderCallbacks<Void>{
 	private TextView mSelectCountText;	//Number of selected user
 	private EditText mTotalAmount;
 	private EditText mGroupNote;
-	
+
 	private UserInfo myUserInfo;
 	private ArrayList<UserInfo> mUserInfoList;	//User info list except for myself
 	private float mOldMoneyAmount;
-	
+
 
 	public static SendFragment newInstance(String param1, String param2) {
 		SendFragment fragment = new SendFragment();
@@ -82,8 +86,8 @@ implements LoaderCallbacks<Void>{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-	
-	
+
+
 
 	@Override
 	public void onStop() {
@@ -97,11 +101,11 @@ implements LoaderCallbacks<Void>{
 		// Inflate the layout for this fragment
 		mCurrentView = inflater.inflate(R.layout.fragment_send, container, false);
 		Utility.setupKeyboardAutoHidden(mCurrentView, getActivity());
-		
+
 		mBubbleFrameLayout = (FrameLayout)mCurrentView.findViewById(R.id.layout_send_frag_bubbles);
 		mBubbleFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new MyOnGlobalLayoutChgListener());
 		mBubbleFrameLayout.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				//TODO:Un-expand small bubbles
@@ -109,19 +113,19 @@ implements LoaderCallbacks<Void>{
 				for(RadarUserView ruv: mUserBubbles){
 					ruv.switchExpandPanel(false);
 				}
-					
+
 				//Catch the focus (from TotalAmout EditText)
 				mBubbleFrameLayout.requestFocus();
 			}
 		});
-		
+
 		mSelfBubble = (RadarUserView)mCurrentView.findViewById(R.id.user_bubble_myself);
 		mSelectCountText = (TextView)mCurrentView.findViewById(R.id.send_num_of_people);
 		mTotalAmount = (EditText)mCurrentView.findViewById(R.id.edit_text_total_amount);
 		mGroupNote = (EditText)mCurrentView.findViewById(R.id.group_note);
-		
 
-		
+
+
 		myUserInfo = new UserInfo();
 		myUserInfo.setUserId(new Random().nextInt());
 		myUserInfo.setUserName("Itziar");
@@ -130,7 +134,7 @@ implements LoaderCallbacks<Void>{
 		mSelfBubble.setEditBtnClickedListener(new OnEditButtonClickedListener() {
 			@Override
 			public void OnClick(View v) {
-				
+
 				showBigBubble(myUserInfo);
 			}
 		});
@@ -148,20 +152,20 @@ implements LoaderCallbacks<Void>{
 				updateSelectedUserNumber();
 			}
 		});
-		
+
 		//TODO: Randomly generated small bubbles~ 
 		mUserInfoList = new ArrayList<UserInfo>();
 		mUserBubbles = new ArrayList<RadarUserView>();
 		//mPositionHandler = new PositionHandler();
-		
-		
+
+
 		mTotalAmount.setOnFocusChangeListener(new OnTotalMoneyFocusChangeListener());
-		
+
 		mGroupNote.setOnFocusChangeListener(new OnGroupNoteFocusChangeListener());
-		
+
 		return mCurrentView;
 	}
-	
+
 	/**
 	 * Generate user bubbles.
 	 * @param qty Amount of users to be generated.
@@ -189,7 +193,7 @@ implements LoaderCallbacks<Void>{
 			RadarUserView ruv = new RadarUserView(getActivity());
 			mUserBubbles.add(ruv);
 			mBubbleFrameLayout.addView(mUserBubbles.get(i), params);
-			
+
 			UserInfo info = new UserInfo();
 			info.setUserName("Ano" + i);
 			info.setUserId(random.nextInt());
@@ -265,7 +269,7 @@ implements LoaderCallbacks<Void>{
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	/**
 	 * Show big bubble
 	 * @param userInfo
@@ -284,13 +288,13 @@ implements LoaderCallbacks<Void>{
 		mBigBubble.setUserInfo(userInfo);
 		mBigBubble.showUserInfo();
 		mBigBubble.setOnDismissListener(new OnBigBubbleDismissListener());
-		
+
 		mOldMoneyAmount = userInfo.getAmountOfMoney();
-		
+
 		mBigBubble.showAtLocation(getActivity().findViewById(R.id.btn_radar_view_back), Gravity.CENTER|Gravity.TOP, 0, 200);
 	}
-	
-	
+
+
 	private class OnBigBubbleDismissListener implements OnDismissListener {
 
 		@Override
@@ -300,7 +304,7 @@ implements LoaderCallbacks<Void>{
 			int index = findUserIndexById(uid);
 			if(index == -1){
 				//TODO: Refresh UI.
-//				float oldAmount = myUserInfo.getAmountOfMoney();
+				//				float oldAmount = myUserInfo.getAmountOfMoney();
 				myUserInfo = userInfo;
 				mSelfBubble.setUserInfo(myUserInfo);
 				applyFurtherMoneyChange(index, mOldMoneyAmount, myUserInfo.getAmountOfMoney());
@@ -308,14 +312,14 @@ implements LoaderCallbacks<Void>{
 				Log.w("OnBigBubbleDismissListener", "Could not find user id=" + userInfo.getUserId());
 			} else {
 				//TODO: Refresh UI.
-//				float oldAmount = mUserInfoList.get(index).getAmountOfMoney();
+				//				float oldAmount = mUserInfoList.get(index).getAmountOfMoney();
 				mUserInfoList.set(index, userInfo);
 				mUserBubbles.get(index).setUserInfo(userInfo);
 				applyFurtherMoneyChange(index, mOldMoneyAmount, mUserInfoList.get(index).getAmountOfMoney());
 			}
-			
+
 			Log.d("OnBigBubbleDismissListener", userInfo.toString());
-			
+
 		}
 
 		private void applyFurtherMoneyChange(int indexOfUser, float oldAmount,
@@ -330,7 +334,7 @@ implements LoaderCallbacks<Void>{
 					;
 				}
 				float newAmount = oldTotalAmount + moneyChanged;
-				mTotalAmount.setText(String.valueOf(newAmount));
+				mTotalAmount.setText(String.format("%.2f", newAmount));
 			} else {
 				//Total amount is locked, split the balance to (unlocked && selected) users
 				float moneyChanged = currentAmount - oldAmount;
@@ -347,19 +351,19 @@ implements LoaderCallbacks<Void>{
 						mSelfBubble.setUserInfo(myUserInfo);
 						continue;
 					}
-					
+
 					float old = mUserInfoList.get(index).getAmountOfMoney();
 					mUserInfoList.get(index).setAmountOfMoney(old - moneyToSplit);
 					mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
 				}
 			}
-			
+
 		}
 
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param userId
@@ -375,7 +379,7 @@ implements LoaderCallbacks<Void>{
 		}
 		return -2;
 	}
-	
+
 	private class MyOnGlobalLayoutChgListener implements ViewTreeObserver.OnGlobalLayoutListener{
 
 		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -383,52 +387,52 @@ implements LoaderCallbacks<Void>{
 		public void onGlobalLayout() {
 			// TODO Auto-generated method stub
 			generateBubbles(5);
-			
+
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
 				mBubbleFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 			else
 				mBubbleFrameLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 		}
-		
+
 	}
-	
+
 	private class EditButtonOnClickListener implements OnEditButtonClickedListener{
 		int indexOfBubble;
-		
+
 		public EditButtonOnClickListener(int index){
 			indexOfBubble = index;
 		}
-		
+
 		@Override
 		public void OnClick(View v) {
 			showBigBubble(mUserInfoList.get(indexOfBubble));
-			
+
 		}
-		
+
 	}
-	
+
 	private class LockButtonOnClickListener implements OnLockButtonClickedListener{
 		int indexOfBubble;
-		
+
 		public LockButtonOnClickListener(int index) {
 			indexOfBubble = index;
 		}
-		
+
 		@Override
 		public void OnClick(View v, boolean isLocked) {
 			mUserInfoList.get(indexOfBubble).setLocked(isLocked);
 			Log.d(getTag(), "User" + indexOfBubble + " lock state = " + isLocked);
 		}
-		
+
 	}
-	
+
 	private class SelectUserOnClickListener implements OnCenterButtonClickedListener{
 		int indexOfBubble;
-		
+
 		public SelectUserOnClickListener(int index) {
 			indexOfBubble = index;
 		}
-		
+
 		@Override
 		public void OnClick(View v, boolean isSelected) {
 			mUserInfoList.get(indexOfBubble).setSelecetd(isSelected);
@@ -436,22 +440,66 @@ implements LoaderCallbacks<Void>{
 			updateSelectedUserNumber();
 		}
 	}
-	
+
 	private class DeselectUserOnClickListener implements OnDeselectButtonClickedListener{
 		int indexOfBubble;
 		public DeselectUserOnClickListener(int index) {
 			indexOfBubble = index;
 		}
-		
+
 		@Override
 		public void OnClick(View v) {
 			mUserInfoList.get(indexOfBubble).setSelecetd(false);
 			Log.d(getTag(), "User" + indexOfBubble + " deselected");
 			updateSelectedUserNumber();
 		}
-		
+
 	}
-	
+
+	public ArrayList<String[]> getPaymentInfo() {
+		ArrayList<String[]> paymentInfo = new ArrayList<String[]>();
+		for (UserInfo info : mUserInfoList) {
+			if (info.isSelecetd()) {
+				String[] item = {"normal", info.getPersonalNote(), info.getUserName(), myUserInfo.getUserName(), "$ " + String.format("%.2f",info.getAmountOfMoney())};
+				paymentInfo.add(item);
+//				Log.d(" paymentInfo", item[2]);
+			}
+		}
+		if (myUserInfo.isSelecetd()) {
+			String[] item = {"normal", myUserInfo.getPersonalNote(), myUserInfo.getUserName(), myUserInfo.getUserName(), "$ " + String.format("%.2f",myUserInfo.getAmountOfMoney())};
+			paymentInfo.add(item);
+//			Log.d(" paymentInfo", item[2]);
+		}
+
+		String[] groupNote = {"group_note", ((EditText) getActivity().findViewById(R.id.group_note)).getText().toString() };
+		if (groupNote[1].length() > 0) paymentInfo.add(groupNote);
+
+
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy  HH:mm:ss");
+		String strDate = sdf.format(c.getTime());
+
+		String[] summary = {"summary", strDate, String.valueOf(getSelectedUserSize()), "$ " + mTotalAmount.getText().toString()};
+		paymentInfo.add(summary);
+//		Log.d(" paymentInfo", summary[3]);
+		/* example */
+//		{
+//			{"normal", "", "Luna", "Itziar", "$ 500"},
+//			{"normal", "Pay one extra beer", "Patrick", "Itziar", "$ 30"},   //	name, amount, personal note
+//			{"normal", "", "asd", "Itziar", "$ 20"},
+//			{"normal", "", "Itziar", "Itziar", "$ 20"},
+//			{"group_note", "This is a group note"},
+//			{"summary", "2014-11-14", "5", "$ 130"}
+//		}
+
+		for (String[] x : paymentInfo) {
+			for (int i = 0;i < x.length;i++) {
+				Log.d("return paymentInfo", x[i]);
+			}
+		}
+		return paymentInfo;
+	}
+
 	private class OnTotalMoneyFocusChangeListener implements OnFocusChangeListener{
 		private float oldAmount;
 		@Override
@@ -481,11 +529,11 @@ implements LoaderCallbacks<Void>{
 					mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
 				}
 			}
-			
+
 			oldAmount = currentAmount;
 		}
 	}
-	
+
 	private class OnGroupNoteFocusChangeListener implements OnFocusChangeListener{
 
 		@Override
@@ -499,11 +547,11 @@ implements LoaderCallbacks<Void>{
 				mUserInfoList.get(i).setPublicNote(groupNote);
 				mUserBubbles.get(i).setUserInfo(mUserInfoList.get(i));
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Get selected user index
 	 * @return Index array. The index of myself = -1;
@@ -514,7 +562,7 @@ implements LoaderCallbacks<Void>{
 		if(myUserInfo.isSelecetd()){
 			retList.add(-1);
 		}
-		
+
 		int userSize = mUserInfoList.size();
 		for (int i=0; i<userSize; i++){
 			if(mUserInfoList.get(i).isSelecetd())
@@ -526,7 +574,7 @@ implements LoaderCallbacks<Void>{
 	public int getSelectedUserSize(){
 		return getSelectedUserIndex().size();
 	}
-	
+
 	public void updateSelectedUserNumber() {
 		int selectedUserNum = getSelectedUserSize();
 		mSelectCountText.setText(String.valueOf(selectedUserNum));
@@ -536,13 +584,13 @@ implements LoaderCallbacks<Void>{
 			mTotalAmount.setEnabled(false);
 		}
 	}
-	
+
 	public boolean getTotalLockState() {
 		RadarViewActivity activity = (RadarViewActivity)getActivity();
 		Boolean b =  activity.lockInfo.get("total");
 		return b;
 	}
-	
+
 	/**
 	 * Get unlocked && selected user index
 	 * @return	Index array. The index of myself = -1;
@@ -560,5 +608,5 @@ implements LoaderCallbacks<Void>{
 		}
 		return retList;
 	}
-	
+
 }
