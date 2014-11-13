@@ -1,5 +1,6 @@
 package com.soontobe.joinpay;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,13 +8,14 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -26,6 +28,7 @@ public class ContactListActivity extends ListActivity {
 
 	final Set<String> nameSelected = new HashSet<String>();
 
+	
 	private ListView lv;
 
 	// Listview Adapter
@@ -110,7 +113,7 @@ public class ContactListActivity extends ListActivity {
 		lv = getListView();
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-		adapter = new ArrayAdapter<String>(this, layoutType, Constants.NameList);
+		adapter = new ArrayAdapter<String>(this, layoutType, Constants.contactNameList);
 		setListAdapter(adapter);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {

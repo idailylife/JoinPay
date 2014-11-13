@@ -158,6 +158,14 @@ public class SendConfirmActivity extends ListActivity {
 				retData += paymentInfo.get(i)[j];
 			}
 		}
+		final String paymentInfoString = retData;
+		new Thread() {
+			@Override
+			public void run() {
+				WebConnector webConnector = new WebConnector(Constants.userName);
+				webConnector.postTransactionRecord(Constants.urlForPostingToFolder, paymentInfoString);
+			}
+		}.start();
 		Intent data = new Intent();
 		data.setData(Uri.parse(retData));
 		setResult(RESULT_OK, data);

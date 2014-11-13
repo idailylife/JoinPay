@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +19,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,22 +30,26 @@
         <activity
             android:name=".RadarViewActivity"
             android:label="@string/title_activity_radar_view"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ContactListActivity"
             android:label="@string/title_contact_list"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".SendConfirmActivity"
             android:label="@string/title_send_confirm"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service
             android:name="MessageRetrievalService"
-            android:label="@string/service_name" >
+            android:label="@string/service_name"
+            android:screenOrientation="portrait" >
         </service>
     </application>
 

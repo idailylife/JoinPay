@@ -57,7 +57,7 @@ implements LoaderCallbacks<Void>{
 
 
 	private OnFragmentInteractionListener mListener;
-//	private static final int contactListRequestCode = 1;
+	//	private static final int contactListRequestCode = 1;
 
 	private FrameLayout mBubbleFrameLayout;
 	private ArrayList<RadarUserView> mUserBubbles;
@@ -72,7 +72,6 @@ implements LoaderCallbacks<Void>{
 	protected ArrayList<UserInfo> mUserInfoList;	//User info list except for myself
 	private float mOldMoneyAmount;
 
-
 	public TransactionFragment() {
 		// Required empty public constructor
 	}
@@ -81,8 +80,6 @@ implements LoaderCallbacks<Void>{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-
-
 
 	@Override
 	public void onStop() {
@@ -183,12 +180,18 @@ implements LoaderCallbacks<Void>{
 		mUserInfoList.get(index).setUserName(contactName);
 		mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
 	}
-	
+
 	/**
 	 * Add a user to view
 	 * @param userName
 	 */
 	public void addUserToView(String userName){
+		Log.d("addUserToView", userName);
+		for (UserInfo userInfo : mUserInfoList) {
+			if (userName.equals(userInfo.getUserName())) {
+				return;
+			}
+		}
 		if(!generateBubbles(1))
 			return;
 		int index = mUserInfoList.size() -1;
@@ -213,9 +216,9 @@ implements LoaderCallbacks<Void>{
 		Random random = new Random();
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(mSelfBubble.getLayoutParams());
 		for (int i=posOffset; i<qty+posOffset; i++){
-			
+
 			float pos[] = {PositionHandler.RAND_BUBBLE_CENTER_POS_X[i],
-					PositionHandler.RAND_BUBBLE_CENTER_POS_Y[i]			};
+					PositionHandler.RAND_BUBBLE_CENTER_POS_Y[i]};
 			pos[0] = pos[0] * frameWidth - widgetWidth/2;
 			pos[1] = pos[1] * frameHeight - widgetWidth/2;
 			Log.d("Bubble pos", "x=" + pos[0] + ", y=" + pos[1]);
@@ -242,9 +245,9 @@ implements LoaderCallbacks<Void>{
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		setMyName(Constants.userName);
 		super.onActivityCreated(savedInstanceState);
 	}
-
 
 	// TODO: Rename method, update argument and hook method into UI event
 	public void onButtonPressed(Uri uri) {
@@ -360,7 +363,7 @@ implements LoaderCallbacks<Void>{
 				try{
 					oldTotalAmount = Float.valueOf(mTotalAmount.getEditableText().toString());
 				} catch(NumberFormatException e){
-					;
+					oldTotalAmount = 0;
 				}
 				float newAmount = oldTotalAmount + moneyChanged;
 				mTotalAmount.setText(String.format("%.2f", newAmount));
@@ -386,7 +389,6 @@ implements LoaderCallbacks<Void>{
 					mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
 				}
 			}
-
 		}
 
 	}
@@ -414,13 +416,8 @@ implements LoaderCallbacks<Void>{
 		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 		@Override
 		public void onGlobalLayout() {
-			
-			generateBubbles(2);
-			
-			//DEBUG////
-			//removeUserFromView(0);
-			///////////
-			
+
+			//generateBubbles(2);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
 				mBubbleFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 			else
@@ -505,6 +502,7 @@ implements LoaderCallbacks<Void>{
 				Log.d("TotalMoneyAmount", "" + oldAmount);
 				return;
 			}
+			
 			float currentAmount = 0.0f;
 			try{
 				currentAmount = Float.valueOf(((EditText)v).getEditableText().toString());

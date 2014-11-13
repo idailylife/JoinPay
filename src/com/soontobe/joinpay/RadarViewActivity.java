@@ -3,7 +3,9 @@ package com.soontobe.joinpay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -60,8 +62,6 @@ HistoryFragment.OnFragmentInteractionListener {
 	private RequestFragment mRequestFragment;
 	private HistoryFragment mHistoryFragment;
 
-
-
 	public static final String JUMP_KEY = "_jump";
 	private static final String TAG = "RadarViewActivity";
 	private static final String TAG_SEND = "tab_send";
@@ -78,6 +78,14 @@ HistoryFragment.OnFragmentInteractionListener {
 	private ArrayList<String[]> paymentInfo;
 
 	public Map<String, Boolean> lockInfo;
+
+	WebConnector webConnector;
+	private ArrayList<String> fileNameList; // posttestserver
+	private int visitedFilesCount = 0; // posttestserver
+	private Set<String> onlineNameList = new HashSet<String>();
+
+
+	WebConnector WebConnector;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +114,122 @@ HistoryFragment.OnFragmentInteractionListener {
 
 		lockInfo = new HashMap<String, Boolean>();
 		lockInfo.put("total", false);
-		
 		setEventListeners();
+		runPostTestServer();
+	}
+
+	private void runPostTestServer() {
+		webConnector = new WebConnector(Constants.userName);
+		Log.d("RadarViewActivity", "onCreate");
+
+		new Thread() {
+			@Override
+			public void run() {
+				Log.d("RadarViewActivity", "run");
+				webConnector.onlineSignIn(Constants.urlForPostingToFolder);
+				while (true) {
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					fileNameList = webConnector.getFileNameList(Constants.urlPrefix, visitedFilesCount);
+					for (String i : fileNameList) {
+						String newFile = webConnector.getFile(Constants.urlPrefix + "/" + i);
+						for (String name : Constants.deviceNameList) {
+							if (onlineNameList.contains(name) || name.equals(Constants.userName)) continue;
+							if (newFile.contains(name + "IsOnline")) {
+								onlineNameList.add(name);
+							}
+						}
+
+						if (newFile.contains(Constants.transactionIntiatorTag + Constants.userName)) {
+							continue;
+						}
+
+						int idx1 = newFile.indexOf(Constants.transactionBeginTag);
+						int idx2 = newFile.indexOf(Constants.transactionEndTag);
+						if (idx1 >= 0 && idx2 >= 0) {
+							int st = idx1 + Constants.transactionBeginTag.length();
+							int ed = idx2;
+							String data = newFile.substring(st, ed);
+							//							Log.d("RadarViewActivity paymentInfo from web", newFile.substring(st, ed));
+
+							ArrayList<String []> paymentInfoFromWeb = new ArrayList<String []>();
+							String[] paymentStrings = data.split("\\|");
+							String [] relevantItem = {};
+							String [] groupNote = {};
+							String [] summary = {};
+							for (int k = 0;k < paymentStrings.length;k++) {
+								String[] items = paymentStrings[k].split(",");
+								//								paymentInfoFromWeb.add(items);
+								if (items.length >= 4) {
+									if (items[2].equals(Constants.userName)) {  	//	payer
+										relevantItem = items;
+									} else if (items[3].equals(Constants.userName)) {	//	payee
+										relevantItem = items;
+									}
+								}
+
+								if (items[0].equals("group_note")) {
+									groupNote = items;
+								}
+
+								if (items[0].equals("summary")) {
+									summary = items;
+								}
+							}
+
+							if (relevantItem.length > 0) {
+								ArrayList<String []> popupPaymentInfo = new ArrayList<String[]>();
+								popupPaymentInfo.add(relevantItem);
+								popupPaymentInfo.add(groupNote);
+								popupPaymentInfo.add(summary);
+								
+								String ssss = "";
+								for (int m = 0;m < popupPaymentInfo.size();m++) {
+									for (String s : popupPaymentInfo.get(m)) {
+										Log.d("popupPaymentInfo", s);
+										ssss += " " + s;
+										
+									}
+								}
+								final String finalSSSS = ssss;
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										Toast.makeText(getBaseContext(),
+												finalSSSS, Toast.LENGTH_SHORT).show();
+									}
+								});
+							}
+
+
+
+						}
+
+
+					}
+					visitedFilesCount += fileNameList.size();
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							for (String i : onlineNameList) {
+								Log.d("onlineNameList", i);
+								if (mCurrentTab == 0) {
+									mSendFragment.addUserToView(i);
+								} else if (mCurrentTab == 1) {
+									mSendFragment.addUserToView(i);
+								}
+							}
+						}
+					});
+
+					Log.d("visitedFilesCount", "" + visitedFilesCount);
+				}
+			}
+		}.start();
 	}
 
 	@Override
@@ -193,6 +315,7 @@ HistoryFragment.OnFragmentInteractionListener {
 				}
 			}
 			mCurrentTab = 0;
+			mSendFragment.setMyName(Constants.userName);
 		} else if (TAG_REQUEST.equals(tabId)){
 			if(!mFragmentInitState[1]){
 				fm.beginTransaction().replace(R.id.tab_request, mRequestFragment)
@@ -212,6 +335,7 @@ HistoryFragment.OnFragmentInteractionListener {
 			}
 			
 			mCurrentTab = 1;
+			mRequestFragment.setMyName(Constants.userName);
 		} else if (TAG_HISTORY.equals(tabId)){
 			if(!mFragmentInitState[2]){
 				fm.beginTransaction().replace(R.id.tab_history, mHistoryFragment)
@@ -341,7 +465,7 @@ HistoryFragment.OnFragmentInteractionListener {
 		startActivity(i);
 		finish();
 	}
-	
+
 	public void onClickClearButton(View v){
 		switch(mCurrentTab){
 		case 0:
@@ -362,7 +486,4 @@ HistoryFragment.OnFragmentInteractionListener {
 
 		return super.onKeyDown(keyCode, event);
 	}
-
-
-
 }
