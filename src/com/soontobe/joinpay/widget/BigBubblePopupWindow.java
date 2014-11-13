@@ -120,7 +120,16 @@ public class BigBubblePopupWindow extends PopupWindow {
 		}
 		UserInfo userInfo = mUserInfo;
 		mTextView.setText(userInfo.getUserName());
-		mEditText.setText(String.format("%.1f", userInfo.getAmountOfMoney()));
+		
+		float moneyAmount = userInfo.getAmountOfMoney();
+		if(moneyAmount < 0.01f){
+			mEditText.setText("");
+		} else {
+			mEditText.setText(String.format("%.1f", userInfo.getAmountOfMoney()));
+		}
+		
+		
+		
 		if(userInfo.isLocked()){
 			//mLockButton.setText("U");
 			mLockButton.setBackgroundResource(R.drawable.locked_darkgreen);
@@ -195,7 +204,14 @@ public class BigBubblePopupWindow extends PopupWindow {
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			if (!hasFocus){
-				Float currentMoney = Float.valueOf(mEditText.getText().toString());
+				Float currentMoney = 0.0f;
+				try{
+					currentMoney = Float.valueOf(mEditText.getText().toString());
+				} catch (NumberFormatException e){
+					;
+				}
+				
+				
 				if (currentMoney != mUserInfo.getAmountOfMoney()){
 					mUserInfo.setChangedMoney(currentMoney - mUserInfo.getAmountOfMoney());
 					mUserInfo.setAmountOfMoney(currentMoney);

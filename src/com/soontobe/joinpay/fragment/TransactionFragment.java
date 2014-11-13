@@ -311,16 +311,12 @@ implements LoaderCallbacks<Void>{
 			int uid = userInfo.getUserId();
 			int index = findUserIndexById(uid);
 			if(index == -1){
-				//TODO: Refresh UI.
-				//				float oldAmount = myUserInfo.getAmountOfMoney();
 				myUserInfo = userInfo;
 				mSelfBubble.setUserInfo(myUserInfo);
 				applyFurtherMoneyChange(index, mOldMoneyAmount, myUserInfo.getAmountOfMoney());
 			} else if(index == -2) {
 				Log.w("OnBigBubbleDismissListener", "Could not find user id=" + userInfo.getUserId());
 			} else {
-				//TODO: Refresh UI.
-				//				float oldAmount = mUserInfoList.get(index).getAmountOfMoney();
 				mUserInfoList.set(index, userInfo);
 				mUserBubbles.get(index).setUserInfo(userInfo);
 				applyFurtherMoneyChange(index, mOldMoneyAmount, mUserInfoList.get(index).getAmountOfMoney());

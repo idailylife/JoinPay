@@ -130,6 +130,8 @@ public class RadarUserView extends FrameLayout {
 				setCenterButtonBackgroundState(true);
 			}
 			
+			setSelectState(userInfo.isSelecetd());
+			
 			if(userInfo.isLocked()){
 				changeLockState(true);
 				//mIsMoneyLocked = true;
@@ -301,8 +303,7 @@ public class RadarUserView extends FrameLayout {
 		int resId;
 		if(isSelected){
 			if(mIsContact){
-				resId = R.drawable.shape_circle_green_w_boldborder;
-				
+				resId = R.drawable.shape_circle_green_w_boldborder;			
 			} else {
 				resId = R.drawable.shape_circle_white_w_boldborder;
 			}
