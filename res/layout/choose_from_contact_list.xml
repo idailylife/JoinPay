@@ -18,7 +18,8 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="Contacts"
-        android:textSize="24dp" />
+        android:textColor="#ffffff"
+        android:textSize="20dp" />
 
     <FrameLayout
         android:id="@+id/contact_search_layout"

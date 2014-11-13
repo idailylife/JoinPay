@@ -39,6 +39,7 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.soontobe.joinpay.fragment.TransactionFragment;
 import com.soontobe.joinpay.fragment.HistoryFragment;
 import com.soontobe.joinpay.fragment.RequestFragment;
 import com.soontobe.joinpay.fragment.SendFragment;
@@ -50,8 +51,8 @@ import com.soontobe.joinpay.widget.BigBubblePopupWindow;
  */
 
 public class RadarViewActivity extends FragmentActivity 
-implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
-, RequestFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener {
+implements OnTabChangeListener, TransactionFragment.OnFragmentInteractionListener,
+HistoryFragment.OnFragmentInteractionListener {
 
 	private TabHost mTabHost;
 	private int mCurrentTab;
@@ -59,7 +60,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	private RequestFragment mRequestFragment;
 	private HistoryFragment mHistoryFragment;
 
-	
+
 	public static final String JUMP_KEY = "_jump";
 	private static final String TAG = "RadarViewActivity";
 	private static final String TAG_SEND = "tab_send";
@@ -73,7 +74,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	private static final int receiveTab = 1;
 	private static final int historyTab = 2;
 
-    private ArrayList<String[]> paymentInfo;
+	private ArrayList<String[]> paymentInfo;
 
 	public Map<String, Boolean> lockInfo;
 
@@ -89,7 +90,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
 		setupTabs();
 		mTabHost.setOnTabChangedListener(this);
-		
+
 		//Receive jump command
 		Intent intent = getIntent();
 		int jump_target = intent.getIntExtra(JUMP_KEY, 0);
@@ -97,7 +98,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		if(jump_target == historyRequestCode){
 			mCurrentTab = historyTab;
 		}
-		
+
 		mTabHost.setCurrentTab(mCurrentTab);
 		getFragmentManager().beginTransaction().replace(R.id.tab_send, mSendFragment)
 		.commit();
@@ -154,7 +155,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	}
 
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
-//		Log.d(TAG, "buildTab(): tag=" + tag);
+		//		Log.d(TAG, "buildTab(): tag=" + tag);
 
 		View indicator = LayoutInflater.from(this).inflate(
 				R.layout.tab,
@@ -208,17 +209,23 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == contactListRequestCode) { 
 			if (resultCode == RESULT_OK) {
-				Toast.makeText(this, data.getData().toString(), Toast.LENGTH_SHORT).show();
+				//				Toast.makeText(this, data.getData().toString(), Toast.LENGTH_SHORT).show();
+				String nameArray[];
 				switch(mCurrentTab){
 				case 0:
 					//Send
-					String nameArray[] = data.getStringArrayExtra("name");
+					nameArray = data.getStringArrayExtra("name");
 					for(String name: nameArray){
 						mSendFragment.addContactToView(name);
 					}
 					//mSendFragment.addContactToView(data.getDataString());
 					break;
 				case 1:
+					//Request
+					nameArray = data.getStringArrayExtra("name");
+					for(String name: nameArray){
+						mRequestFragment.addContactToView(name);
+					}
 					//Request
 					break;
 				default:
@@ -231,27 +238,33 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 			if (resultCode == RESULT_OK) {
 				paymentInfo = new ArrayList<String []>();
 				String dataString = data.getData().toString();
-//				Log.d("SendConfirm", dataString);
 				String[] paymentStrings = dataString.split("\\|");
 				for (int i = 0;i < paymentStrings.length;i++) {
-//					Log.d("SendConfirm", dataString);
-//					Log.d("SendConfirm", paymentStrings[i] + "------");
 					String[] items = paymentStrings[i].split(",");
 					paymentInfo.add(items);
-					for (int j = 0;j < items.length;j++) {
-
-//						Log.d("SendConfirm", items[j] + "-");
-					}
 				}
+
 				mHistoryFragment.setNewRecordNotification(paymentInfo);
 				mTabHost.setCurrentTab(historyTab);
 			} 
 		}
 	}
 
-	public void sendProceedToConfirm(View v) {
+	public void proceedToConfirm(View v) {
 		Intent i = new Intent(this, SendConfirmActivity.class);
-		ArrayList<String[]> paymentInfo = mSendFragment.getPaymentInfo();
+		ArrayList<String[]> paymentInfo = new ArrayList<String[]>();
+		switch(mCurrentTab) {
+		case 0:
+			paymentInfo = mSendFragment.getPaymentInfo();
+			i.putExtra("transactionType", "Send");
+			break;
+		case 1:
+			paymentInfo = mRequestFragment.getPaymentInfo();
+			i.putExtra("transactionType", "Request");
+			break;
+		default:
+			break;
+		}
 		Bundle extras = new Bundle();
 		extras.putSerializable("paymentInfo", paymentInfo);
 		i.putExtras(extras);
@@ -263,49 +276,49 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 		startActivityForResult(new Intent(this, ContactListActivity.class), contactListRequestCode);
 	}
 
-//	/**
-//	 * onClick function for the debug button `CALL_BIG_BUBBLE`
-//	 * @param view
-//	 */
-//	public void debugCallBigBubble(View view){
-//		View popupView = getLayoutInflater().inflate(R.layout.big_bubble, null);
-//		mBigBubble = new BigBubblePopupWindow(popupView, null);
-//		mBigBubble.setTouchable(true);
-//		mBigBubble.setBackgroundDrawable(new BitmapDrawable()); //Outside disimss-able
-//
-//		ArrayList<Float> dataList = new ArrayList<Float>();
-//		dataList.add(1.05f);
-//		dataList.add(2.55f);
-//
-//		mBigBubble.setDonutChartData(dataList);
-//
-//		//Make up some user info...
-//		UserInfo userInfo = new UserInfo();
-//		userInfo.setLocked(true);
-//		userInfo.setUserName("Test User Name");
-//		userInfo.setAmountOfMoney(52.06f);
-//		userInfo.setPublicNote("Helloween party");
-//
-//		mBigBubble.setUserInfo(userInfo);
-//		mBigBubble.showUserInfo();
-//		mBigBubble.setOnDismissListener(new OnBigBubbleDismissListener());
-//
-//		mBigBubble.showAtLocation(findViewById(R.id.btn_radar_view_back), Gravity.CENTER_VERTICAL, 0, 50);
-//	}
-//
-//
-//
-//
-//	private class OnBigBubbleDismissListener implements OnDismissListener {
-//
-//		@Override
-//		public void onDismiss() {
-//			UserInfo userInfo = mBigBubble.getUserInfo();
-//			//TODO: Refresh UI.
-//			Log.d("OnBigBubbleDismissListener", userInfo.toString());
-//		}
-//
-//	}
+	//	/**
+	//	 * onClick function for the debug button `CALL_BIG_BUBBLE`
+	//	 * @param view
+	//	 */
+	//	public void debugCallBigBubble(View view){
+	//		View popupView = getLayoutInflater().inflate(R.layout.big_bubble, null);
+	//		mBigBubble = new BigBubblePopupWindow(popupView, null);
+	//		mBigBubble.setTouchable(true);
+	//		mBigBubble.setBackgroundDrawable(new BitmapDrawable()); //Outside disimss-able
+	//
+	//		ArrayList<Float> dataList = new ArrayList<Float>();
+	//		dataList.add(1.05f);
+	//		dataList.add(2.55f);
+	//
+	//		mBigBubble.setDonutChartData(dataList);
+	//
+	//		//Make up some user info...
+	//		UserInfo userInfo = new UserInfo();
+	//		userInfo.setLocked(true);
+	//		userInfo.setUserName("Test User Name");
+	//		userInfo.setAmountOfMoney(52.06f);
+	//		userInfo.setPublicNote("Helloween party");
+	//
+	//		mBigBubble.setUserInfo(userInfo);
+	//		mBigBubble.showUserInfo();
+	//		mBigBubble.setOnDismissListener(new OnBigBubbleDismissListener());
+	//
+	//		mBigBubble.showAtLocation(findViewById(R.id.btn_radar_view_back), Gravity.CENTER_VERTICAL, 0, 50);
+	//	}
+	//
+	//
+	//
+	//
+	//	private class OnBigBubbleDismissListener implements OnDismissListener {
+	//
+	//		@Override
+	//		public void onDismiss() {
+	//			UserInfo userInfo = mBigBubble.getUserInfo();
+	//			//TODO: Refresh UI.
+	//			Log.d("OnBigBubbleDismissListener", userInfo.toString());
+	//		}
+	//
+	//	}
 
 	public void setSendTotalLock(View v) {
 		//TODO:Move to SendFragment
@@ -321,7 +334,7 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 			findViewById(R.id.edit_text_total_amount).setEnabled(false);
 		}
 	}
-	
+
 	public void onClickBackButton(View v){
 		Intent i = new Intent(this, MainActivity.class);
 		startActivity(i);
@@ -334,10 +347,10 @@ implements OnTabChangeListener, SendFragment.OnFragmentInteractionListener
 			onClickBackButton(getCurrentFocus());
 			return true;
 		}
-		
+
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	
-	
+
+
+
 }

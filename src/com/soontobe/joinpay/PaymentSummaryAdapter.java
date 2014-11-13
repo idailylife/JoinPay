@@ -66,6 +66,10 @@ public class PaymentSummaryAdapter extends ArrayAdapter<String[]> {
 
 
 			TableLayout tr = (TableLayout) rowView;
+			boolean hasPersonalNote = false;
+			boolean isPending = false;
+			String pendingString = values.get(position)[5];
+			
 			// Initiator pays himself/herself
 			if (values.get(position)[2].equals(values.get(position)[3])) {
 				payerView.setText("You paid");
@@ -75,19 +79,21 @@ public class PaymentSummaryAdapter extends ArrayAdapter<String[]> {
 				item.removeView(item.findViewById(R.id.activity_confirm_pay_text));
 				item.removeView(payeeView);
 				item.requestLayout();
-				
-				if (values.get(position)[1].length() == 0) {	//	without personal note
-					tr.removeView(tr.findViewById(R.id.confirm_item_second_row));
-				}
-				
-			} else if (isHistory) {
-				// Show "Pending" by default.
-				TextView tv = (TextView) tr.findViewById(R.id.payment_status);
-				tv.setText("Pending");
-			} else if (values.get(position)[1].length() == 0) {	//	without personal note
-				tr.removeView(tr.findViewById(R.id.confirm_item_second_row));
 			}
 
+			if (values.get(position)[1].length() > 0) {	//	without personal note
+				hasPersonalNote = true;
+			}
+			
+			if (pendingString.equals("isPending") && isHistory) {
+				TextView tv = (TextView) tr.findViewById(R.id.payment_status);
+				tv.setText("Pending");
+				isPending = true;
+			}
+
+			if (hasPersonalNote == false && isPending == false) {
+				tr.removeView(tr.findViewById(R.id.confirm_item_second_row));
+			}
 			tr.requestLayout();
 
 		} else if (values.get(position)[0].equals("summary")) {
