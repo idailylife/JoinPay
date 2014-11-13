@@ -15,9 +15,17 @@
  */
 package com.soontobe.joinpay;
 
-import org.json.JSONObject;
-
 public class Constants {
+	public static String DemoMyName = "Lirong";
+	
+	public static String[] DemoUserNameList = {
+		"Luna",
+		"Bowei",
+		"Jone",
+		"Doe",
+		"Whoever",
+		""
+	};
 
     static String[] NameList = {
     	"Alice",

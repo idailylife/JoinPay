@@ -215,7 +215,7 @@ public class RadarUserView extends FrameLayout {
 			//Hide money amount and reset view
 			mMoneyText.setVisibility(View.GONE);
 			mDollarText.setVisibility(View.GONE);
-			mNameText.setTextSize(20.0f);	//enlarge text
+			mNameText.setTextSize(18.0f);	//enlarge text
 			
 			FrameLayout.LayoutParams params = new LayoutParams(mNameText.getLayoutParams());
 			//params.height = params.height + 20;

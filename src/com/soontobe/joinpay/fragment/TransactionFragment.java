@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
+import com.soontobe.joinpay.Constants;
 import com.soontobe.joinpay.PositionHandler;
 import com.soontobe.joinpay.R;
 import com.soontobe.joinpay.RadarViewActivity;
@@ -122,7 +123,7 @@ implements LoaderCallbacks<Void>{
 
 		myUserInfo = new UserInfo();
 		myUserInfo.setUserId(new Random().nextInt());
-		myUserInfo.setUserName("Itziar");
+		myUserInfo.setUserName(Constants.DemoMyName);
 		myUserInfo.setContactState(true);
 		mSelfBubble.setUserInfo(myUserInfo);
 		mSelfBubble.setEditBtnClickedListener(new OnEditButtonClickedListener() {
@@ -173,6 +174,17 @@ implements LoaderCallbacks<Void>{
 	}
 	
 	/**
+	 * Add a user to view
+	 * @param userName
+	 */
+	public void addUserToView(String userName){
+		generateBubbles(1);
+		int index = mUserInfoList.size() -1;
+		mUserInfoList.get(index).setUserName(userName);
+		mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
+	}
+	
+	/**
 	 * Generate user bubbles.
 	 * @param qty Amount of users to be generated.
 	 */
@@ -203,7 +215,7 @@ implements LoaderCallbacks<Void>{
 			mBubbleFrameLayout.addView(mUserBubbles.get(i), params);
 
 			UserInfo info = new UserInfo();
-			info.setUserName("Ano" + i);
+			info.setUserName(Constants.DemoUserNameList[i]);
 			info.setUserId(random.nextInt());
 			mUserInfoList.add(info);
 			mUserBubbles.get(i).setUserInfo(info);
