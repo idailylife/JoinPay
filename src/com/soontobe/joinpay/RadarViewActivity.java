@@ -322,49 +322,6 @@ HistoryFragment.OnFragmentInteractionListener {
 		startActivityForResult(new Intent(this, ContactListActivity.class), contactListRequestCode);
 	}
 
-	//	/**
-	//	 * onClick function for the debug button `CALL_BIG_BUBBLE`
-	//	 * @param view
-	//	 */
-	//	public void debugCallBigBubble(View view){
-	//		View popupView = getLayoutInflater().inflate(R.layout.big_bubble, null);
-	//		mBigBubble = new BigBubblePopupWindow(popupView, null);
-	//		mBigBubble.setTouchable(true);
-	//		mBigBubble.setBackgroundDrawable(new BitmapDrawable()); //Outside disimss-able
-	//
-	//		ArrayList<Float> dataList = new ArrayList<Float>();
-	//		dataList.add(1.05f);
-	//		dataList.add(2.55f);
-	//
-	//		mBigBubble.setDonutChartData(dataList);
-	//
-	//		//Make up some user info...
-	//		UserInfo userInfo = new UserInfo();
-	//		userInfo.setLocked(true);
-	//		userInfo.setUserName("Test User Name");
-	//		userInfo.setAmountOfMoney(52.06f);
-	//		userInfo.setPublicNote("Helloween party");
-	//
-	//		mBigBubble.setUserInfo(userInfo);
-	//		mBigBubble.showUserInfo();
-	//		mBigBubble.setOnDismissListener(new OnBigBubbleDismissListener());
-	//
-	//		mBigBubble.showAtLocation(findViewById(R.id.btn_radar_view_back), Gravity.CENTER_VERTICAL, 0, 50);
-	//	}
-	//
-	//
-	//
-	//
-	//	private class OnBigBubbleDismissListener implements OnDismissListener {
-	//
-	//		@Override
-	//		public void onDismiss() {
-	//			UserInfo userInfo = mBigBubble.getUserInfo();
-	//			//TODO: Refresh UI.
-	//			Log.d("OnBigBubbleDismissListener", userInfo.toString());
-	//		}
-	//
-	//	}
 
 	public void setSendTotalLock(View v) {
 		//TODO:Move to SendFragment
@@ -385,6 +342,17 @@ HistoryFragment.OnFragmentInteractionListener {
 		Intent i = new Intent(this, MainActivity.class);
 		startActivity(i);
 		finish();
+	}
+	
+	public void onClickClearButton(View v){
+		switch(mCurrentTab){
+		case 0:
+			mSendFragment.clearUserMoneyAmount();
+			break;
+		case 1:
+			mRequestFragment.clearUserMoneyAmount();
+			break;
+		}
 	}
 
 	@Override

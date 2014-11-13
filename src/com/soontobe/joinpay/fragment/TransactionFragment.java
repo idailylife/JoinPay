@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
+import com.soontobe.joinpay.Constants;
 import com.soontobe.joinpay.PositionHandler;
 import com.soontobe.joinpay.R;
 import com.soontobe.joinpay.RadarViewActivity;
@@ -70,14 +71,6 @@ implements LoaderCallbacks<Void>{
 	protected UserInfo myUserInfo;
 	protected ArrayList<UserInfo> mUserInfoList;	//User info list except for myself
 	private float mOldMoneyAmount;
-
-	//	
-	//	/* 
-	//	 * Useless? 
-	//	 */
-	//	public static TransactionFragment newInstance(String param1, String param2) {
-	//
-	//	}
 
 	public TransactionFragment() {
 		// Required empty public constructor
@@ -129,7 +122,7 @@ implements LoaderCallbacks<Void>{
 
 		myUserInfo = new UserInfo();
 		myUserInfo.setUserId(new Random().nextInt());
-		myUserInfo.setUserName("Itziar");
+		myUserInfo.setUserName(Constants.DemoMyName);
 		myUserInfo.setContactState(true);
 		mSelfBubble.setUserInfo(myUserInfo);
 		mSelfBubble.setEditBtnClickedListener(new OnEditButtonClickedListener() {
@@ -166,13 +159,22 @@ implements LoaderCallbacks<Void>{
 
 		return mCurrentView;
 	}
+	
+	/**
+	 * 
+	 * @param index
+	 */
+	public void removeUserFromView(int index){
+		
+	}
 
 	/**
 	 * Add a contact to view
 	 * @param contactName
 	 */
 	public void addContactToView(String contactName){
-		generateBubbles(1);
+		if (!generateBubbles(1))
+			return;
 		int index = mUserInfoList.size() -1;
 		mUserInfoList.get(index).setContactState(true);
 		mUserInfoList.get(index).setUserName(contactName);
@@ -180,14 +182,26 @@ implements LoaderCallbacks<Void>{
 	}
 
 	/**
+	 * Add a user to view
+	 * @param userName
+	 */
+	public void addUserToView(String userName){
+		if(!generateBubbles(1))
+			return;
+		int index = mUserInfoList.size() -1;
+		mUserInfoList.get(index).setUserName(userName);
+		mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
+	}
+	
+	/**
 	 * Generate user bubbles.
 	 * @param qty Amount of users to be generated.
 	 */
-	public void generateBubbles(int qty){
+	public boolean generateBubbles(int qty){
 		int posOffset = mUserInfoList.size();
 		if(qty + posOffset > PositionHandler.MAX_USER_SUPPORTED){
 			Log.e("SendFragment::generateBubbles", "Maximum user quantity exceed!");
-			return;
+			return false;
 		}
 		//TODO: Generate randomly
 		int frameHeight = mBubbleFrameLayout.getHeight();
@@ -210,7 +224,7 @@ implements LoaderCallbacks<Void>{
 			mBubbleFrameLayout.addView(mUserBubbles.get(i), params);
 
 			UserInfo info = new UserInfo();
-			info.setUserName("Ano" + i);
+			info.setUserName(Constants.DemoUserNameList[i]);
 			info.setUserId(random.nextInt());
 			mUserInfoList.add(info);
 			mUserBubbles.get(i).setUserInfo(info);
@@ -219,6 +233,7 @@ implements LoaderCallbacks<Void>{
 			mUserBubbles.get(i).setCenterBtnClickedListener(new SelectUserOnClickListener(i));
 			mUserBubbles.get(i).setDeselectBtnClickedListener(new DeselectUserOnClickListener(i));
 		}
+		return true;
 	}
 
 	@Override
@@ -318,16 +333,12 @@ implements LoaderCallbacks<Void>{
 			int uid = userInfo.getUserId();
 			int index = findUserIndexById(uid);
 			if(index == -1){
-				//TODO: Refresh UI.
-				//				float oldAmount = myUserInfo.getAmountOfMoney();
 				myUserInfo = userInfo;
 				mSelfBubble.setUserInfo(myUserInfo);
 				applyFurtherMoneyChange(index, mOldMoneyAmount, myUserInfo.getAmountOfMoney());
 			} else if(index == -2) {
 				Log.w("OnBigBubbleDismissListener", "Could not find user id=" + userInfo.getUserId());
 			} else {
-				//TODO: Refresh UI.
-				//				float oldAmount = mUserInfoList.get(index).getAmountOfMoney();
 				mUserInfoList.set(index, userInfo);
 				mUserBubbles.get(index).setUserInfo(userInfo);
 				applyFurtherMoneyChange(index, mOldMoneyAmount, mUserInfoList.get(index).getAmountOfMoney());
@@ -587,6 +598,20 @@ implements LoaderCallbacks<Void>{
 				retList.add(i);
 		}
 		return retList;
+	}
+	
+	/**
+	 * This function will clear all money amounts
+	 * including the total amount.
+	 */
+	public void clearUserMoneyAmount(){
+		myUserInfo.setAmountOfMoney(0.0f);
+		mSelfBubble.setUserInfo(myUserInfo);
+		for(int i=0; i<mUserInfoList.size(); i++){
+			mUserInfoList.get(i).setAmountOfMoney(0.0f);
+			mUserBubbles.get(i).setUserInfo(mUserInfoList.get(i));
+		}
+		mTotalAmount.setText("");
 	}
 
 }

@@ -20,6 +20,16 @@ import java.util.Map;
 import org.json.JSONObject;
 
 public class Constants {
+	public static String DemoMyName = "Lirong";
+	
+	public static String[] DemoUserNameList = {
+		"Luna",
+		"Bowei",
+		"Jone",
+		"Doe",
+		"Whoever",
+		""
+	};
 
 	static String userName;
 	static String folderName = "lirong2";

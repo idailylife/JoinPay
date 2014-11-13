@@ -51,8 +51,9 @@ public class BigBubblePopupWindow extends PopupWindow {
 
 
 	public BigBubblePopupWindow(View contentView, UserInfo userInfo){
-		super(contentView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-
+		//super(contentView);
+		super(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+		
 		// Initialize pie graph
 		mPieGraph = (PieGraph)contentView.findViewById(R.id.piegraph_boarder);
 		initDonutChart();
@@ -74,7 +75,8 @@ public class BigBubblePopupWindow extends PopupWindow {
 				if(null == mUserInfo)
 					return;
 				String personalNote = mUserInfo.getPersonalNote();
-				if (null != personalNote)
+				if (null != personalNote &&
+						!personalNote.isEmpty())
 					mEditPersonalNote.setText(personalNote);
 			}
 		});
@@ -84,7 +86,31 @@ public class BigBubblePopupWindow extends PopupWindow {
 		mUserInfo = userInfo;
 		showUserInfo();
 	}
-
+	
+	public boolean isPersonalNoteEmpty(){
+		if(null == mUserInfo)
+			return true;
+		String personalNote = mUserInfo.getPersonalNote();
+		if (personalNote == null)
+			return true;
+		else if(personalNote.isEmpty())
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean isPublicNoteEmpty(){
+		if(null == mUserInfo)
+			return true;
+		String publicNote = mUserInfo.getPublicNote();
+		if (publicNote == null)
+			return true;
+		else if(publicNote.isEmpty())
+			return true;
+		else
+			return false;
+	}
+	
 	/**
 	 * Call setUserInfo() before this function!!
 	 */
@@ -95,16 +121,27 @@ public class BigBubblePopupWindow extends PopupWindow {
 		}
 		UserInfo userInfo = mUserInfo;
 		mTextView.setText(userInfo.getUserName());
-		mEditText.setText(String.format("%.1f", userInfo.getAmountOfMoney()));
+		
+		float moneyAmount = userInfo.getAmountOfMoney();
+		if(moneyAmount < 0.01f){
+			mEditText.setText("");
+		} else {
+			mEditText.setText(String.format("%.1f", userInfo.getAmountOfMoney()));
+		}
+		
+		
+		
 		if(userInfo.isLocked()){
 			//mLockButton.setText("U");
 			mLockButton.setBackgroundResource(R.drawable.locked_darkgreen);
 		}
-		if(null != userInfo.getPublicNote()){
-			//TODO: Insert items into ListView
+		
+		if(!isPublicNoteEmpty()){
 			mTextPublicNote.setText(userInfo.getPublicNote());
+		} else {
+			mTextPublicNote.setText("Group note not set yet.");
 		}
-		if(null == userInfo.getPersonalNote()){
+		if(isPersonalNoteEmpty()){
 			mTextPersonalNote.setVisibility(View.GONE);
 			mEditPersonalNote.setVisibility(View.VISIBLE);
 		} else {
@@ -168,11 +205,13 @@ public class BigBubblePopupWindow extends PopupWindow {
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			if (!hasFocus){
-				float currentMoney = 0;
-				String textString = mEditText.getText().toString();
-				if (textString.length() > 0) {
+				Float currentMoney = 0.0f;
+				try{
 					currentMoney = Float.valueOf(mEditText.getText().toString());
+				} catch (NumberFormatException e){
+					;
 				}
+				
 				if (currentMoney != mUserInfo.getAmountOfMoney()){
 					mUserInfo.setChangedMoney(currentMoney - mUserInfo.getAmountOfMoney());
 					mUserInfo.setAmountOfMoney(currentMoney);

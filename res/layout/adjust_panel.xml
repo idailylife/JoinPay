@@ -81,13 +81,14 @@
         android:layout_height="18dp"
         android:textSize="14sp"
         android:text="NAME"
+        android:singleLine="true"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:gravity="center_horizontal"
         />
     <TextView 
         android:id="@+id/textview_adjpanel_dollar"
-        android:layout_width="54dp"
+        android:layout_width="50dp"
         android:layout_height="19dp"
         android:textSize="12sp"
         android:textColor="#5cc38c"

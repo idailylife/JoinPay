@@ -4,10 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import android.util.Log;
-import android.widget.EditText;
-
-import com.soontobe.joinpay.R;
 import com.soontobe.joinpay.model.UserInfo;
 
 public class SendFragment extends TransactionFragment {
