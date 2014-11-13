@@ -92,7 +92,6 @@ HistoryFragment.OnFragmentInteractionListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  //No Title Bar
 		setContentView(R.layout.activity_radar_view);
-		runPostTestServer();
 		mSendFragment = new SendFragment();
 		mRequestFragment = new RequestFragment();
 		mHistoryFragment = new HistoryFragment();
@@ -116,6 +115,7 @@ HistoryFragment.OnFragmentInteractionListener {
 		lockInfo = new HashMap<String, Boolean>();
 		lockInfo.put("total", false);
 		setEventListeners();
+		runPostTestServer();
 	}
 
 	private void runPostTestServer() {
@@ -145,9 +145,20 @@ HistoryFragment.OnFragmentInteractionListener {
 						}
 					}
 					visitedFilesCount += fileNameList.size();
-					for (String i : onlineNameList) {
-						Log.d("onlineNameList", i);
-					}
+					runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                        	for (String i : onlineNameList) {
+        						Log.d("onlineNameList", i);
+        						if (mCurrentTab == 0) {
+        							mSendFragment.addUserToView(i);
+        						} else if (mCurrentTab == 1) {
+        							mSendFragment.addUserToView(i);
+        						}
+        					}
+                        }
+                    });
+					
 					Log.d("visitedFilesCount", "" + visitedFilesCount);
 				}
 			}

@@ -32,7 +32,7 @@ public class Constants {
 	};
 
 	static String userName;
-	static String folderName = "lirong2";
+	static String folderName = "ajsdkljkglajasdfjaslkd";
 	static String urlPrefix = "http://www.posttestserver.com/data/2014/11/12/" + folderName;
 	static String urlForCreatingFolder = "https://posttestserver.com/post.php?dir=" + folderName;
 

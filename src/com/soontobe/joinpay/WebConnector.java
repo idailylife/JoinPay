@@ -39,7 +39,7 @@ public class WebConnector {
 		try {
 			// Add your data
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			nameValuePairs.add(new BasicNameValuePair("status", "LirongIsOnline"));
+			nameValuePairs.add(new BasicNameValuePair("status", Constants.userName + "IsOnline"));
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 			// Execute HTTP Post Request

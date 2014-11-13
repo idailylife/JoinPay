@@ -81,8 +81,6 @@ implements LoaderCallbacks<Void>{
 		super.onCreate(savedInstanceState);
 	}
 
-
-
 	@Override
 	public void onStop() {
 		//TODO: Save current status
@@ -186,6 +184,12 @@ implements LoaderCallbacks<Void>{
 	 * @param userName
 	 */
 	public void addUserToView(String userName){
+		Log.d("addUserToView", userName);
+		for (UserInfo userInfo : mUserInfoList) {
+			if (userName.equals(userInfo.getUserName())) {
+				return;
+			}
+		}
 		if(!generateBubbles(1))
 			return;
 		int index = mUserInfoList.size() -1;
@@ -412,7 +416,7 @@ implements LoaderCallbacks<Void>{
 		@Override
 		public void onGlobalLayout() {
 
-			generateBubbles(2);
+			//generateBubbles(2);
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
 				mBubbleFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
