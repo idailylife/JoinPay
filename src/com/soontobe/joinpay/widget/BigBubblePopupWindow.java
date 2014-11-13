@@ -22,16 +22,16 @@ import android.widget.TextView;
 
 /**
  * Customized Popup Window 
- * @author ²©Î°
+ * @author ï¿½ï¿½Î°
  *
  */
 public class BigBubblePopupWindow extends PopupWindow {
 	final public int LAYOUT_ID = R.id.layout_big_bubble;
 	final public String TAG = "BIG_BUBBLE";
 	final public String[] COLOR_MAP = {"#99CC00", "#FFBB33", "#AA66CC", "#0000AA"}; //TODO: ...
-	
+
 	private UserInfo mUserInfo;
-	
+
 	public UserInfo getUserInfo() {
 		return mUserInfo;
 	}
@@ -40,7 +40,7 @@ public class BigBubblePopupWindow extends PopupWindow {
 		this.mUserInfo = mUserInfo;
 	}
 
-	
+
 	private PieGraph mPieGraph;
 	private Button mLockButton;
 	private EditText mEditText;  //Amount of money
@@ -48,25 +48,25 @@ public class BigBubblePopupWindow extends PopupWindow {
 	private TextView mTextView;  //Name
 	private TextView mTextPersonalNote;
 	private TextView mTextPublicNote;
-	
-	
+
+
 	public BigBubblePopupWindow(View contentView, UserInfo userInfo){
 		super(contentView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-		
+
 		// Initialize pie graph
 		mPieGraph = (PieGraph)contentView.findViewById(R.id.piegraph_boarder);
 		initDonutChart();
-		
+
 		mLockButton = (Button)contentView.findViewById(R.id.button_lock_inbubble);
 		mLockButton.setOnClickListener(new LockButtonOnClickListener());
 		mEditText = (EditText)contentView.findViewById(R.id.edittext_inbubble);
 		mEditText.setOnFocusChangeListener(new AmountOfMoneyFocusChangeListener());
 		mEditPersonalNote = (EditText)contentView.findViewById(R.id.edittext_private_note_inbubble);
 		mEditPersonalNote.setOnFocusChangeListener(new PersonalNoteChangeListener());
-		
+
 		mTextPersonalNote = (TextView)contentView.findViewById(R.id.textview_private_note_inbubble);
 		mTextPersonalNote.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				mTextPersonalNote.setVisibility(View.GONE);
@@ -80,11 +80,11 @@ public class BigBubblePopupWindow extends PopupWindow {
 		});
 		mTextPublicNote = (TextView)contentView.findViewById(R.id.textview_public_note_inbubble);
 		mTextView = (TextView)contentView.findViewById(R.id.textview_name_inbubble);
-		
+
 		mUserInfo = userInfo;
 		showUserInfo();
 	}
-	
+
 	/**
 	 * Call setUserInfo() before this function!!
 	 */
@@ -109,9 +109,9 @@ public class BigBubblePopupWindow extends PopupWindow {
 			mEditPersonalNote.setVisibility(View.VISIBLE);
 		} else {
 			mTextPersonalNote.setText(userInfo.getPersonalNote());
-			
+
 		}
-		
+
 	}
 
 	private void initDonutChart() {
@@ -120,9 +120,9 @@ public class BigBubblePopupWindow extends PopupWindow {
 			return;
 		}
 		mPieGraph.setInnerCircleRatio(230); //TODO: Set a precise value...
-		
+
 	}
-	
+
 	/**
 	 * Set chart data of outer donut chart (border)
 	 * @param values Values 
@@ -142,9 +142,9 @@ public class BigBubblePopupWindow extends PopupWindow {
 		}
 		//initDonutChart();
 	}
-	
-	
-	
+
+
+
 	private class LockButtonOnClickListener implements View.OnClickListener{
 
 		@Override
@@ -160,33 +160,41 @@ public class BigBubblePopupWindow extends PopupWindow {
 				mLockButton.setBackgroundResource(R.drawable.locked_darkgreen);
 			}
 		}
-		
+
 	}
-	
+
 	private class AmountOfMoneyFocusChangeListener implements View.OnFocusChangeListener{
 
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			if (!hasFocus){
-				Float currentMoney = Float.valueOf(mEditText.getText().toString());
+				float currentMoney = 0;
+				String textString = mEditText.getText().toString();
+				if (textString.length() > 0) {
+					currentMoney = Float.valueOf(mEditText.getText().toString());
+				}
 				if (currentMoney != mUserInfo.getAmountOfMoney()){
 					mUserInfo.setChangedMoney(currentMoney - mUserInfo.getAmountOfMoney());
 					mUserInfo.setAmountOfMoney(currentMoney);
-					
+
 				}
 			}
 		}
 	}
-	
-	
+
+
 	private class PersonalNoteChangeListener implements View.OnFocusChangeListener{
 
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			if (hasFocus)
 				return;
-			
+
 			String currNote = mEditPersonalNote.getText().toString();
+			if (currNote.isEmpty()) {
+				mUserInfo.setPersonalNote("");
+				mTextPersonalNote.setText("");
+			}
 			if (currNote != null && !currNote.isEmpty()){
 				mUserInfo.setPersonalNote(currNote);
 				mEditPersonalNote.setVisibility(View.GONE);
@@ -194,6 +202,5 @@ public class BigBubblePopupWindow extends PopupWindow {
 				mTextPersonalNote.setText(currNote);
 			}
 		}
-		
 	}
 }

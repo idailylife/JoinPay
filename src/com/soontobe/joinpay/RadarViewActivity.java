@@ -3,7 +3,9 @@ package com.soontobe.joinpay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -60,7 +62,6 @@ HistoryFragment.OnFragmentInteractionListener {
 	private RequestFragment mRequestFragment;
 	private HistoryFragment mHistoryFragment;
 
-
 	public static final String JUMP_KEY = "_jump";
 	private static final String TAG = "RadarViewActivity";
 	private static final String TAG_SEND = "tab_send";
@@ -78,11 +79,20 @@ HistoryFragment.OnFragmentInteractionListener {
 
 	public Map<String, Boolean> lockInfo;
 
+	WebConnector webConnector;
+	private ArrayList<String> fileNameList; // posttestserver
+	private int visitedFilesCount = 0; // posttestserver
+	private Set<String> onlineNameList = new HashSet<String>();
+
+
+	WebConnector WebConnector;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  //No Title Bar
 		setContentView(R.layout.activity_radar_view);
+		runPostTestServer();
 		mSendFragment = new SendFragment();
 		mRequestFragment = new RequestFragment();
 		mHistoryFragment = new HistoryFragment();
@@ -106,6 +116,42 @@ HistoryFragment.OnFragmentInteractionListener {
 		lockInfo = new HashMap<String, Boolean>();
 		lockInfo.put("total", false);
 		setEventListeners();
+	}
+
+	private void runPostTestServer() {
+		webConnector = new WebConnector(Constants.userName);
+		Log.d("RadarViewActivity", "onCreate");
+
+		new Thread() {
+			@Override
+			public void run() {
+				Log.d("RadarViewActivity", "run");
+				webConnector.onlineSignIn(Constants.urlForCreatingFolder);
+				while (true) {
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					fileNameList = webConnector.getFileNameList(Constants.urlPrefix, visitedFilesCount);
+					for (String i : fileNameList) {
+						String newFile = webConnector.getFile(Constants.urlPrefix + "/" + i);
+						for (String name : Constants.deviceNameList) {
+							if (onlineNameList.contains(name) || name.equals(Constants.userName)) continue;
+							if (newFile.contains(name + "IsOnline")) {
+								onlineNameList.add(name);
+							}
+						}
+					}
+					visitedFilesCount += fileNameList.size();
+					for (String i : onlineNameList) {
+						Log.d("onlineNameList", i);
+					}
+					Log.d("visitedFilesCount", "" + visitedFilesCount);
+				}
+			}
+		}.start();
 	}
 
 	@Override

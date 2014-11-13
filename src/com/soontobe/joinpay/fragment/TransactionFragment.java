@@ -56,7 +56,7 @@ implements LoaderCallbacks<Void>{
 
 
 	private OnFragmentInteractionListener mListener;
-//	private static final int contactListRequestCode = 1;
+	//	private static final int contactListRequestCode = 1;
 
 	private FrameLayout mBubbleFrameLayout;
 	private ArrayList<RadarUserView> mUserBubbles;
@@ -71,13 +71,13 @@ implements LoaderCallbacks<Void>{
 	protected ArrayList<UserInfo> mUserInfoList;	//User info list except for myself
 	private float mOldMoneyAmount;
 
-//	
-//	/* 
-//	 * Useless? 
-//	 */
-//	public static TransactionFragment newInstance(String param1, String param2) {
-//
-//	}
+	//	
+	//	/* 
+	//	 * Useless? 
+	//	 */
+	//	public static TransactionFragment newInstance(String param1, String param2) {
+	//
+	//	}
 
 	public TransactionFragment() {
 		// Required empty public constructor
@@ -178,7 +178,7 @@ implements LoaderCallbacks<Void>{
 		mUserInfoList.get(index).setUserName(contactName);
 		mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
 	}
-	
+
 	/**
 	 * Generate user bubbles.
 	 * @param qty Amount of users to be generated.
@@ -196,7 +196,7 @@ implements LoaderCallbacks<Void>{
 		Random random = new Random();
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(mSelfBubble.getLayoutParams());
 		for (int i=posOffset; i<qty+posOffset; i++){
-			
+
 			float pos[] = {PositionHandler.RAND_BUBBLE_CENTER_POS_X[i],
 					PositionHandler.RAND_BUBBLE_CENTER_POS_Y[i]			};
 			pos[0] = pos[0] * frameWidth - widgetWidth/2;
@@ -346,7 +346,7 @@ implements LoaderCallbacks<Void>{
 				try{
 					oldTotalAmount = Float.valueOf(mTotalAmount.getEditableText().toString());
 				} catch(NumberFormatException e){
-					;
+					oldTotalAmount = 0;
 				}
 				float newAmount = oldTotalAmount + moneyChanged;
 				mTotalAmount.setText(String.format("%.2f", newAmount));
@@ -400,9 +400,9 @@ implements LoaderCallbacks<Void>{
 		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 		@Override
 		public void onGlobalLayout() {
-			
+
 			generateBubbles(2);
-			
+
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
 				mBubbleFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 			else
@@ -487,7 +487,14 @@ implements LoaderCallbacks<Void>{
 				Log.d("TotalMoneyAmount", "" + oldAmount);
 				return;
 			}
-			float currentAmount = Float.valueOf(((EditText)v).getEditableText().toString());
+			float currentAmount;
+
+
+			try{
+				currentAmount = Float.valueOf(((EditText)v).getEditableText().toString());
+			} catch (NumberFormatException e){
+				currentAmount = 0;
+			}
 			ArrayList<Integer> targetUserIndex = getUnlockedSelectedUserIndex();
 			int size = targetUserIndex.size();
 			float splitAmount = (currentAmount - oldAmount) / (float)size;

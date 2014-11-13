@@ -15,11 +15,25 @@
  */
 package com.soontobe.joinpay;
 
+import java.util.Map;
+
 import org.json.JSONObject;
 
 public class Constants {
 
-    static String[] NameList = {
+	static String userName;
+	static String folderName = "lirong2";
+	static String urlPrefix = "http://www.posttestserver.com/data/2014/11/12/" + folderName;
+	static String urlForCreatingFolder = "https://posttestserver.com/post.php?dir=" + folderName;
+
+	static String[][] macAddressToName = {
+		{ "a0:0b:ba:e7:05:b5", "Lirong"},
+		{ "10:68:3f:fc:0e:d9", "Luna"},
+		{ "10:68:3f:43:5c:35", "Bowei"},
+		{ "asdfkjklasdjgklajsdlfjalsdjfalsdj", "Benny"},
+	};
+
+    static String[] contactNameList = {
     	"Alice",
         "Amy",
         "Benny",
@@ -32,7 +46,15 @@ public class Constants {
         "Melissa",
         "Patrick",
         "Teddy",
-        "Tommy"
+        "Tommy",
+        "Yu"
+    };
+    
+    static String[] deviceNameList = {
+    	"Lirong",
+    	"Luna",
+    	"Bowei",
+    	"Benny"
     };
     
     // Alphabetical

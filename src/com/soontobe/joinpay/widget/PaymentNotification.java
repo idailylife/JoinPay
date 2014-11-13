@@ -69,7 +69,5 @@ public class PaymentNotification  {
 			str += amountOfMoney;
 			return str;
 		}
-		
-		
 	}
 }
