@@ -74,7 +74,8 @@ public class BigBubblePopupWindow extends PopupWindow {
 				if(null == mUserInfo)
 					return;
 				String personalNote = mUserInfo.getPersonalNote();
-				if (null != personalNote)
+				if (null != personalNote &&
+						!personalNote.isEmpty())
 					mEditPersonalNote.setText(personalNote);
 			}
 		});
@@ -83,6 +84,30 @@ public class BigBubblePopupWindow extends PopupWindow {
 		
 		mUserInfo = userInfo;
 		showUserInfo();
+	}
+	
+	public boolean isPersonalNoteEmpty(){
+		if(null == mUserInfo)
+			return true;
+		String personalNote = mUserInfo.getPersonalNote();
+		if (personalNote == null)
+			return true;
+		else if(personalNote.isEmpty())
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean isPublicNoteEmpty(){
+		if(null == mUserInfo)
+			return true;
+		String publicNote = mUserInfo.getPublicNote();
+		if (publicNote == null)
+			return true;
+		else if(publicNote.isEmpty())
+			return true;
+		else
+			return false;
 	}
 	
 	/**
@@ -100,11 +125,13 @@ public class BigBubblePopupWindow extends PopupWindow {
 			//mLockButton.setText("U");
 			mLockButton.setBackgroundResource(R.drawable.locked_darkgreen);
 		}
-		if(null != userInfo.getPublicNote()){
-			//TODO: Insert items into ListView
+		
+		if(!isPublicNoteEmpty()){
 			mTextPublicNote.setText(userInfo.getPublicNote());
+		} else {
+			mTextPublicNote.setText("Group note not set yet.");
 		}
-		if(null == userInfo.getPersonalNote()){
+		if(isPersonalNoteEmpty()){
 			mTextPersonalNote.setVisibility(View.GONE);
 			mEditPersonalNote.setVisibility(View.VISIBLE);
 		} else {

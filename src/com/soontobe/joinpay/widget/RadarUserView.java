@@ -36,7 +36,6 @@ public class RadarUserView extends FrameLayout {
 	private boolean mIsContact;
 	
 	private ImageView mYellowCircle;
-	//private ImageView mGreenCircle[] = {null, null, null, null}; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
 	private ImageButton	mSideButtons[] = {null, null, null, null}; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
 	private Button mCenterButton;
 	private TextView mNameText;

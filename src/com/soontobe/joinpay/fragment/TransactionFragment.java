@@ -71,13 +71,6 @@ implements LoaderCallbacks<Void>{
 	protected ArrayList<UserInfo> mUserInfoList;	//User info list except for myself
 	private float mOldMoneyAmount;
 
-//	
-//	/* 
-//	 * Useless? 
-//	 */
-//	public static TransactionFragment newInstance(String param1, String param2) {
-//
-//	}
 
 	public TransactionFragment() {
 		// Required empty public constructor
