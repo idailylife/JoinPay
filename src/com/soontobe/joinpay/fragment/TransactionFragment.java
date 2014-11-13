@@ -160,13 +160,22 @@ implements LoaderCallbacks<Void>{
 
 		return mCurrentView;
 	}
+	
+	/**
+	 * 
+	 * @param index
+	 */
+	public void removeUserFromView(int index){
+		
+	}
 
 	/**
 	 * Add a contact to view
 	 * @param contactName
 	 */
 	public void addContactToView(String contactName){
-		generateBubbles(1);
+		if (!generateBubbles(1))
+			return;
 		int index = mUserInfoList.size() -1;
 		mUserInfoList.get(index).setContactState(true);
 		mUserInfoList.get(index).setUserName(contactName);
@@ -178,7 +187,8 @@ implements LoaderCallbacks<Void>{
 	 * @param userName
 	 */
 	public void addUserToView(String userName){
-		generateBubbles(1);
+		if(!generateBubbles(1))
+			return;
 		int index = mUserInfoList.size() -1;
 		mUserInfoList.get(index).setUserName(userName);
 		mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
@@ -188,11 +198,11 @@ implements LoaderCallbacks<Void>{
 	 * Generate user bubbles.
 	 * @param qty Amount of users to be generated.
 	 */
-	public void generateBubbles(int qty){
+	public boolean generateBubbles(int qty){
 		int posOffset = mUserInfoList.size();
 		if(qty + posOffset > PositionHandler.MAX_USER_SUPPORTED){
 			Log.e("SendFragment::generateBubbles", "Maximum user quantity exceed!");
-			return;
+			return false;
 		}
 		//TODO: Generate randomly
 		int frameHeight = mBubbleFrameLayout.getHeight();
@@ -224,6 +234,7 @@ implements LoaderCallbacks<Void>{
 			mUserBubbles.get(i).setCenterBtnClickedListener(new SelectUserOnClickListener(i));
 			mUserBubbles.get(i).setDeselectBtnClickedListener(new DeselectUserOnClickListener(i));
 		}
+		return true;
 	}
 
 	@Override
