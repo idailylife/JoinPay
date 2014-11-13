@@ -21,44 +21,60 @@
 		
         
         <!-- User circles in this frame(or somewhat)layout -->
-        <FrameLayout
-            android:id="@+id/layout_send_frag_bubbles"
+        <com.soontobe.joinpay.widget.UntouchableScrollView
+            android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" 
             android:layout_above="@+id/group_note_bar"
-            android:background="@drawable/radar_bg"
-            android:focusableInTouchMode="true"
+            android:scrollbars="none"
             >
-
-            <ImageButton
-            	android:id="@+id/contact_button"
-            	android:layout_width="62dp"
-            	android:layout_height="62dp"
-            	android:layout_gravity="center|top"
-            	android:layout_marginTop="30dp"
-            	android:onClick="contactButtonOnClick"
-            	android:src="@drawable/add_white"
-            	android:scaleType="fitCenter"
-            	android:padding="15dp"
-            	android:textColor="#fcfcfc"
-            	android:textSize="36dp"
-            	android:background="@drawable/shape_circle_gray"
-            	android:gravity="center"
-            	/>
-        
-            <com.soontobe.joinpay.widget.RadarUserView 
-                android:id="@+id/user_bubble_myself"
-                android:layout_width="wrap_content"
+			<LinearLayout 
+			    android:layout_width="match_parent"
+			    android:layout_height="fill_parent"
+			    android:orientation="vertical"
+			    >
+			    <FrameLayout
+                android:id="@+id/layout_send_frag_bubbles"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:layout_marginBottom="10dp"
-                >
-            </com.soontobe.joinpay.widget.RadarUserView>
-            
-            
+                android:focusableInTouchMode="true"
+                 >
+                
+                <com.soontobe.joinpay.widget.ResizableImageView
+            	    android:layout_width="match_parent"
+            	    android:layout_height="wrap_content"
+            	    android:scaleType="centerCrop"
+            	    android:src="@drawable/radar_bg" 
+            	    />
+			        
+            	<ImageButton
+                	android:id="@+id/contact_button"
+                	android:layout_width="62dp"
+                	android:layout_height="62dp"
+                	android:layout_gravity="center|top"
+                	android:layout_marginTop="20dp"
+               		android:background="@drawable/shape_circle_gray"
+                	android:gravity="center"
+                	android:onClick="contactButtonOnClick"
+                	android:padding="15dp"
+                	android:scaleType="fitCenter"
+                	android:src="@drawable/add_white"
+                	android:textColor="#fcfcfc"
+                	android:textSize="36dp" />
 
-        	
-        </FrameLayout>
+            	<com.soontobe.joinpay.widget.RadarUserView
+                	android:id="@+id/user_bubble_myself"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:layout_gravity="bottom|center"
+                	android:layout_marginBottom="20dp" >
+            	</com.soontobe.joinpay.widget.RadarUserView>
+
+
+			</FrameLayout>
+			</LinearLayout>
+               
+        </com.soontobe.joinpay.widget.UntouchableScrollView>
+        
 
         <!-- Group note bar -->
         <RelativeLayout

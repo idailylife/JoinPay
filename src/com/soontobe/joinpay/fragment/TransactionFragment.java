@@ -157,16 +157,18 @@ implements LoaderCallbacks<Void>{
 		mTotalAmount.setOnFocusChangeListener(new OnTotalMoneyFocusChangeListener());
 
 		mGroupNote.setOnFocusChangeListener(new OnGroupNoteFocusChangeListener());
-
+		
 		return mCurrentView;
 	}
 	
 	/**
-	 * 
+	 * Remove user from RadarView by his index in mUserInfoList of mUserBubbles
 	 * @param index
 	 */
 	public void removeUserFromView(int index){
-		
+		mBubbleFrameLayout.removeView(mUserBubbles.get(index));
+		mUserBubbles.remove(index);
+		mUserInfoList.remove(index);
 	}
 
 	/**
@@ -415,6 +417,10 @@ implements LoaderCallbacks<Void>{
 			
 			generateBubbles(2);
 			
+			//DEBUG////
+			//removeUserFromView(0);
+			///////////
+			
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
 				mBubbleFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 			else
@@ -499,7 +505,13 @@ implements LoaderCallbacks<Void>{
 				Log.d("TotalMoneyAmount", "" + oldAmount);
 				return;
 			}
-			float currentAmount = Float.valueOf(((EditText)v).getEditableText().toString());
+			float currentAmount = 0.0f;
+			try{
+				currentAmount = Float.valueOf(((EditText)v).getEditableText().toString());
+			} catch (NumberFormatException e){
+				;
+			}
+			
 			ArrayList<Integer> targetUserIndex = getUnlockedSelectedUserIndex();
 			int size = targetUserIndex.size();
 			float splitAmount = (currentAmount - oldAmount) / (float)size;
@@ -526,7 +538,7 @@ implements LoaderCallbacks<Void>{
 			if(hasFocus)
 				return;
 			String groupNote = mGroupNote.getEditableText().toString();
-			myUserInfo.setPersonalNote(groupNote);
+			myUserInfo.setPublicNote(groupNote);
 			mSelfBubble.setUserInfo(myUserInfo);
 			for(int i=0; i<mUserInfoList.size(); i++){
 				mUserInfoList.get(i).setPublicNote(groupNote);
@@ -600,12 +612,36 @@ implements LoaderCallbacks<Void>{
 	 */
 	public void clearUserMoneyAmount(){
 		myUserInfo.setAmountOfMoney(0.0f);
+		myUserInfo.setSelecetd(false);
+		mTotalAmount.setText("");
+		mGroupNote.setText("");
+		String groupNote = "";
+		myUserInfo.setPublicNote(groupNote);
+		myUserInfo.setPersonalNote("");
 		mSelfBubble.setUserInfo(myUserInfo);
 		for(int i=0; i<mUserInfoList.size(); i++){
 			mUserInfoList.get(i).setAmountOfMoney(0.0f);
+			mUserInfoList.get(i).setPublicNote(groupNote);
+			mUserInfoList.get(i).setPersonalNote("");
+			mUserInfoList.get(i).setSelecetd(false);
 			mUserBubbles.get(i).setUserInfo(mUserInfoList.get(i));
 		}
-		mTotalAmount.setText("");
+		mSelectCountText.setText("0");
+	}
+	
+	/**
+	 * Set name of myself
+	 * this method will update UI
+	 * 
+	 * @param name
+	 */
+	public void setMyName(String name){
+		if(myUserInfo == null)
+			return;
+		myUserInfo.setUserName(name);
+		if(mSelfBubble == null)
+			return;
+		mSelfBubble.setUserInfo(myUserInfo);
 	}
 
 }
