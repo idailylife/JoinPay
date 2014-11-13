@@ -297,6 +297,17 @@ HistoryFragment.OnFragmentInteractionListener {
 		startActivity(i);
 		finish();
 	}
+	
+	public void onClickClearButton(View v){
+		switch(mCurrentTab){
+		case 0:
+			mSendFragment.clearUserMoneyAmount();
+			break;
+		case 1:
+			mRequestFragment.clearUserMoneyAmount();
+			break;
+		}
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

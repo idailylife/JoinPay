@@ -51,7 +51,8 @@ public class BigBubblePopupWindow extends PopupWindow {
 	
 	
 	public BigBubblePopupWindow(View contentView, UserInfo userInfo){
-		super(contentView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+		//super(contentView);
+		super(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
 		
 		// Initialize pie graph
 		mPieGraph = (PieGraph)contentView.findViewById(R.id.piegraph_boarder);

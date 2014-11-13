@@ -570,5 +570,19 @@ implements LoaderCallbacks<Void>{
 		}
 		return retList;
 	}
+	
+	/**
+	 * This function will clear all money amounts
+	 * including the total amount.
+	 */
+	public void clearUserMoneyAmount(){
+		myUserInfo.setAmountOfMoney(0.0f);
+		mSelfBubble.setUserInfo(myUserInfo);
+		for(int i=0; i<mUserInfoList.size(); i++){
+			mUserInfoList.get(i).setAmountOfMoney(0.0f);
+			mUserBubbles.get(i).setUserInfo(mUserInfoList.get(i));
+		}
+		mTotalAmount.setText("");
+	}
 
 }
