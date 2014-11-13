@@ -218,7 +218,7 @@ implements LoaderCallbacks<Void>{
 		for (int i=posOffset; i<qty+posOffset; i++){
 
 			float pos[] = {PositionHandler.RAND_BUBBLE_CENTER_POS_X[i],
-					PositionHandler.RAND_BUBBLE_CENTER_POS_Y[i]			};
+					PositionHandler.RAND_BUBBLE_CENTER_POS_Y[i]};
 			pos[0] = pos[0] * frameWidth - widgetWidth/2;
 			pos[1] = pos[1] * frameHeight - widgetWidth/2;
 			Log.d("Bubble pos", "x=" + pos[0] + ", y=" + pos[1]);
@@ -245,9 +245,9 @@ implements LoaderCallbacks<Void>{
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		setMyName(Constants.userName);
 		super.onActivityCreated(savedInstanceState);
 	}
-
 
 	// TODO: Rename method, update argument and hook method into UI event
 	public void onButtonPressed(Uri uri) {
@@ -389,7 +389,6 @@ implements LoaderCallbacks<Void>{
 					mUserBubbles.get(index).setUserInfo(mUserInfoList.get(index));
 				}
 			}
-
 		}
 
 	}

@@ -126,7 +126,7 @@ HistoryFragment.OnFragmentInteractionListener {
 			@Override
 			public void run() {
 				Log.d("RadarViewActivity", "run");
-				webConnector.onlineSignIn(Constants.urlForCreatingFolder);
+				webConnector.onlineSignIn(Constants.urlForPostingToFolder);
 				while (true) {
 					try {
 						Thread.sleep(5000);
@@ -143,22 +143,89 @@ HistoryFragment.OnFragmentInteractionListener {
 								onlineNameList.add(name);
 							}
 						}
+
+						if (newFile.contains(Constants.transactionIntiatorTag + Constants.userName)) {
+							continue;
+						}
+
+						int idx1 = newFile.indexOf(Constants.transactionBeginTag);
+						int idx2 = newFile.indexOf(Constants.transactionEndTag);
+						if (idx1 >= 0 && idx2 >= 0) {
+							int st = idx1 + Constants.transactionBeginTag.length();
+							int ed = idx2;
+							String data = newFile.substring(st, ed);
+							//							Log.d("RadarViewActivity paymentInfo from web", newFile.substring(st, ed));
+
+							ArrayList<String []> paymentInfoFromWeb = new ArrayList<String []>();
+							String[] paymentStrings = data.split("\\|");
+							String [] relevantItem = {};
+							String [] groupNote = {};
+							String [] summary = {};
+							for (int k = 0;k < paymentStrings.length;k++) {
+								String[] items = paymentStrings[k].split(",");
+								//								paymentInfoFromWeb.add(items);
+								if (items.length >= 4) {
+									if (items[2].equals(Constants.userName)) {  	//	payer
+										relevantItem = items;
+									} else if (items[3].equals(Constants.userName)) {	//	payee
+										relevantItem = items;
+									}
+								}
+
+								if (items[0].equals("group_note")) {
+									groupNote = items;
+								}
+
+								if (items[0].equals("summary")) {
+									summary = items;
+								}
+							}
+
+							if (relevantItem.length > 0) {
+								ArrayList<String []> popupPaymentInfo = new ArrayList<String[]>();
+								popupPaymentInfo.add(relevantItem);
+								popupPaymentInfo.add(groupNote);
+								popupPaymentInfo.add(summary);
+								
+								String ssss = "";
+								for (int m = 0;m < popupPaymentInfo.size();m++) {
+									for (String s : popupPaymentInfo.get(m)) {
+										Log.d("popupPaymentInfo", s);
+										ssss += " " + s;
+										
+									}
+								}
+								final String finalSSSS = ssss;
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										Toast.makeText(getBaseContext(),
+												finalSSSS, Toast.LENGTH_SHORT).show();
+									}
+								});
+							}
+
+
+
+						}
+
+
 					}
 					visitedFilesCount += fileNameList.size();
 					runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                        	for (String i : onlineNameList) {
-        						Log.d("onlineNameList", i);
-        						if (mCurrentTab == 0) {
-        							mSendFragment.addUserToView(i);
-        						} else if (mCurrentTab == 1) {
-        							mSendFragment.addUserToView(i);
-        						}
-        					}
-                        }
-                    });
-					
+						@Override
+						public void run() {
+							for (String i : onlineNameList) {
+								Log.d("onlineNameList", i);
+								if (mCurrentTab == 0) {
+									mSendFragment.addUserToView(i);
+								} else if (mCurrentTab == 1) {
+									mSendFragment.addUserToView(i);
+								}
+							}
+						}
+					});
+
 					Log.d("visitedFilesCount", "" + visitedFilesCount);
 				}
 			}
@@ -169,6 +236,7 @@ HistoryFragment.OnFragmentInteractionListener {
 	public View onCreateView(String name, Context context, AttributeSet attrs) {
 		// TODO Auto-generated method stub
 		return super.onCreateView(name, context, attrs);
+
 	}
 
 	private void setEventListeners() {
@@ -233,11 +301,13 @@ HistoryFragment.OnFragmentInteractionListener {
 			mCurrentTab = 0;
 			fm.beginTransaction().replace(R.id.tab_send, mSendFragment)
 			.commit();
+			mSendFragment.setMyName(Constants.userName);
 
 		} else if (TAG_REQUEST.equals(tabId)){
 			mCurrentTab = 1;
 			fm.beginTransaction().replace(R.id.tab_request, mRequestFragment)
 			.commit();
+			mRequestFragment.setMyName(Constants.userName);
 		} else if (TAG_HISTORY.equals(tabId)){
 			mCurrentTab = 2;
 			fm.beginTransaction().replace(R.id.tab_history, mHistoryFragment)
@@ -354,7 +424,7 @@ HistoryFragment.OnFragmentInteractionListener {
 		startActivity(i);
 		finish();
 	}
-	
+
 	public void onClickClearButton(View v){
 		switch(mCurrentTab){
 		case 0:
@@ -375,7 +445,4 @@ HistoryFragment.OnFragmentInteractionListener {
 
 		return super.onKeyDown(keyCode, event);
 	}
-
-
-
 }

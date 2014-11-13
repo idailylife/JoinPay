@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,26 @@ public class WebConnector {
 		this.userName = userName;
 	}
 
+
+	public void postTransactionRecord(String url, String paymentInfoString) {
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(url);
+
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("transaction", Constants.transactionBeginTag + paymentInfoString + Constants.transactionEndTag));
+		nameValuePairs.add(new BasicNameValuePair("payer", Constants.transactionIntiatorTag + Constants.userName));
+
+		try {
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			// Execute HTTP Post Request
+			HttpResponse response = httpclient.execute(httppost);
+			String result = inputStreamToString(response.getEntity().getContent()).toString();
+						Log.d("HttpPost result", result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+		}
+	}
+
 	public void onlineSignIn(String url) {
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
@@ -38,15 +59,15 @@ public class WebConnector {
 
 		try {
 			// Add your data
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("status", Constants.userName + "IsOnline"));
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 			// Execute HTTP Post Request
 			HttpResponse response = httpclient.execute(httppost);
-			String result = inputStreamToString(response.getEntity().getContent()).toString();
+			//			String result = inputStreamToString(response.getEntity().getContent()).toString();
 			//String result = convertStreamToString(response.getEntity().getContent());
-			Log.d("HttpPost result", result);
+			//			Log.d("HttpPost result", result);
 			//				String[] items1 = result.split("View it at ");
 			//				String[] items2 = items1[1].split("Post body was");
 			//				Log.d("HttpPost result", items2[0]);

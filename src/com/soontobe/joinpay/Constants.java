@@ -31,19 +31,25 @@ public class Constants {
 		""
 	};
 
-	static String userName;
-	static String folderName = "ajsdkljkglajasdfjaslkd";
-	static String urlPrefix = "http://www.posttestserver.com/data/2014/11/12/" + folderName;
-	static String urlForCreatingFolder = "https://posttestserver.com/post.php?dir=" + folderName;
+	public static String userName;
+	public static String folderName = "ajsdkljkglajasdfjaslkd";
+	public static String urlPrefix = "http://www.posttestserver.com/data/2014/11/13/" + folderName;
+	public static String urlForPostingToFolder = "https://posttestserver.com/post.php?dir=" + folderName;
+	
 
-	static String[][] macAddressToName = {
+	public static String[][] macAddressToName = {
 		{ "a0:0b:ba:e7:05:b5", "Lirong"},
 		{ "10:68:3f:fc:0e:d9", "Luna"},
 		{ "10:68:3f:43:5c:35", "Bowei"},
 		{ "asdfkjklasdjgklajsdlfjalsdjfalsdj", "Benny"},
 	};
-
-    static String[] contactNameList = {
+	
+	public static String transactionBeginTag = "<TransactionRecordBegin>";
+	public static String transactionEndTag = "<TransactionRecordEnd>";
+	
+	public static String transactionIntiatorTag = "TheTransactionInitiatorIs";
+	
+	public static String[] contactNameList = {
     	"Alice",
         "Amy",
         "Benny",
@@ -60,7 +66,7 @@ public class Constants {
         "Yu"
     };
     
-    static String[] deviceNameList = {
+	public static String[] deviceNameList = {
     	"Lirong",
     	"Luna",
     	"Bowei",
@@ -68,7 +74,7 @@ public class Constants {
     };
     
     // Alphabetical
-    static String[][] NameList2 = {
+	public static String[][] NameList2 = {
     	{"Alice, Amy"}, 
     	{"Benny", "Bob"}, 
     	{"Catherine"}, 
