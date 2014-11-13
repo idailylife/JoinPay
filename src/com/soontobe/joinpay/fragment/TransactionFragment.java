@@ -86,14 +86,29 @@ implements LoaderCallbacks<Void>{
 		//TODO: Save current status
 		super.onStop();
 	}
-
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		mCurrentView = inflater.inflate(R.layout.fragment_send, container, false);
+		if(mCurrentView == null)
+			mCurrentView = inflater.inflate(R.layout.fragment_send, container, false);
+		//缓存的rootView需要判断是否已经被加过parent， 如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。  
+		
+		ViewGroup parent = (ViewGroup) mCurrentView.getParent(); 
+		if(parent != null){
+			parent.removeView(mCurrentView);
+		}
 		Utility.setupKeyboardAutoHidden(mCurrentView, getActivity());
+		
+		init();
 
+		return mCurrentView;
+	}
+	
+	private void init() {
+		// TODO Auto-generated method stub
 		mBubbleFrameLayout = (FrameLayout)mCurrentView.findViewById(R.id.layout_send_frag_bubbles);
 		mBubbleFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new MyOnGlobalLayoutChgListener());
 		mBubbleFrameLayout.setOnClickListener(new OnClickListener() {
@@ -154,10 +169,8 @@ implements LoaderCallbacks<Void>{
 		mTotalAmount.setOnFocusChangeListener(new OnTotalMoneyFocusChangeListener());
 
 		mGroupNote.setOnFocusChangeListener(new OnGroupNoteFocusChangeListener());
-		
-		return mCurrentView;
 	}
-	
+
 	/**
 	 * Remove user from RadarView by his index in mUserInfoList of mUserBubbles
 	 * @param index

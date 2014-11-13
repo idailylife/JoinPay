@@ -29,7 +29,7 @@ public class Constants {
 	};
 
 	public static String userName;
-	public static String folderName = "whocareswhatthisis";
+	public static String folderName = "whocsadess";
 	public static String urlPrefix = "http://www.posttestserver.com/data/2014/11/13/" + folderName;
 	public static String urlForPostingToFolder = "https://posttestserver.com/post.php?dir=" + folderName;
 	
@@ -39,7 +39,8 @@ public class Constants {
 		{ "10:68:3f:fc:0e:d9", "Luna"},
 		{ "10:68:3f:43:5c:35", "Bowei"},
 		{ "asdfkjklasdjgklajsdlfjalsdjfalsdj", "Benny"},
-		{ "aa:22:0b:42:05:02", "Test"}
+		{ "ac:22:0b:42:85:02", "Test1"},
+		{ "fake_address", "Test2"}
 	};
 	
 	public static String transactionBeginTag = "<TransactionRecordBegin>";
@@ -68,7 +69,9 @@ public class Constants {
     	"Lirong",
     	"Luna",
     	"Bowei",
-    	"Benny"
+    	"Benny",
+    	"Test1",
+    	"Test2"
     };
     
     // Alphabetical

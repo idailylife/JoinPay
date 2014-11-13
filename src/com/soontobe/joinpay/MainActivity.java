@@ -24,6 +24,9 @@ public class MainActivity extends Activity {
 		WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		WifiInfo info = manager.getConnectionInfo();
 		String address = info.getMacAddress();
+		if(null == address){
+			address = "fake_address";
+		}
 		Constants.userName = getUserNameByMacAddress(address);
 		Log.d("MAC address", address);
 		Log.d("User name", Constants.userName);

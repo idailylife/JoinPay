@@ -3,7 +3,10 @@ package com.soontobe.joinpay.fragment;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,10 +19,14 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.soontobe.joinpay.PaymentSummaryAdapter;
 import com.soontobe.joinpay.R;
 import com.soontobe.joinpay.Utility;
+import com.soontobe.joinpay.widget.PendingTransactionItemView;
+import com.soontobe.joinpay.widget.PendingTransactionItemView.OnAcceptButtonClickListener;
+import com.soontobe.joinpay.widget.PendingTransactionItemView.OnDeclineButtonClickListener;
 
 public class HistoryFragment extends Fragment 
 implements LoaderCallbacks<Void> {
@@ -27,6 +34,10 @@ implements LoaderCallbacks<Void> {
 	private OnFragmentInteractionListener mListener;
 	private View mCurrentView;
 	private ArrayList<ArrayList<String[]>> paymentInfoList;
+	private LinearLayout mHistoryLayout;
+	private ArrayList<PendingTransactionItemView> mPendingTIVList;
+	
+	private ArrayList<ArrayList<String []>> mPendingInfoList;
 	private boolean newRecordAvailable;
 	private ArrayList<String[]> newPaymentInfo;
 
@@ -34,19 +45,53 @@ implements LoaderCallbacks<Void> {
 		// Required empty public constructor
 		newRecordAvailable = false;
 		paymentInfoList = new ArrayList<ArrayList<String[]>>();
+		mPendingInfoList = new ArrayList<ArrayList<String[]>>();
+		mPendingTIVList = new ArrayList<PendingTransactionItemView>();
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
+	
+	
+
+	@Override
+	public void onResume() {
+		Log.d("Frag", "OnResume(");
+		//checkPendingInfo();
+		super.onResume();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		mCurrentView = inflater.inflate(R.layout.fragment_history, container, false);
+		if(mCurrentView == null)
+			mCurrentView = inflater.inflate(R.layout.fragment_history, container, false);
+		
+		ViewGroup parent = (ViewGroup) mCurrentView.getParent(); 
+		if(parent != null){
+			parent.removeView(mCurrentView);
+		}
+		
+		mHistoryLayout = (LinearLayout)mCurrentView.findViewById(R.id.history_view_pane_items);
+		
+		checkPendingInfo();
+		
 		return mCurrentView;
+	}
+	
+	
+	private void checkPendingInfo() {
+		// TODO Auto-generated method stub
+		if(mPendingInfoList.isEmpty()){
+			return;
+		}
+		for(ArrayList<String []> pInfo: mPendingInfoList){
+			addTransactionItem(pInfo);
+		}
+		mPendingInfoList.clear();
 	}
 
 	@Override
@@ -54,6 +99,8 @@ implements LoaderCallbacks<Void> {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		
+		
+		//TODO:in case of second start
 		LinearLayout historyItems = (LinearLayout) getActivity().findViewById(R.id.history_view_pane_items);
 		int margin = 15;
 		ListView lv;
@@ -70,6 +117,31 @@ implements LoaderCallbacks<Void> {
 		}
 		
 	}
+	
+	/**
+	 * Add a transaction note to history view
+	 * @param info
+	 */
+	public void addTransactionItem(ArrayList<String[]> info){
+		PendingTransactionItemView pItemView = new PendingTransactionItemView(getActivity());
+		int index = mPendingTIVList.size();
+		pItemView.setPaymentInfo(info);
+		pItemView.setAcceptButtonClickListener(new OnPendingItemAcceptedListener(index));
+		pItemView.setDeclineButtonClickListener(new OnPendingItemDeclinedListener(index));
+		mPendingTIVList.add(pItemView);
+		
+		mHistoryLayout.addView(pItemView, 0);
+	}
+	
+	/**
+	 * Add pending transaction info to list
+	 * @param info
+	 */
+	public void addPendingTransItem(ArrayList<String[]> info){
+		mPendingInfoList.add(info);
+	}
+	
+	
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -123,5 +195,55 @@ implements LoaderCallbacks<Void> {
 
 	public void setNewRecordNotification(ArrayList<String []> newPaymentInfo) {
 		paymentInfoList.add(newPaymentInfo);
+	}
+	
+	private class OnPendingItemAcceptedListener implements OnAcceptButtonClickListener{
+		private int index;
+		
+		public OnPendingItemAcceptedListener(int _index){
+			index = _index;
+		}
+		
+		@Override
+		public void OnClick(View v) {
+			// TODO Auto-generated method stub
+			
+			String confirmMsg = "Confirm the payment?";
+			new AlertDialog.Builder(getActivity())
+				.setMessage(confirmMsg)
+				.setPositiveButton("OK", new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						mPendingTIVList.get(index).setAccepted();
+					}
+				})
+				.setNegativeButton("Don\'t allow", new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						return;
+					}
+				})
+				.show();
+			
+		}
+		
+	}
+	
+	private class OnPendingItemDeclinedListener implements OnDeclineButtonClickListener{
+		private int index;
+		
+		public OnPendingItemDeclinedListener(int _index){
+			index = _index;
+		}
+		
+		@Override
+		public void OnClick(View v) {
+			// TODO Auto-generated method stub
+			mPendingTIVList.get(index).setDeclined();
+		}
 	}
 }

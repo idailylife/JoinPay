@@ -187,20 +187,26 @@ HistoryFragment.OnFragmentInteractionListener {
 								popupPaymentInfo.add(groupNote);
 								popupPaymentInfo.add(summary);
 								
-								String ssss = "";
-								for (int m = 0;m < popupPaymentInfo.size();m++) {
-									for (String s : popupPaymentInfo.get(m)) {
-										Log.d("popupPaymentInfo", s);
-										ssss += " " + s;
-										
-									}
-								}
-								final String finalSSSS = ssss;
+//								String ssss = "";
+//								for (int m = 0;m < popupPaymentInfo.size();m++) {
+//									for (String s : popupPaymentInfo.get(m)) {
+//										Log.d("popupPaymentInfo", s);
+//										ssss += " " + s;
+//										
+//									}
+//								}
+								//final String finalSSSS = ssss;
+								final ArrayList<String []> finalInfo = popupPaymentInfo;
 								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
-										Toast.makeText(getBaseContext(),
-												finalSSSS, Toast.LENGTH_SHORT).show();
+//										Toast.makeText(getBaseContext(),
+//												finalSSSS, Toast.LENGTH_SHORT).show();
+										
+										//mHistoryFragment.addTransactionItem(finalInfo);
+										mHistoryFragment.addPendingTransItem(finalInfo);
+										mCurrentTab = 2;	//jump to history view
+										mTabHost.setCurrentTab(mCurrentTab);
 									}
 								});
 							}
@@ -220,7 +226,7 @@ HistoryFragment.OnFragmentInteractionListener {
 								if (mCurrentTab == 0) {
 									mSendFragment.addUserToView(i);
 								} else if (mCurrentTab == 1) {
-									mSendFragment.addUserToView(i);
+									mRequestFragment.addUserToView(i);
 								}
 							}
 						}
@@ -276,6 +282,10 @@ HistoryFragment.OnFragmentInteractionListener {
 		mTabHost.addTab(newTab(TAG_SEND, R.string.tab_send, R.id.tab_send));
 		mTabHost.addTab(newTab(TAG_REQUEST, R.string.tab_request, R.id.tab_request));
 		mTabHost.addTab(newTab(TAG_HISTORY, R.string.tab_history, R.id.tab_history));
+		
+		mTabHost.setCurrentTab(1);
+		mTabHost.setCurrentTab(2);
+		mTabHost.setCurrentTab(0);
 	}
 
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
@@ -298,60 +308,60 @@ HistoryFragment.OnFragmentInteractionListener {
 		//		Log.d(TAG, "onTabChanged(): tabId=" + tabId);
 		FragmentManager fm = getFragmentManager();
 		if(TAG_SEND.equals(tabId)){
-			if(!mFragmentInitState[0]){
+//			if(!mFragmentInitState[0]){
 				fm.beginTransaction().replace(R.id.tab_send, mSendFragment)
 					.commit();
 				mFragmentInitState[0] = true;
-			} else{
-				switch(mCurrentTab){
-				case 1:
-					fm.beginTransaction().hide(mRequestFragment);
-					fm.beginTransaction().show(mSendFragment);
-					break;
-				case 2:
-					fm.beginTransaction().hide(mHistoryFragment);
-					fm.beginTransaction().show(mSendFragment);
-					break;
-				}
-			}
+//			} else{
+//				switch(mCurrentTab){
+//				case 1:
+//					fm.beginTransaction().hide(mRequestFragment);
+//					fm.beginTransaction().show(mSendFragment);
+//					break;
+//				case 2:
+//					fm.beginTransaction().hide(mHistoryFragment);
+//					fm.beginTransaction().show(mSendFragment);
+//					break;
+//				}
+//			}
 			mCurrentTab = 0;
 			mSendFragment.setMyName(Constants.userName);
 		} else if (TAG_REQUEST.equals(tabId)){
-			if(!mFragmentInitState[1]){
+//			if(!mFragmentInitState[1]){
 				fm.beginTransaction().replace(R.id.tab_request, mRequestFragment)
 					.commit();
 				mFragmentInitState[1] = true;
-			} else {
-				switch(mCurrentTab){
-				case 0:
-					fm.beginTransaction().hide(mSendFragment);
-					fm.beginTransaction().show(mRequestFragment);
-					break;
-				case 2:
-					fm.beginTransaction().hide(mHistoryFragment);
-					fm.beginTransaction().show(mRequestFragment);
-					break;
-				}
-			}
-			
+//			} else {
+//				switch(mCurrentTab){
+//				case 0:
+//					fm.beginTransaction().hide(mSendFragment);
+//					fm.beginTransaction().show(mRequestFragment);
+//					break;
+//				case 2:
+//					fm.beginTransaction().hide(mHistoryFragment);
+//					fm.beginTransaction().show(mRequestFragment);
+//					break;
+//				}
+//			}
+//			
 			mCurrentTab = 1;
 			mRequestFragment.setMyName(Constants.userName);
 		} else if (TAG_HISTORY.equals(tabId)){
-			if(!mFragmentInitState[2]){
+//			if(!mFragmentInitState[2]){
 				fm.beginTransaction().replace(R.id.tab_history, mHistoryFragment)
 				.commit();
-			} else {
-				switch(mCurrentTab){
-				case 0:
-					fm.beginTransaction().hide(mSendFragment);
-					fm.beginTransaction().show(mHistoryFragment);
-					break;
-				case 1:
-					fm.beginTransaction().hide(mRequestFragment);
-					fm.beginTransaction().show(mHistoryFragment);
-					break;
-				}
-			}
+//			} else {
+//				switch(mCurrentTab){
+//				case 0:
+//					fm.beginTransaction().hide(mSendFragment);
+//					fm.beginTransaction().show(mHistoryFragment);
+//					break;
+//				case 1:
+//					fm.beginTransaction().hide(mRequestFragment);
+//					fm.beginTransaction().show(mHistoryFragment);
+//					break;
+//				}
+//			}
 
 			mCurrentTab = 2;
 		} else {
