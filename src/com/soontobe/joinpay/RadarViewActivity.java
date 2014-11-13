@@ -61,6 +61,7 @@ HistoryFragment.OnFragmentInteractionListener {
 	private HistoryFragment mHistoryFragment;
 
 
+
 	public static final String JUMP_KEY = "_jump";
 	private static final String TAG = "RadarViewActivity";
 	private static final String TAG_SEND = "tab_send";
@@ -105,6 +106,7 @@ HistoryFragment.OnFragmentInteractionListener {
 
 		lockInfo = new HashMap<String, Boolean>();
 		lockInfo.put("total", false);
+		
 		setEventListeners();
 	}
 
@@ -167,25 +169,67 @@ HistoryFragment.OnFragmentInteractionListener {
 		tabSpec.setContent(tabContentId);
 		return tabSpec;
 	}
-
+	
+	private boolean mFragmentInitState[] = {true, false, false};
 	@Override
 	public void onTabChanged(String tabId) {
 		//		Log.d(TAG, "onTabChanged(): tabId=" + tabId);
 		FragmentManager fm = getFragmentManager();
 		if(TAG_SEND.equals(tabId)){
+			if(!mFragmentInitState[0]){
+				fm.beginTransaction().replace(R.id.tab_send, mSendFragment)
+					.commit();
+				mFragmentInitState[0] = true;
+			} else{
+				switch(mCurrentTab){
+				case 1:
+					fm.beginTransaction().hide(mRequestFragment);
+					fm.beginTransaction().show(mSendFragment);
+					break;
+				case 2:
+					fm.beginTransaction().hide(mHistoryFragment);
+					fm.beginTransaction().show(mSendFragment);
+					break;
+				}
+			}
 			mCurrentTab = 0;
-			fm.beginTransaction().replace(R.id.tab_send, mSendFragment)
-			.commit();
-
 		} else if (TAG_REQUEST.equals(tabId)){
+			if(!mFragmentInitState[1]){
+				fm.beginTransaction().replace(R.id.tab_request, mRequestFragment)
+					.commit();
+				mFragmentInitState[1] = true;
+			} else {
+				switch(mCurrentTab){
+				case 0:
+					fm.beginTransaction().hide(mSendFragment);
+					fm.beginTransaction().show(mRequestFragment);
+					break;
+				case 2:
+					fm.beginTransaction().hide(mHistoryFragment);
+					fm.beginTransaction().show(mRequestFragment);
+					break;
+				}
+			}
+			
 			mCurrentTab = 1;
-			fm.beginTransaction().replace(R.id.tab_request, mRequestFragment)
-			.commit();
 		} else if (TAG_HISTORY.equals(tabId)){
-			mCurrentTab = 2;
-			fm.beginTransaction().replace(R.id.tab_history, mHistoryFragment)
-			.commit();
+			if(!mFragmentInitState[2]){
+				fm.beginTransaction().replace(R.id.tab_history, mHistoryFragment)
+				.commit();
+			} else {
+				switch(mCurrentTab){
+				case 0:
+					fm.beginTransaction().hide(mSendFragment);
+					fm.beginTransaction().show(mHistoryFragment);
+					break;
+				case 1:
+					fm.beginTransaction().hide(mRequestFragment);
+					fm.beginTransaction().show(mHistoryFragment);
+					break;
+				}
+			}
 
+			mCurrentTab = 2;
 		} else {
 			Log.w("RadarViewActivity_onTabChanged", "Cannot find tab id=" + tabId);
 		}
