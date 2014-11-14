@@ -14,18 +14,34 @@ public class UserInfo {
 	private String personalNote;
 	private float amountOfMoney;
 	private float changedMoney;	//Amount of money changed when editing TextEdit
+	private boolean isMyself;
 	private boolean isContact;
 	private boolean isLocked;
 	private boolean isSelecetd;
 	
 	public UserInfo() {
 		isContact = false;
+		isMyself = false;
 		amountOfMoney = 0.0f;
 		userName = "";
 		publicNote = "";
 		personalNote = "";
 	}
 	
+	
+	
+	public boolean isMyself() {
+		return isMyself;
+	}
+
+
+
+	public void setMyself(boolean isMyself) {
+		this.isMyself = isMyself;
+	}
+
+
+
 	public boolean isSelecetd() {
 		return isSelecetd;
 	}

@@ -139,7 +139,9 @@ implements LoaderCallbacks<Void>{
 		myUserInfo = new UserInfo();
 		myUserInfo.setUserId(new Random().nextInt());
 		myUserInfo.setUserName(Constants.DemoMyName);
-		myUserInfo.setContactState(true);
+		//myUserInfo.setContactState(true);
+		myUserInfo.setMyself(true);
+		
 		mSelfBubble.setUserInfo(myUserInfo);
 		mSelfBubble.setEditBtnClickedListener(new OnEditButtonClickedListener() {
 			@Override

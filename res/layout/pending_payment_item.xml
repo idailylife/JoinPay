@@ -94,6 +94,7 @@
             android:gravity="center"
             android:layout_toRightOf="@+id/textview_pending_date"
             android:text=" | "
+            android:visibility="gone"
             android:textColor="#7d7d7d"
             />
         <TextView 
@@ -102,6 +103,7 @@
             android:layout_height="fill_parent"
             android:gravity="center"
             android:text="1d"
+            android:visibility="gone"
             android:layout_toRightOf="@+id/textview_separator"
             android:textColor="#7d7d7d"
             />

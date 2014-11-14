@@ -143,8 +143,8 @@ public class PendingTransactionItemView extends LinearLayout {
 			note += " & " + personalNote;
 		mTextNote.setText(note);
 		mTextMoneyAmount.setText(amount);
-		mTextDate.setText(datetime.split(" ")[0]);
-		mTextTime.setText(datetime.split(" ")[1]);
+		mTextDate.setText(datetime);
+		//mTextTime.setText(datetime.split(" ")[1]);
 		
 	}
 	

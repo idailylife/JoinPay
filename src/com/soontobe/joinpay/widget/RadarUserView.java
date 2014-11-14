@@ -28,12 +28,14 @@ import android.view.ViewGroup;
  *
  */
 public class RadarUserView extends FrameLayout {
-	private static int[] CENTER_BUTTON_BKG_ID = {R.drawable.shape_circle_white_w_border, R.drawable.shape_circle_green_w_border};
+	private static int[] CENTER_BUTTON_BKG_ID = {R.drawable.shape_circle_white_w_border
+		, R.drawable.shape_circle_green_w_border, R.drawable.shape_circle_darkgreen_w_border};
 	
 	private boolean mIsPanelExpanded;	//Whether the 4 side buttons are shown.
 	private boolean mIsMoneyLocked;		
 	private boolean mIsUserSelected;
 	private boolean mIsContact;
+	private boolean mIsMyself;
 	
 	private ImageView mYellowCircle;
 	private ImageButton	mSideButtons[] = {null, null, null, null}; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
@@ -126,8 +128,11 @@ public class RadarUserView extends FrameLayout {
 			setMoneyAmount(userInfo.getAmountOfMoney());
 			
 			mIsContact = userInfo.isContact();
+			mIsMyself = userInfo.isMyself();
 			if(userInfo.isContact()){
-				setCenterButtonBackgroundState(true);
+				setCenterButtonBackgroundState(1);
+			} else if(userInfo.isMyself()){
+				setCenterButtonBackgroundState(2);
 			}
 			
 			setSelectState(userInfo.isSelecetd());
@@ -236,19 +241,34 @@ public class RadarUserView extends FrameLayout {
 	/**
 	 * Set whether a user is a contact of mine.
 	 * This will change the background color of center button.
-	 * @param isContact
+	 * @param userType 0-user, 1-contact, 2-myself
 	 */
-	private void setCenterButtonBackgroundState(boolean isContact){
-		if (isContact){
+	private void setCenterButtonBackgroundState(int userType){
+		
+		if (userType == 1){
+			//contact
 			mCenterButton.setBackgroundResource(CENTER_BUTTON_BKG_ID[1]);
 			mNameText.setTextColor(Color.parseColor("#FFFFFF"));
 			mMoneyText.setTextColor(Color.parseColor("#FFFFFF"));
 			mDollarText.setTextColor(Color.parseColor("#FFFFFF"));
-		} else {
+			mIsContact = true;
+			mIsMyself = false;
+		} else if(userType == 0) {
+			//user
 			mCenterButton.setBackgroundResource(CENTER_BUTTON_BKG_ID[0]);
 			mNameText.setTextColor(Color.parseColor("#000000"));
 			mMoneyText.setTextColor(Color.parseColor("#5bc48c"));
 			mDollarText.setTextColor(Color.parseColor("#5bc48c"));
+			mIsContact = false;
+			mIsMyself = false;
+		} else {
+			//myself
+			mCenterButton.setBackgroundResource(CENTER_BUTTON_BKG_ID[2]);
+			mNameText.setTextColor(Color.parseColor("#ffffff"));
+			mMoneyText.setTextColor(Color.parseColor("#ffffff"));
+			mDollarText.setTextColor(Color.parseColor("#ffffff"));
+			mIsContact = false;
+			mIsMyself = true;
 		}
 	}
 
@@ -304,12 +324,16 @@ public class RadarUserView extends FrameLayout {
 		if(isSelected){
 			if(mIsContact){
 				resId = R.drawable.shape_circle_green_w_boldborder;			
+			} else if(mIsMyself){
+				resId = R.drawable.shape_circle_darkgreen_w_boldborder;
 			} else {
 				resId = R.drawable.shape_circle_white_w_boldborder;
 			}
 		} else {
 			if(mIsContact){
 				resId = R.drawable.shape_circle_green_w_border;
+			} else if(mIsMyself){
+				resId = R.drawable.shape_circle_darkgreen_w_border;
 			} else {
 				resId = R.drawable.shape_circle_white_w_border;
 			}

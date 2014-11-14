@@ -203,7 +203,6 @@ HistoryFragment.OnFragmentInteractionListener {
 //										Toast.makeText(getBaseContext(),
 //												finalSSSS, Toast.LENGTH_SHORT).show();
 										
-										//mHistoryFragment.addTransactionItem(finalInfo);
 										mHistoryFragment.addPendingTransItem(finalInfo);
 										mCurrentTab = 2;	//jump to history view
 										mTabHost.setCurrentTab(mCurrentTab);
