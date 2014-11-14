@@ -59,7 +59,7 @@ implements LoaderCallbacks<Void> {
 
 	@Override
 	public void onResume() {
-		//Log.d("Frag", "OnResume(");
+		checkPendingInfo();
 		super.onResume();
 	}
 
@@ -77,7 +77,7 @@ implements LoaderCallbacks<Void> {
 		
 		mHistoryLayout = (LinearLayout)mCurrentView.findViewById(R.id.history_view_pane_items);
 		
-		checkPendingInfo();
+		
 		
 		return mCurrentView;
 	}
@@ -154,9 +154,13 @@ implements LoaderCallbacks<Void> {
 		pItemView.setPaymentInfo(info);
 		pItemView.setAcceptButtonClickListener(new OnPendingItemAcceptedListener(index));
 		pItemView.setDeclineButtonClickListener(new OnPendingItemDeclinedListener(index));
+		
 		mPendingTIVList.add(pItemView);
 		
 		mHistoryLayout.addView(pItemView, 0);
+		
+		LinearLayout.MarginLayoutParams mlp = (LinearLayout.MarginLayoutParams) pItemView.getLayoutParams();
+		mlp.setMargins(0, 15, 0, 15);
 	}
 	
 	/**
