@@ -2,6 +2,7 @@ package com.soontobe.joinpay.fragment;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -9,7 +10,10 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -39,6 +43,23 @@ implements LoaderCallbacks<Void> {
 	
 	private ArrayList<ArrayList<String []>> mPendingInfoList;
 	private ArrayList<Integer> mPendingInfoTypeList;	//0-Transaction, 1-Notification
+	private boolean mShouldAsyncTaskStop = false;
+	
+	private static final int COMPLETED = 0;
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg){
+			if(msg.what == COMPLETED) {
+				try{
+					checkPendingInfo(); //UI update
+				} catch (Exception e){
+					mShouldAsyncTaskStop = true; //If an error occurs stop the AsyncTask.
+				}
+				
+			}
+		}
+	};
+
 	
 
 	public HistoryFragment() {
@@ -57,10 +78,29 @@ implements LoaderCallbacks<Void> {
 	
 	
 
+	@SuppressLint("NewApi")
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		// TODO Auto-generated method stub
+		super.setUserVisibleHint(isVisibleToUser);
+		if(isVisibleToUser)
+			checkPaymentInfo();
+	}
+
 	@Override
 	public void onResume() {
-		checkPendingInfo();
+		//checkPendingInfo();
+		new CheckViewUpdateAsyncTask().execute();
 		super.onResume();
+	}
+	
+	
+	
+
+	@Override
+	public void onPause() {
+		mShouldAsyncTaskStop = true; //Stop asynctask
+		super.onPause();
 	}
 
 	@Override
@@ -77,10 +117,11 @@ implements LoaderCallbacks<Void> {
 		
 		mHistoryLayout = (LinearLayout)mCurrentView.findViewById(R.id.history_view_pane_items);
 		
-		
+		checkPaymentInfo();
 		
 		return mCurrentView;
 	}
+	
 	
 	
 	private void checkPendingInfo() {
@@ -277,5 +318,40 @@ implements LoaderCallbacks<Void> {
 			// TODO Auto-generated method stub
 			mPendingTIVList.get(index).setDeclined();
 		}
+	}
+	
+	/**
+	 * Check for ui change every 3 seconds
+	 * @author ²©Î°
+	 *
+	 */
+	private class CheckViewUpdateAsyncTask extends AsyncTask<Void, Void, Void>{
+		
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			Log.d("AsyncTask", "STARTED");
+			while(true){
+				if(mShouldAsyncTaskStop){
+					Log.d("AsyncTask", "STOPPED");
+					
+					break;
+				}
+					
+				
+				try {
+					Message msg = new Message();
+					msg.what = COMPLETED;
+					mHandler.sendMessage(msg);
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			return null;
+		}
+		
 	}
 }
