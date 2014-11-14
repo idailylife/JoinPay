@@ -450,6 +450,12 @@ HistoryFragment.OnFragmentInteractionListener {
 			mRequestFragment.clearUserMoneyAmount();
 			break;
 		}
+		//Clear total lock state
+		
+		lockInfo.put("total", false);
+		findViewById(R.id.edit_text_total_amount).setEnabled(true);
+		ImageView lockView = (ImageView)findViewById(R.id.send_total_lock);
+		lockView.setImageResource(R.drawable.unlocked_darkgreen);
 	}
 
 	@Override
