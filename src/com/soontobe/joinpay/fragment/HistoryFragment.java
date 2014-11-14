@@ -38,15 +38,16 @@ implements LoaderCallbacks<Void> {
 	private ArrayList<PendingTransactionItemView> mPendingTIVList;
 	
 	private ArrayList<ArrayList<String []>> mPendingInfoList;
-	private boolean newRecordAvailable;
-	private ArrayList<String[]> newPaymentInfo;
+	private ArrayList<Integer> mPendingInfoTypeList;	//0-Transaction, 1-Notification
+	
 
 	public HistoryFragment() {
 		// Required empty public constructor
-		newRecordAvailable = false;
+		//newRecordAvailable = false;
 		paymentInfoList = new ArrayList<ArrayList<String[]>>();
 		mPendingInfoList = new ArrayList<ArrayList<String[]>>();
 		mPendingTIVList = new ArrayList<PendingTransactionItemView>();
+		mPendingInfoTypeList = new ArrayList<Integer>();
 	}
 
 	@Override
@@ -58,8 +59,7 @@ implements LoaderCallbacks<Void> {
 
 	@Override
 	public void onResume() {
-		Log.d("Frag", "OnResume(");
-		//checkPendingInfo();
+		//Log.d("Frag", "OnResume(");
 		super.onResume();
 	}
 
@@ -85,23 +85,44 @@ implements LoaderCallbacks<Void> {
 	
 	private void checkPendingInfo() {
 		// TODO Auto-generated method stub
-		if(mPendingInfoList.isEmpty()){
+		if(mPendingInfoTypeList.isEmpty()){
 			return;
 		}
-		for(ArrayList<String []> pInfo: mPendingInfoList){
-			addTransactionItem(pInfo);
+		int pendingSize = mPendingInfoTypeList.size();
+		int transCount = 0;
+		int notiCount = 0;
+		for(int i=0; i<pendingSize; i++){
+			int pType = mPendingInfoTypeList.get(i);
+			if(pType == 0){
+				//transaction
+				addTransaction(paymentInfoList.get(transCount++));
+			} else {
+				//notification
+				addTransactionNoteItem(mPendingInfoList.get(notiCount++));
+			}
 		}
+		mPendingInfoTypeList.clear();
 		mPendingInfoList.clear();
+		paymentInfoList.clear();
 	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onActivityCreated(savedInstanceState);
+	
+	public void addTransaction(ArrayList<String[]> info){
+		int margin = 15;
+		ListView lv;
+		LinearLayout.MarginLayoutParams mlp;
 		
-		
-		//TODO:in case of second start
-		LinearLayout historyItems = (LinearLayout) getActivity().findViewById(R.id.history_view_pane_items);
+		lv = new ListView(getActivity());
+		PaymentSummaryAdapter adapter = new PaymentSummaryAdapter(getActivity(), info, true);
+		lv.setAdapter(adapter);
+		lv.setBackgroundColor(Color.rgb(0xff, 0xff, 0xff));
+		mHistoryLayout.addView(lv, 0);
+		Utility.setListViewHeightBasedOnChildren(lv);
+		mlp = (LinearLayout.MarginLayoutParams) lv.getLayoutParams();
+		mlp.setMargins(0, margin, 0, margin);
+	}
+	
+	public void checkPaymentInfo(){
+		//LinearLayout historyItems = (LinearLayout) getActivity().findViewById(R.id.history_view_pane_items);
 		int margin = 15;
 		ListView lv;
 		LinearLayout.MarginLayoutParams mlp;
@@ -110,19 +131,24 @@ implements LoaderCallbacks<Void> {
 			PaymentSummaryAdapter adapter = new PaymentSummaryAdapter(getActivity(), paymentInfoList.get(i), true);
 			lv.setAdapter(adapter);
 			lv.setBackgroundColor(Color.rgb(0xff, 0xff, 0xff));
-			historyItems.addView(lv, 0);
+			mHistoryLayout.addView(lv, 0);
 			Utility.setListViewHeightBasedOnChildren(lv);
 			mlp = (LinearLayout.MarginLayoutParams) lv.getLayoutParams();
 			mlp.setMargins(0, margin, 0, margin);
 		}
-		
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
 	}
 	
 	/**
 	 * Add a transaction note to history view
 	 * @param info
 	 */
-	public void addTransactionItem(ArrayList<String[]> info){
+	public void addTransactionNoteItem(ArrayList<String[]> info){
 		PendingTransactionItemView pItemView = new PendingTransactionItemView(getActivity());
 		int index = mPendingTIVList.size();
 		pItemView.setPaymentInfo(info);
@@ -139,6 +165,7 @@ implements LoaderCallbacks<Void> {
 	 */
 	public void addPendingTransItem(ArrayList<String[]> info){
 		mPendingInfoList.add(info);
+		mPendingInfoTypeList.add(1);
 	}
 	
 	
@@ -195,6 +222,7 @@ implements LoaderCallbacks<Void> {
 
 	public void setNewRecordNotification(ArrayList<String []> newPaymentInfo) {
 		paymentInfoList.add(newPaymentInfo);
+		mPendingInfoTypeList.add(0);
 	}
 	
 	private class OnPendingItemAcceptedListener implements OnAcceptButtonClickListener{

@@ -388,7 +388,11 @@ HistoryFragment.OnFragmentInteractionListener {
 			} 
 		}
 	}
-
+	
+	/**
+	 * on send button click
+	 * @param v
+	 */
 	public void proceedToConfirm(View v) {
 		Intent i = new Intent(this, SendConfirmActivity.class);
 		ArrayList<String[]> paymentInfo = new ArrayList<String[]>();
