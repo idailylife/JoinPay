@@ -92,8 +92,11 @@ implements LoaderCallbacks<Void>{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		if(mCurrentView == null)
+		if(mCurrentView == null){
 			mCurrentView = inflater.inflate(R.layout.fragment_send, container, false);
+			init();
+		}
+			
 		//缓存的rootView需要判断是否已经被加过parent， 如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。  
 		
 		ViewGroup parent = (ViewGroup) mCurrentView.getParent(); 
@@ -102,7 +105,7 @@ implements LoaderCallbacks<Void>{
 		}
 		Utility.setupKeyboardAutoHidden(mCurrentView, getActivity());
 		
-		init();
+		
 
 		return mCurrentView;
 	}
@@ -317,6 +320,14 @@ implements LoaderCallbacks<Void>{
 	public void onLoaderReset(Loader<Void> arg0) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		
 	}
 
 	/**
