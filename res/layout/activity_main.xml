@@ -26,6 +26,7 @@
             android:layout_gravity="center|right"
             android:background="@drawable/cross_normal"
             android:layout_marginRight="8dp"
+            android:visibility="gone"
             />
         
     </FrameLayout>
