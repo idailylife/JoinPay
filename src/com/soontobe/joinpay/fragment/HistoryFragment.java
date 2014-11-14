@@ -44,16 +44,21 @@ implements LoaderCallbacks<Void> {
 	private ArrayList<ArrayList<String []>> mPendingInfoList;
 	private ArrayList<Integer> mPendingInfoTypeList;	//0-Transaction, 1-Notification
 	private boolean mShouldAsyncTaskStop = false;
+	private boolean isViewAvailable = false;
+	private CheckViewUpdateAsyncTask mAsyncTask = null;
 	
 	private static final int COMPLETED = 0;
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg){
 			if(msg.what == COMPLETED) {
+				if(getActivity() == null)
+					return;	//Fragment is not available
+				
 				try{
 					checkPendingInfo(); //UI update
 				} catch (Exception e){
-					mShouldAsyncTaskStop = true; //If an error occurs stop the AsyncTask.
+					//mShouldAsyncTaskStop = true; //If an error occurs stop the AsyncTask.
 				}
 				
 			}
@@ -89,8 +94,7 @@ implements LoaderCallbacks<Void> {
 
 	@Override
 	public void onResume() {
-		//checkPendingInfo();
-		new CheckViewUpdateAsyncTask().execute();
+		isViewAvailable = true;
 		super.onResume();
 	}
 	
@@ -98,8 +102,15 @@ implements LoaderCallbacks<Void> {
 	
 
 	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		//mShouldAsyncTaskStop = true;
+		super.onDestroy();
+	}
+
+	@Override
 	public void onPause() {
-		mShouldAsyncTaskStop = true; //Stop asynctask
+		isViewAvailable = false;
 		super.onPause();
 	}
 
@@ -117,7 +128,11 @@ implements LoaderCallbacks<Void> {
 		
 		mHistoryLayout = (LinearLayout)mCurrentView.findViewById(R.id.history_view_pane_items);
 		
-		checkPaymentInfo();
+		//checkPaymentInfo();
+		if(mAsyncTask == null){
+			mAsyncTask = new CheckViewUpdateAsyncTask();
+			mAsyncTask.execute();
+		}
 		
 		return mCurrentView;
 	}
@@ -321,7 +336,7 @@ implements LoaderCallbacks<Void> {
 	}
 	
 	/**
-	 * Check for ui change every 3 seconds
+	 * Check for ui change every 4 seconds
 	 * @author ²©Î°
 	 *
 	 */
@@ -334,7 +349,6 @@ implements LoaderCallbacks<Void> {
 			while(true){
 				if(mShouldAsyncTaskStop){
 					Log.d("AsyncTask", "STOPPED");
-					
 					break;
 				}
 					
@@ -343,7 +357,7 @@ implements LoaderCallbacks<Void> {
 					Message msg = new Message();
 					msg.what = COMPLETED;
 					mHandler.sendMessage(msg);
-					Thread.sleep(3000);
+					Thread.sleep(4000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
