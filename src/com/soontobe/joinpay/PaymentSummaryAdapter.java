@@ -42,7 +42,7 @@ public class PaymentSummaryAdapter extends ArrayAdapter<String[]> {
 	 * isHistory: true if this list view is shown in History, false if in transaction confirmation view
 	 */
 	public PaymentSummaryAdapter(Context context, List<String[]> values, boolean isHistory) {
-		super(context, R.layout.confirm_page_item, values);		//	dummy?
+		super(context, R.layout.confirm_page_item, values);
 		this.context = context;
 		this.values = (ArrayList<String[]>) values;
 		this.isHistory = isHistory;
@@ -63,7 +63,6 @@ public class PaymentSummaryAdapter extends ArrayAdapter<String[]> {
 			payerView.setText(values.get(position)[2]);
 			payeeView.setText(values.get(position)[3]);
 			amountView.setText(values.get(position)[4]);
-
 
 			TableLayout tr = (TableLayout) rowView;
 			boolean hasPersonalNote = false;
@@ -108,7 +107,7 @@ public class PaymentSummaryAdapter extends ArrayAdapter<String[]> {
 			rowView = inflater.inflate(R.layout.confirm_page_group_note, parent, false);
 			TextView groupNoteView = (TextView) rowView.findViewById(R.id.confirm_group_note);
 			groupNoteView.setText(values.get(position)[1]);
-		} else {	// hopefully won't happen
+		} else {
 			Log.e("ConfirmPageArrayAdapter", "Wrong value type");
 			rowView = inflater.inflate(R.layout.confirm_page_item, parent, false);
 		}

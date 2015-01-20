@@ -129,7 +129,7 @@ HistoryFragment.OnFragmentInteractionListener {
 				webConnector.onlineSignIn(Constants.urlForPostingToFolder);
 				while (true) {
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(3000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -156,7 +156,6 @@ HistoryFragment.OnFragmentInteractionListener {
 							String data = newFile.substring(st, ed);
 							//							Log.d("RadarViewActivity paymentInfo from web", newFile.substring(st, ed));
 
-							ArrayList<String []> paymentInfoFromWeb = new ArrayList<String []>();
 							String[] paymentStrings = data.split("\\|");
 							String [] relevantItem = {};
 							String [] groupNote = {};

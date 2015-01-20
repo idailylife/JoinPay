@@ -15,14 +15,12 @@ import android.view.Window;
 
 public class MainActivity extends Activity {
 	private boolean mIsServiceStarted;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  //No Title Bar
 		setContentView(R.layout.activity_main);
-		
 		
 		WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		WifiInfo info = manager.getConnectionInfo();
@@ -73,7 +71,6 @@ public class MainActivity extends Activity {
 	}
 
 	public void onStartServiceClick(View v){
-
 		Intent i = new Intent(getBaseContext(), MessageRetrievalService.class);;
 		if(!mIsServiceStarted){
 			startService(i);
@@ -90,12 +87,5 @@ public class MainActivity extends Activity {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-//		new Thread() {
-//			@Override
-//			public void run() {
-//				WebConnector.postData(Constants.urlPrefix, false);
-//				//postData("http://posttestserver.com/post.php");
-//			}
-//		}.start();
 	}
 }

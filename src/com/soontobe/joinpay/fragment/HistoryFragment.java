@@ -65,8 +65,6 @@ implements LoaderCallbacks<Void> {
 		}
 	};
 
-	
-
 	public HistoryFragment() {
 		// Required empty public constructor
 		//newRecordAvailable = false;
@@ -81,8 +79,6 @@ implements LoaderCallbacks<Void> {
 		super.onCreate(savedInstanceState);
 	}
 	
-	
-
 	@SuppressLint("NewApi")
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -98,9 +94,6 @@ implements LoaderCallbacks<Void> {
 		super.onResume();
 	}
 	
-	
-	
-
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
@@ -133,11 +126,8 @@ implements LoaderCallbacks<Void> {
 			mAsyncTask = new CheckViewUpdateAsyncTask();
 			mAsyncTask.execute();
 		}
-		
 		return mCurrentView;
 	}
-	
-	
 	
 	private void checkPendingInfo() {
 		// TODO Auto-generated method stub
@@ -228,8 +218,6 @@ implements LoaderCallbacks<Void> {
 		mPendingInfoTypeList.add(1);
 	}
 	
-	
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -240,7 +228,6 @@ implements LoaderCallbacks<Void> {
 					+ " must implement OnFragmentInteractionListener");
 		}
 	}
-
 
 	@Override
 	public void onDetach() {
@@ -271,7 +258,6 @@ implements LoaderCallbacks<Void> {
 	@Override
 	public void onLoadFinished(Loader<Void> arg0, Void arg1) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -316,9 +302,7 @@ implements LoaderCallbacks<Void> {
 					}
 				})
 				.show();
-			
 		}
-		
 	}
 	
 	private class OnPendingItemDeclinedListener implements OnDeclineButtonClickListener{
@@ -337,11 +321,8 @@ implements LoaderCallbacks<Void> {
 	
 	/**
 	 * Check for ui change every 4 seconds
-	 * @author ²©Î°
-	 *
 	 */
 	private class CheckViewUpdateAsyncTask extends AsyncTask<Void, Void, Void>{
-		
 		
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -351,7 +332,6 @@ implements LoaderCallbacks<Void> {
 					Log.d("AsyncTask", "STOPPED");
 					break;
 				}
-					
 				
 				try {
 					Message msg = new Message();
@@ -362,10 +342,8 @@ implements LoaderCallbacks<Void> {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 			return null;
 		}
-		
 	}
 }

@@ -54,7 +54,6 @@ public class SendConfirmActivity extends ListActivity {
 	private void updatePaneTitle() {
 		TextView tv = (TextView) findViewById(R.id.title_transaction_confirm);
 		tv.setText(transactionType);
-
 	}
 
 	private void setEventListeners() {
@@ -89,44 +88,17 @@ public class SendConfirmActivity extends ListActivity {
 			}
 		};
 		sendEditPencil.setOnTouchListener(buttonOnTouchListener);
-
 	}
 
 
 	private void setListView() {
-
 		ListView list = getListView();
-		//        List<Map<String, String>> values = new ArrayList<Map<String, String>>();
-		//        Map<String, String> map = null;
-		//        for (int i = 0;i< paymentInfo.length;i++) {
-		//        	if (i == 0) continue;
-		//            map = new HashMap<String,String>();
-		//            map.put(ACTIVITY_MSG_ID, paymentInfo[i][0]);
-		//            map.put(AMOUNT_ID, paymentInfo[i][1]);
-		//            map.put(PERSONAL_NOTE_ID, paymentInfo[i][2]);
-		//            values.add(map);
-		//        }
-		//        String[] from = new String[]{ACTIVITY_MSG_ID, AMOUNT_ID, PERSONAL_NOTE_ID};
-		//        
-		//        int[] to = new int[]{R.id.activity_confirm, R.id.amount_confirm, R.id.personal_note_confirm};
-		//        //Initiliazing Adapter
-		//        SimpleAdapter adapter = new SimpleAdapter(SendConfirmActivity.this,
-		//                values,								//values to be displayed
-		//                R.layout.confirm_page_item_with_personal_note,	//list item layout id
-		//                from,								//Keys for input values
-		//                to									//keys for output items
-		//                );
-		//        //setting Adapter to ListView
-		////		list.setClickable(false);		//	not working
-		//
-		//        list.setAdapter(adapter);
 
 		boolean isPending = false;	//	Don't care
 		boolean isHistory = false;
 		PaymentSummaryAdapter adapter = new PaymentSummaryAdapter(this, paymentInfo, isHistory);
 		list.setAdapter(adapter);
 	}
-
 
 	private void setConstant() {
 		String[][] tmp = 

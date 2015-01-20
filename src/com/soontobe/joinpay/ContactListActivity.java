@@ -29,7 +29,6 @@ public class ContactListActivity extends ListActivity {
 
 	final Set<String> nameSelected = new HashSet<String>();
 
-	
 	private ListView lv;
 
 	// Listview Adapter
@@ -47,23 +46,7 @@ public class ContactListActivity extends ListActivity {
 		setInputSearch();
 		setEventListeners();
 	}
-	
-//	@Override  
-//    public void onAttachedToWindow() {  
-//        super.onAttachedToWindow();  
-//  
-//        if (getResources().getBoolean(R.bool.is_tablet) && mOpenAsSmallWindow) {  
-//            final View view = getWindow().getDecorView();  
-//            final WindowManager.LayoutParams lp = (WindowManager.LayoutParams) view.getLayoutParams();  
-//  
-//            lp.gravity = Gravity.CENTER;  
-//  
-//            lp.width = mActivityWindowWidth;  
-//            lp.height = mActivityWindowHeight;  
-//            getWindowManager().updateViewLayout(view, lp);  
-//        }  
-//    }  
-	
+
 	private void setEventListeners() {
 		Button contactListAddButton = (Button) findViewById(R.id.contact_list_add_button);
 		contactListAddButton.setOnTouchListener(new OnTouchListener() {
@@ -82,7 +65,7 @@ public class ContactListActivity extends ListActivity {
 
 		EditText contactSearchInput = (EditText) findViewById(R.id.contact_search_input);
 		contactSearchInput.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				Button clearButton = (Button) findViewById(R.id.button_clear_contact_search_input);
@@ -93,23 +76,20 @@ public class ContactListActivity extends ListActivity {
 					clearButton.setVisibility(View.VISIBLE);
 				}
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// TODO Auto-generated method stub
-				
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				
 			}
 		});
-		
 	}
-	
+
 	private void setContactListView() {
 		int layoutType = android.R.layout.simple_list_item_multiple_choice;
 		lv = getListView();
@@ -129,7 +109,7 @@ public class ContactListActivity extends ListActivity {
 			}
 		});
 	}
-	
+
 	private void setInputSearch() {
 		inputSearch = (EditText) findViewById(R.id.contact_search_input);
 		inputSearch.addTextChangedListener(new TextWatcher() {
@@ -161,7 +141,6 @@ public class ContactListActivity extends ListActivity {
 			@Override
 			public void afterTextChanged(Editable arg0) {
 				// TODO Auto-generated method stub  
-
 			}
 		});
 
