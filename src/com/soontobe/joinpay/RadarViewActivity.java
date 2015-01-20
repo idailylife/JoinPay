@@ -7,20 +7,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.util.EncodingUtils;
-
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils.StringSplitter;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,25 +23,23 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TabWidget;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.soontobe.joinpay.fragment.TransactionFragment;
 import com.soontobe.joinpay.fragment.HistoryFragment;
 import com.soontobe.joinpay.fragment.RequestFragment;
 import com.soontobe.joinpay.fragment.SendFragment;
-import com.soontobe.joinpay.model.UserInfo;
-import com.soontobe.joinpay.widget.BigBubblePopupWindow;
+
+/**
+ * 
+ * Main activity.
+ *
+ */
 
 /* TODO: 
  * 		1. Numeric Keyboard should contain arithmetic operations
@@ -118,6 +111,10 @@ HistoryFragment.OnFragmentInteractionListener {
 		runPostTestServer();
 	}
 
+	/**
+	 * This method aims to retrieve new payments from the website.
+	 * For demo use only because the message retrieval mechanism is experimental.
+	 */
 	private void runPostTestServer() {
 		webConnector = new WebConnector(Constants.userName);
 		Log.d("RadarViewActivity", "onCreate");
@@ -186,21 +183,11 @@ HistoryFragment.OnFragmentInteractionListener {
 								popupPaymentInfo.add(groupNote);
 								popupPaymentInfo.add(summary);
 								
-//								String ssss = "";
-//								for (int m = 0;m < popupPaymentInfo.size();m++) {
-//									for (String s : popupPaymentInfo.get(m)) {
-//										Log.d("popupPaymentInfo", s);
-//										ssss += " " + s;
-//										
-//									}
-//								}
-								//final String finalSSSS = ssss;
+
 								final ArrayList<String []> finalInfo = popupPaymentInfo;
 								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
-//										Toast.makeText(getBaseContext(),
-//												finalSSSS, Toast.LENGTH_SHORT).show();
 										
 										mHistoryFragment.addPendingTransItem(finalInfo);
 										mCurrentTab = 2;	//jump to history view
@@ -420,13 +407,11 @@ HistoryFragment.OnFragmentInteractionListener {
 
 
 	public void setSendTotalLock(View v) {
-		//TODO:Move to SendFragment
 		ImageView iv = (ImageView) v;
 		if (lockInfo.get("total")) {
 			iv.setImageResource(R.drawable.unlocked_darkgreen);
 			lockInfo.put("total", false);
 			findViewById(R.id.edit_text_total_amount).setEnabled(true);
-			// TODO
 		} else {
 			iv.setImageResource(R.drawable.locked_darkgreen);
 			lockInfo.put("total", true);

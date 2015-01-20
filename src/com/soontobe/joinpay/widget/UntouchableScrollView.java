@@ -1,11 +1,14 @@
 package com.soontobe.joinpay.widget;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ScrollView;
+
+/**
+ * A strange type of ScrollView used as the container of RadarView
+ *  just for a better layout
+ */
 
 public class UntouchableScrollView extends ScrollView {
 

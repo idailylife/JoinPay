@@ -20,12 +20,12 @@ import android.view.ViewGroup;
 
 /**
  * Customized widget in radar view
- * contains 1 center button and 4 side buttons.
- * 
- * CAUTION: This widget has the size 108dp*108dp whether the side buttons show or not.
+ *  contains 1 center button and 4 side buttons, it appears like a bubble and will expand when clicked.
+ *  </br>
+ * CAUTION: This widget has the fixed size 108dp*108dp whether the side buttons show or not.
  * The center part of this widget have the size 96dp*96dp.
- * @author ²©Î°
- *
+ * </br>
+ *  -->see layout file for detail.
  */
 public class RadarUserView extends FrameLayout {
 	private static int[] CENTER_BUTTON_BKG_ID = {R.drawable.shape_circle_white_w_border
@@ -33,9 +33,9 @@ public class RadarUserView extends FrameLayout {
 	
 	private boolean mIsPanelExpanded;	//Whether the 4 side buttons are shown.
 	private boolean mIsMoneyLocked;		
-	private boolean mIsUserSelected;
-	private boolean mIsContact;
-	private boolean mIsMyself;
+	private boolean mIsUserSelected;	//Is this bubble selected
+	private boolean mIsContact;			//Is this bubble indicating a contact
+	private boolean mIsMyself;          //Is this bubble indicating myself
 	
 	private ImageView mYellowCircle;
 	private ImageButton	mSideButtons[] = {null, null, null, null}; 	// 0-Top, 1-Left, 2-Bottom, 3-Right
@@ -46,6 +46,7 @@ public class RadarUserView extends FrameLayout {
 	
 	private ViewGroup.LayoutParams nameTextParams;
 	
+	/// Customized listeners ///
 	OnLockButtonClickedListener lockBtnClickedListener = null;
 	OnEditButtonClickedListener editBtnClickedListener = null;
 	OnAddContactClickedListener addBtnClickedListener = null;
@@ -375,11 +376,10 @@ public class RadarUserView extends FrameLayout {
 	}
 	
 	/**
-	 * Actions:
-	 * [1] Unselected --Click--> Selected;
-	 * [2] Selected&Unexpanded <--Click--> Selected&Expanded
-	 * 
-	 * @author ²©Î°
+	 * Actions:<br/>
+	 * [1] Unselected --Click--> Selected;<br/>
+	 * [2] Selected&Unexpanded <--Click--> Selected&Expanded;<br/>
+	 * (Un-select action is defined by clicking DeselectButton:`X`)
 	 *
 	 */
 	private class CenterBtnClickListener implements View.OnClickListener{

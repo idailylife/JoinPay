@@ -14,6 +14,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * Pending transaction item
+ * This object will be shown in the transaction list for its pending state.
+ * Buttons for either `Accept` or `Decline` of the transaction is set
+ * 	with customized OnClickListener for further implementation.
+ * 
+ */
 public class PendingTransactionItemView extends LinearLayout {
 	private int transactionId;
 	

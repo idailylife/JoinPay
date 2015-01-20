@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 
 /**
- * Customized Popup Window 
- * @author ��ΰ
+ * Customized PopupWindow 
+ * This popupwindow will show when editing the transaction details with someone
  *
  */
 public class BigBubblePopupWindow extends PopupWindow {
@@ -41,13 +41,13 @@ public class BigBubblePopupWindow extends PopupWindow {
 	}
 
 
-	private PieGraph mPieGraph;
-	private Button mLockButton;
-	private EditText mEditText;  //Amount of money
-	private EditText mEditPersonalNote;
+	private PieGraph mPieGraph;	  //Outer torus which will be further developed to show the ratio of different types of transaction
+	private Button mLockButton;   //Lock button
+	private EditText mEditText;   //Amount of money
+	private EditText mEditPersonalNote;  //Personal note editor
 	private TextView mTextView;  //Name
-	private TextView mTextPersonalNote;
-	private TextView mTextPublicNote;
+	private TextView mTextPersonalNote;  //Personal note label
+	private TextView mTextPublicNote;    //Group note label
 
 
 	public BigBubblePopupWindow(View contentView, UserInfo userInfo){
@@ -112,7 +112,7 @@ public class BigBubblePopupWindow extends PopupWindow {
 	}
 	
 	/**
-	 * Call setUserInfo() before this function!!
+	 * Call setUserInfo() beforehand!!
 	 */
 	public void showUserInfo() {
 		if (null == mUserInfo){
@@ -180,7 +180,7 @@ public class BigBubblePopupWindow extends PopupWindow {
 		//initDonutChart();
 	}
 
-
+	// Customized listeners below //
 
 	private class LockButtonOnClickListener implements View.OnClickListener{
 
