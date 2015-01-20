@@ -71,7 +71,6 @@ public class ContactListActivity extends ListActivity {
 
 		EditText contactSearchInput = (EditText) findViewById(R.id.contact_search_input);
 		contactSearchInput.addTextChangedListener(new TextWatcher() {
-
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				Button clearButton = (Button) findViewById(R.id.button_clear_contact_search_input);
@@ -116,6 +115,9 @@ public class ContactListActivity extends ListActivity {
 		});
 	}
 
+	/**
+	 * 	Implements the search function
+	 */
 	private void setInputSearch() {
 		inputSearch = (EditText) findViewById(R.id.contact_search_input);
 		inputSearch.addTextChangedListener(new TextWatcher() {

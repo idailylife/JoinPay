@@ -7,8 +7,8 @@ import java.util.Calendar;
 import com.soontobe.joinpay.model.UserInfo;
 
 /**
- * It is one of the three fragments in the radar view activity. In this fragment, users can specify the transaction detail and click "Next" to
- * move forwards to next step.
+ * It is one of the three fragments in the radar view activity. In this fragment, users can specify the transaction detail, such as the people
+ * to request money from and the amount on each person, and click "Next" to move forwards to next step.
  */
 public class RequestFragment extends TransactionFragment {
 	public ArrayList<String[]> getPaymentInfo() {

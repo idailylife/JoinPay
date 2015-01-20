@@ -13,7 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 /**
- * This class stores some utility functions.
+ * This class provides some utility functions.
  *
  */
 public class Utility {
