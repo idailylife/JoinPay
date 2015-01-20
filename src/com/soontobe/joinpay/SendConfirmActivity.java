@@ -16,9 +16,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * This class corresponds to the confirmation pane of a transaction (both sending and requesting money). It shows a summary of 
+ * the transaction and provides buttons for users to take the next step.
+ *
+ */
 public class SendConfirmActivity extends ListActivity {
-
-
 	// for testing only
 	private ArrayList<String[]> paymentInfo;
 	private String[][] paymentInfoArray;

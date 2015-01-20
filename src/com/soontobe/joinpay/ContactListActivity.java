@@ -25,6 +25,12 @@ import android.widget.EditText;
 import android.widget.Filter.FilterListener;
 import android.widget.ListView;
 
+
+/**
+* This class handles the operation of selecting people from the contact list to the radar view.
+* It also incorporates the search function. After the "Add" button is clicked, people selected will be returned to the radar view pane.
+*
+*/
 public class ContactListActivity extends ListActivity {
 
 	final Set<String> nameSelected = new HashSet<String>();

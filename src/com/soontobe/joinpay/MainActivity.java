@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.Window;
 
 
+/**
+ * This class is the access point of the whole application. After the user hit the "JoinPay" button, it will jump to the radar view pane.
+ *
+ */
 public class MainActivity extends Activity {
 	private boolean mIsServiceStarted;
 

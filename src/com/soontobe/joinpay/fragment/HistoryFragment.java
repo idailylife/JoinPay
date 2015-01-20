@@ -32,6 +32,9 @@ import com.soontobe.joinpay.widget.PendingTransactionItemView;
 import com.soontobe.joinpay.widget.PendingTransactionItemView.OnAcceptButtonClickListener;
 import com.soontobe.joinpay.widget.PendingTransactionItemView.OnDeclineButtonClickListener;
 
+/**
+ * It is one of the three fragments in the radar view activity. It shows a readable list of transaction records.
+ */
 public class HistoryFragment extends Fragment 
 implements LoaderCallbacks<Void> {
 

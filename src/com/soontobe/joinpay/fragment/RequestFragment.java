@@ -6,6 +6,10 @@ import java.util.Calendar;
 
 import com.soontobe.joinpay.model.UserInfo;
 
+/**
+ * It is one of the three fragments in the radar view activity. In this fragment, users can specify the transaction detail and click "Next" to
+ * move forwards to next step.
+ */
 public class RequestFragment extends TransactionFragment {
 	public ArrayList<String[]> getPaymentInfo() {
 		ArrayList<String[]> paymentInfo = new ArrayList<String[]>();
@@ -13,13 +17,11 @@ public class RequestFragment extends TransactionFragment {
 			if (info.isSelecetd()) {
 				String[] item = {"normal", info.getPersonalNote(), info.getUserName(), myUserInfo.getUserName(), "$ " + String.format("%.2f",info.getAmountOfMoney()), "isPending"};
 				paymentInfo.add(item);
-//				Log.d(" paymentInfo", item[2]);
 			}
 		}
 		if (myUserInfo.isSelecetd()) {
 			String[] item = {"normal", myUserInfo.getPersonalNote(), myUserInfo.getUserName(), myUserInfo.getUserName(), "$ " + String.format("%.2f",myUserInfo.getAmountOfMoney()), "notPending"};
 			paymentInfo.add(item);
-//			Log.d(" paymentInfo", item[2]);
 		}
 
 		String[] groupNote = {"group_note", mGroupNote.getText().toString() };

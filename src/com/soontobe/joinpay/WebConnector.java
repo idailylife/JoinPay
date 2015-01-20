@@ -24,6 +24,11 @@ import org.jsoup.select.Elements;
 
 import android.util.Log;
 
+/**
+ * This class is specially designed for our "weird" way of communication among multiple devices.
+ * We use posttestserver.com as a simple server. Each android device posts a sign-in message at the very beginning
+ * and checks whether other devices are online every 3-5 seconds.
+ */
 public class WebConnector {
 
 	private String userName;
@@ -31,7 +36,6 @@ public class WebConnector {
 	public WebConnector(String userName) {
 		this.userName = userName;
 	}
-
 
 	public void postTransactionRecord(String url, String paymentInfoString) {
 		HttpClient httpclient = new DefaultHttpClient();
@@ -43,7 +47,6 @@ public class WebConnector {
 
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			// Execute HTTP Post Request
 			HttpResponse response = httpclient.execute(httppost);
 			String result = inputStreamToString(response.getEntity().getContent()).toString();
 						Log.d("HttpPost result", result);
@@ -53,24 +56,15 @@ public class WebConnector {
 	}
 
 	public void onlineSignIn(String url) {
-		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 
 		try {
-			// Add your data
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("status", Constants.userName + "IsOnline"));
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-			// Execute HTTP Post Request
 			HttpResponse response = httpclient.execute(httppost);
-			//			String result = inputStreamToString(response.getEntity().getContent()).toString();
-			//String result = convertStreamToString(response.getEntity().getContent());
-			//			Log.d("HttpPost result", result);
-			//				String[] items1 = result.split("View it at ");
-			//				String[] items2 = items1[1].split("Post body was");
-			//				Log.d("HttpPost result", items2[0]);
 
 
 		} catch (IOException e) {
@@ -81,12 +75,9 @@ public class WebConnector {
 	public String getFile(String url)
 	{
 		HttpClient httpclient = new DefaultHttpClient();
-
-		// Prepare a request object
 		HttpGet httpget = new HttpGet(url); 
 
 		ArrayList<String> ret = new ArrayList<String>();
-		// Execute the request
 		HttpResponse response;
 		String result = "";
 		try {
@@ -94,7 +85,6 @@ public class WebConnector {
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
 
-				// A Simple JSON Response Read
 				InputStream instream = entity.getContent();
 				result = inputStreamToString(instream).toString();
 			}
@@ -108,12 +98,9 @@ public class WebConnector {
 	public ArrayList<String> getFileNameList(String url, int visitedFilesCount)
 	{
 		HttpClient httpclient = new DefaultHttpClient();
-
-		// Prepare a request object
 		HttpGet httpget = new HttpGet(url); 
 
 		ArrayList<String> ret = new ArrayList<String>();
-		// Execute the request
 		HttpResponse response;
 		try {
 			response = httpclient.execute(httpget);
@@ -121,21 +108,16 @@ public class WebConnector {
 
 			if (entity != null) {
 
-				// A Simple JSON Response Read
 				InputStream instream = entity.getContent();
 				String result= inputStreamToString(instream).toString();
 
-				//				Log.d("HttpGet result", result);
-
 				String html = result;
 				Document doc = Jsoup.parse(html);
-
 				Elements link = doc.select("a");
 
 				int cnt = 0;
 				for (Element elm : link) {
 					String text = elm.text();
-					//Log.d("HttpPost text", elm.text());
 					if (text.matches("[0-9][0-9].[0-9][0-9].[0-9]+")) {
 						if (cnt >= visitedFilesCount) {
 							ret.add(text);
@@ -155,8 +137,6 @@ public class WebConnector {
 	private StringBuilder inputStreamToString(InputStream is) {
 		String line = "";
 		StringBuilder total = new StringBuilder();
-
-		// Wrap a BufferedReader around the InputStream
 		BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 
 		// Read response until the end

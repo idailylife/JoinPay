@@ -15,6 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+/**
+ * This class is an adapter for the layout of the transaction summary view or history view.
+ *
+ */
 public class PaymentSummaryAdapter extends ArrayAdapter<String[]> {
 	private final Context context;
 
