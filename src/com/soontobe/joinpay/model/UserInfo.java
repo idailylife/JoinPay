@@ -1,11 +1,9 @@
 package com.soontobe.joinpay.model;
 
-import java.util.ArrayList;
-
 /**
- * User information model for exchanging between RadarView and BigBubble
- * @author ��ΰ
- *
+ * User information model for information exchange between RadarView and
+ * BigBubble
+ * 
  */
 public class UserInfo {
 	private int userId;
@@ -13,12 +11,12 @@ public class UserInfo {
 	private String publicNote;
 	private String personalNote;
 	private float amountOfMoney;
-	private float changedMoney;	//Amount of money changed when editing TextEdit
-	private boolean isMyself;
-	private boolean isContact;
-	private boolean isLocked;
-	private boolean isSelecetd;
-	
+	private float changedMoney; // Amount of money changed when editing TextEdit
+	private boolean isMyself; // Is this user just myself
+	private boolean isContact; // Is this user a contact of mine
+	private boolean isLocked; // Lock status of this user
+	private boolean isSelecetd; // Is this user selected
+
 	public UserInfo() {
 		isContact = false;
 		isMyself = false;
@@ -27,20 +25,14 @@ public class UserInfo {
 		publicNote = "";
 		personalNote = "";
 	}
-	
-	
-	
+
 	public boolean isMyself() {
 		return isMyself;
 	}
 
-
-
 	public void setMyself(boolean isMyself) {
 		this.isMyself = isMyself;
 	}
-
-
 
 	public boolean isSelecetd() {
 		return isSelecetd;
@@ -50,7 +42,6 @@ public class UserInfo {
 		this.isSelecetd = isSelecetd;
 	}
 
-	
 	public boolean isContact() {
 		return isContact;
 	}
@@ -67,8 +58,6 @@ public class UserInfo {
 		this.changedMoney = changedMoney;
 	}
 
-	
-	
 	public String getPublicNote() {
 		return publicNote;
 	}
@@ -93,9 +82,6 @@ public class UserInfo {
 		this.isLocked = isLocked;
 	}
 
-
-	
-	
 	public int getUserId() {
 		return userId;
 	}
@@ -112,7 +98,6 @@ public class UserInfo {
 		this.userName = userName;
 	}
 
-
 	public float getAmountOfMoney() {
 		return amountOfMoney;
 	}
@@ -127,5 +112,5 @@ public class UserInfo {
 		str += "Name = " + userName;
 		return str;
 	}
-	
+
 }
